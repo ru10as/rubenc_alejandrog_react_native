@@ -3,6 +3,7 @@
     "name": "The12thMan",
     "slug": "The12thMan",
     "version": "1.0.0",
+    "scheme": "the12thman",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -25,5 +26,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+    
   }
 }

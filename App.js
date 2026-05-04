@@ -1,19 +1,21 @@
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Campobase from './componentes/CampobaseComponent';
+import { Provider } from 'react-redux';
+import { ConfigureStore } from './redux/configureStore';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>The 12th Man - Próximamente</Text>
-    </View>
-  );
+const store = ConfigureStore(); 
+export default function App() { 
+  return( 
+    <Provider store={store}> 
+      <SafeAreaProvider> 
+        <View style={{flex: 1}}> 
+          <Campobase/> 
+          <StatusBar style="auto" /> 
+        </View> 
+      </SafeAreaProvider> 
+    </Provider> 
+  ); 
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -1,0 +1,144 @@
+{
+  "camisetas": [
+    { 
+        "id": 0, 
+        "nombre": "Real Madrid - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": true,
+        "descripcion": "Clásica equipación blanca con detalles dorados, temporada 2025/26."
+    },
+    { 
+        "id": 1, 
+        "nombre": "Real Madrid - Visitante", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": true,
+        "descripcion": "Diseño azul marino con patrones geométricos modernos." 
+    },
+    { 
+        "id": 2, 
+        "nombre": "Real Madrid - Alternativa", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": true,
+        "descripcion": "Edición especial en color carbón y gris." 
+    },
+    { 
+        "id": 3, 
+        "nombre": "FC Barcelona - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": true,
+        "descripcion": "Tradicionales franjas azulgranas con tecnología transpirable." 
+    },
+    { 
+        "id": 4, 
+        "nombre": "FC Barcelona - Visitante", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": true,
+        "descripcion": "Elegante diseño negro con detalles en rombos." 
+    },
+    { 
+        "id": 5, 
+        "nombre": "FC Barcelona - Alternativa", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Color voltio brillante inspirada en la ciudad condal." 
+    },
+    { 
+        "id": 6, 
+        "nombre": "Atlético de Madrid - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Rojiblanca clásica con cuello tipo polo." 
+    },
+    { 
+        "id": 7, 
+        "nombre": "Manchester City - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Azul cielo inspirado en el 0161 de Manchester." 
+    },
+    { 
+        "id": 8, 
+        "nombre": "Manchester City - Visitante", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Homenaje a la mítica equipación de 1999." 
+    },
+    { 
+        "id": 9, 
+        "nombre": "Liverpool FC - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Rojo intenso con detalles en amarillo retro." 
+    },
+    { 
+        "id": 10, 
+        "nombre": "Bayern Múnich - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Tres tonos de rojo que representan la identidad bávara." 
+    },
+    { 
+        "id": 11, 
+        "nombre": "AC Milan - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Rossoneri clásica con tecnología ultra ligera." 
+    },
+    { 
+        "id": 12, 
+        "nombre": "Inter de Milán - Local", 
+        "imagen": "img/inter_home.png", 
+        "destacado": false,
+        "descripcion": "Franjas verticales y diagonales que rompen esquemas." 
+    },
+    { 
+        "id": 13, 
+        "nombre": "PSG - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Estilo Hechter moderno con los colores parisinos." 
+    },
+    { 
+        "id": 14, 
+        "nombre": "PSG - Visitante", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Blanca con la silueta de la Torre Eiffel difuminada." 
+    },
+    { 
+        "id": 15, 
+        "nombre": "Arsenal FC - Local", 
+        "imagen": "barca_segunda_equip_2025_2026.png", 
+        "destacado": false,
+        "descripcion": "Cuerpo rojo y mangas blancas con el cañón bordado." 
+    },
+    { "id": 16, "nombre": "Bayer Leverkusen - Local", "imagen": "barca_segunda_equip_2025_2026.png", "descripcion": "Edición especial campeones de la Bundesliga." },
+    { "id": 17, "nombre": "Bayer Leverkusen - Visitante", "imagen": "barca_segunda_equip_2025_2026.png", "descripcion": "Blanca pura con detalles en cobre." },
+    { "id": 18, "nombre": "Borussia Dortmund - Local", "imagen": "barca_segunda_equip_2025_2026.png", "descripcion": "Amarillo icónico con mangas negras texturizadas." },
+    { "id": 19, "nombre": "Juventus - Local", "imagen": "barca_segunda_equip_2025_2026.png", "descripcion": "Bianconeri con efecto 'lunar' en las franjas." }
+  ],
+  "comentarios": [
+    {
+      "id": 0,
+      "camisetaId": 0,
+      "valoracion": 5,
+      "comentario": "¡La calidad de la tela es increíble! El escudo viene bordado.",
+      "autor": "Juan Pérez",
+      "dia": "2026-03-21T17:57:28.556094Z"
+    },
+    {
+      "id": 1,
+      "camisetaId": 0,
+      "valoracion": 4,
+      "comentario": "Talla un poco pequeña, pedid una más de la habitual.",
+      "autor": "Sofía G.",
+      "dia": "2026-03-22T10:30:00.000000Z"
+    }
+  ],
+  "cabeceras": [
+    { "id": 0, "nombre": "Nueva Temporada", "imagen": "img/banner_new.png", "descripcion": "Descubre las equipaciones 2025/26" }
+  ],
+  "novedades": [
+    { "id": 0, "nombre": "Lanzamiento Nike", "imagen": "img/nike_drop.png", "descripcion": "Ya disponibles los modelos de élite." }
+  ]
+}
