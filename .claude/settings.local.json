@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Usuario\\\\OneDrive\\\\Escritorio\\\\AppDSMProyecto\\\\rubenc_alejandrog_react_native\" -Force)",
+      "Bash(Select-Object Name, Mode)",
+      "Bash(New-Item -ItemType Directory -Force -Path \"C:\\\\Users\\\\Usuario\\\\OneDrive\\\\Escritorio\\\\AppDSMProyecto\\\\rubenc_alejandrog_react_native\\\\assets\\\\images\")",
+      "Bash(Out-Null)",
+      "Bash(Copy-Item \"C:\\\\Users\\\\Usuario\\\\OneDrive\\\\Escritorio\\\\AppDSMProyecto\\\\rubenc_alejandrog_react_native\\\\componentes\\\\imagenes\\\\logo.png\" \"C:\\\\Users\\\\Usuario\\\\OneDrive\\\\Escritorio\\\\AppDSMProyecto\\\\rubenc_alejandrog_react_native\\\\assets\\\\images\\\\logo.png\")",
+      "Bash(Copy-Item \"C:\\\\Users\\\\Usuario\\\\OneDrive\\\\Escritorio\\\\AppDSMProyecto\\\\rubenc_alejandrog_react_native\\\\src\\\\assets\\\\images\\\\fondo_maracana.png\" \"C:\\\\Users\\\\Usuario\\\\OneDrive\\\\Escritorio\\\\AppDSMProyecto\\\\rubenc_alejandrog_react_native\\\\assets\\\\images\\\\fondo_maracana.png\")",
+      "Bash(Write-Output \"Imágenes copiadas\")"
+    ]
+  }
+}

@@ -23,10 +23,9 @@ export const addComentarios = (comentarios) => ({
     payload: comentarios
 });
 
-// --- CAMISETAS (Antes Excursiones) ---
+// --- CAMISETAS ---
 export const fetchCamisetas = () => (dispatch) => {
     dispatch(camisetasLoading());
-
     return fetch(baseUrl + 'camisetas')
     .then(response => {
         if (response.ok) return response;
@@ -37,24 +36,14 @@ export const fetchCamisetas = () => (dispatch) => {
     .catch(error => dispatch(camisetasFailed(error.message)));
 };
 
-export const camisetasLoading = () => ({
-    type: ActionTypes.CAMISETAS_LOADING
-});
-
-export const camisetasFailed = (errmess) => ({
-    type: ActionTypes.CAMISETAS_FAILED,
-    payload: errmess
-});
-
-export const addCamisetas = (camisetas) => ({
-    type: ActionTypes.ADD_CAMISETAS,
-    payload: camisetas
-});
+export const camisetasLoading = () => ({ type: ActionTypes.CAMISETAS_LOADING });
+export const camisetasFailed = (errmess) => ({ type: ActionTypes.CAMISETAS_FAILED, payload: errmess });
+export const addCamisetas = (camisetas) => ({ type: ActionTypes.ADD_CAMISETAS, payload: camisetas });
 
 // --- CABECERAS ---
 export const fetchCabeceras = () => (dispatch) => {
     dispatch(cabecerasLoading());
-    return fetch(baseUrl + 'cabeceras') 
+    return fetch(baseUrl + 'cabeceras')
     .then(response => {
         if (response.ok) return response;
         throw new Error('Error ' + response.status + ': ' + response.statusText);
@@ -68,7 +57,7 @@ export const cabecerasLoading = () => ({ type: ActionTypes.CABECERAS_LOADING });
 export const cabecerasFailed = (errmess) => ({ type: ActionTypes.CABECERAS_FAILED, payload: errmess });
 export const addCabeceras = (cabeceras) => ({ type: ActionTypes.ADD_CABECERAS, payload: cabeceras });
 
-// --- NOVEDADES (Antes Actividades) ---
+// --- NOVEDADES ---
 export const fetchNovedades = () => (dispatch) => {
     dispatch(novedadesLoading());
     return fetch(baseUrl + 'novedades')
@@ -85,7 +74,7 @@ export const novedadesLoading = () => ({ type: ActionTypes.NOVEDADES_LOADING });
 export const novedadesFailed = (errmess) => ({ type: ActionTypes.NOVEDADES_FAILED, payload: errmess });
 export const addNovedades = (novedades) => ({ type: ActionTypes.ADD_NOVEDADES, payload: novedades });
 
-
+// --- FAVORITOS ---
 export const postFavorito = (camisetaId) => (dispatch) => {
     setTimeout(() => {
         dispatch(addFavorito(camisetaId));
@@ -97,15 +86,15 @@ export const addFavorito = (camisetaId) => ({
     payload: camisetaId
 });
 
+// --- COMENTARIO INDIVIDUAL ---
 export const postComentario = (camisetaId, valoracion, autor, comentario) => (dispatch) => {
     const nuevoComentario = {
-        camisetaId: camisetaId,
-        valoracion: valoracion,
-        autor: autor,
-        comentario: comentario,
+        camisetaId,
+        valoracion,
+        autor,
+        comentario,
         dia: new Date().toISOString()
     };
-
     setTimeout(() => {
         dispatch(addComentario(nuevoComentario));
     }, 2000);
