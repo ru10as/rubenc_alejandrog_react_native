@@ -9,7 +9,7 @@ export const LoginScreen = ({ navigation }: any) => {
       style={styles.container}
     >
         <ImageBackground 
-            source={require('../../assets/images/fondo_maracana.png')}
+            source={require('../../../assets/images/fondo_maracana.png')}
             style={styles.backgroundImage}
             imageStyle={{ opacity: 0.4 }}
         >
