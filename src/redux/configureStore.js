@@ -1,19 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { camisetas } from './camisetas';
-import { comentarios } from './comentarios';
-import { cabeceras } from './cabeceras';
-import { novedades } from './novedades';
-import { favoritos } from './favoritos';
+import { camisetas } from './camisetas';     
+import { comentarios } from './comentarios'; 
+import { cabeceras } from './cabeceras';      
+import { novedades } from './novedades';      
+import { favoritos } from './favoritos';      
+import { usuario } from './usuario'; // <--- ¡IMPORTANTE! Añade esta línea
 
 export const ConfigureStore = () => {
     const store = configureStore({
         reducer: {
-            camisetas,
-            comentarios,
-            cabeceras,
-            novedades,
-            favoritos,
+            camisetas: camisetas,
+            comentarios: comentarios,
+            cabeceras: cabeceras,
+            novedades: novedades,
+            favoritos: favoritos,
+            usuario: usuario,
         },
     });
+
     return store;
-};
+}
