@@ -45,11 +45,6 @@ class Home extends Component {
         return (
             <ScrollView>
                 <RenderItem
-                    item={cabecera}
-                    isLoading={this.props.cabeceras.isLoading}
-                    errMess={this.props.cabeceras.errMess}
-                />
-                <RenderItem
                     item={camiseta}
                     isLoading={this.props.camisetas.isLoading}
                     errMess={this.props.camisetas.errMess}

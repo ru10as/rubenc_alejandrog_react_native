@@ -1,12 +1,11 @@
 import React from 'react';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Platform, StyleSheet, Image, Text, Pressable } from 'react-native';
+import { View, Platform, StyleSheet, Image, Text, Pressable,TouchableOpacity } from 'react-native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-
 // Configuración y Colores
 import { colorTiendaOscuro, colorTiendaClaro } from '../../comun/comun';
 
@@ -17,12 +16,12 @@ import DetalleCamisetaComponent from '../components/DetalleCamisetaComponent';
 import QuienesSomosComponent from '../components/QuienesSomosComponent';
 import ContactoComponent from '../components/ContactoComponent';
 
-// Pantallas (Rutas corregidas con ../ y sin llaves para export default)
-import LoginScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
+import AuthScreen from '../screens/AuthScreen';
+import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+
 
 const screenOptions = {
     headerTitleAlign: 'center' as const,
@@ -51,7 +50,7 @@ function headerOptions(title: string, navigation: any) {
     };
 }
 
-function CustomDrawerContent(props: any) {
+function CustomDrawerContent(props: any) { // Esta funcion es la que vamos a implementar para tratar con el menu lateral
     return (
         <DrawerContentScrollView {...props}>
             <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
@@ -72,7 +71,9 @@ function CustomDrawerContent(props: any) {
     );
 }
 
-function HomeStack() {
+
+
+function HomeStack() { // La parte de inicio o Home
     return (
         <Stack.Navigator id="HomeStack" screenOptions={screenOptions}>
             <Stack.Screen
@@ -89,7 +90,7 @@ function HomeStack() {
     );
 }
 
-function CatalogoStack() {
+function CatalogoStack() { // Este es el subnavegador de la parte de Catalogo
     return (
         <Stack.Navigator id="CatalogoStack" screenOptions={screenOptions}>
             <Stack.Screen
@@ -106,7 +107,7 @@ function CatalogoStack() {
     );
 }
 
-function QuienesSomosStack() {
+function QuienesSomosStack() { // Esta funcion la implementamos para el subnavegador de la parte de QuienesSomos
     return (
         <Stack.Navigator id="QuienesSomosStack" screenOptions={screenOptions}>
             <Stack.Screen
@@ -118,7 +119,7 @@ function QuienesSomosStack() {
     );
 }
 
-function ContactoStack() {
+function ContactoStack() { // Esta funcion la implementamos para el subnavegador de la parte de Contacto
     return (
         <Stack.Navigator id="ContactoStack" screenOptions={screenOptions}>
             <Stack.Screen
@@ -130,34 +131,58 @@ function ContactoStack() {
     );
 }
 
-function AuthStack() {
+function AuthStack() { // Con esta funcion lo que hacemos es un subnavegador de la parte de AuthStack
     return (
-        <Stack.Navigator id="AuthStack" screenOptions={screenOptions}>
+        <Stack.Navigator id="AuthStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
-                name="Login"
-                component={LoginScreen}
-                options={({ navigation }) => headerOptions('Acceso Jugadores', navigation)}
-            />
-            <Stack.Screen
-                name="Register"
-                component={RegisterScreen}
-                options={{ title: 'Registro de Cantera' }}
+                name="Autenticacion"
+                component={AuthScreen} //
+                // options={({ navigation }) => headerOptions('Acceso Jugadores', navigation)}
             />
         </Stack.Navigator>
     );
 }
 
 export default function AppNavigator() {
+    const datosUsuario = useSelector((state: any) => state.usuario);
+    const estaLogueado = datosUsuario?.user;
     return (
         <NavigationContainer>
             <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight }}>
-                <Drawer.Navigator id="MainDrawer"
+                <Drawer.Navigator 
+                    id="MainDrawer"
                     initialRouteName="Inicio"
                     drawerContent={(props) => <CustomDrawerContent {...props} />}
-                    screenOptions={{
-                        headerShown: false,
+                    screenOptions={({ navigation }) => ({
+                        headerShown: true, 
+                        
+                        // --- ESTO ES LO QUE TIENES QUE AÑADIR PARA EL DISEÑO ---
+                        headerTitle: 'The 12th Man', // El nombre que antes tenías en la tarjeta blanca
+                        headerStyle: {
+                            backgroundColor: '#001222', // Tu azul oscuro/negro corporativo
+                            elevation: 0, // Quita la línea de sombra en Android
+                            shadowOpacity: 0, // Quita la línea de sombra en iOS
+                        },
+                        headerTintColor: '#fff', // Hace que el título y las tres rayitas sean blancas
+                        headerTitleAlign: 'center', // Centra el título para que quede profesional
+                        // -------------------------------------------------------
+
                         drawerStyle: { backgroundColor: colorTiendaClaro },
-                    }}
+                        headerRight: () => (
+                            estaLogueado ? (
+                                <TouchableOpacity onPress={() => navigation.navigate('Acceso usuario')}>
+                                    <MaterialCommunityIcons name="account-check" size={28} color="green" style={{marginRight: 15}} />
+                                </TouchableOpacity>
+                            ) : (
+                                <TouchableOpacity 
+                                    style={styles.botonRegistroHeader} 
+                                    onPress={() => navigation.navigate('Acceso usuario')}
+                                >
+                                    <Text style={{color: 'white', fontWeight: 'bold'}}>Registrarse</Text>
+                                </TouchableOpacity>
+                            )
+                        ),
+                    })}
                 >
                     <Drawer.Screen
                         name="Inicio"
@@ -196,9 +221,10 @@ export default function AppNavigator() {
                         }}
                     />
                     <Drawer.Screen
-                        name="Acceso usuario"
+                        name="Acceso usuario" 
                         component={AuthStack}
                         options={{
+                            drawerItemStyle: { display: 'none' }, 
                             drawerIcon: ({ color, size }) => (
                                 <MaterialCommunityIcons name="account" color={color} size={size} />
                             ),
@@ -237,4 +263,16 @@ const styles = StyleSheet.create({
         height: 60,
         resizeMode: 'contain',
     },
+    botonRegistroHeader: {
+    backgroundColor: '#f44336', // Rojo corporativo (podéis usar vuestra variable de color)
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20, // Esto lo hace redondeado tipo "píldora"
+    marginRight: 15,
+    elevation: 3, // Sombra en Android
+    shadowColor: '#000', // Sombra en iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+},
 });

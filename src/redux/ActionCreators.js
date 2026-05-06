@@ -2,6 +2,7 @@ import * as ActionTypes from './ActionTypes';
 import { db, auth } from '../api/firebaseConfig';
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"; // Necesario para llevar a cabo la autenticacion con firebase
+import { Alert } from 'react-native';
 
 // --- COMENTARIOS ---
 export const fetchComentarios = () => async (dispatch) => {
@@ -117,43 +118,24 @@ export const postComentario = (camisetaId, valoracion, autor, comentario) => asy
 
 export const addComentario = (comentario) => ({ type: ActionTypes.ADD_COMENTARIO, payload: comentario });
 
-
-// --- REGISTRO ---
-export const login = (email, password) => async (dispatch) => {
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        // Filtramos solo lo estrictamente necesario
-        const datosReducidos = {
-            uid: user.uid,
-            email: user.email
-        };
-
-        dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: datosReducidos });
-        return user; 
-    } catch (error) {
-        console.error("Error en login:", error.message);
-        throw error;
-    }
-};
-
-// --- REGISTRO ---
+// ACCIÓN PARA REGISTRO MANUAL
 export const signUp = (email, password) => async (dispatch) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        const datosReducidos = {
-            uid: user.uid,
-            email: user.email
-        };
-
-        dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: datosReducidos });
-        return user;
+        // Firebase ya loguea al usuario automáticamente al crearlo
+        dispatch({ type: 'LOGIN_SUCCESS', payload: userCredential.user });
     } catch (error) {
-        console.error("Error en registro:", error.message);
-        throw error;
+        Alert.alert("Error en Registro", error.message);
+    }
+};
+
+// ACCIÓN PARA LOGIN MANUAL
+export const login = (email, password) => async (dispatch) => {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        dispatch({ type: 'LOGIN_SUCCESS', payload: userCredential.user });
+    } catch (error) {
+        Alert.alert("Error de Acceso", "Email o contraseña incorrectos");
     }
 };
 
