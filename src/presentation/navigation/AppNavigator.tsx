@@ -6,14 +6,20 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+
+// Configuración y Colores
 import { colorTiendaOscuro, colorTiendaClaro } from '../../comun/comun';
+
+// Componentes
 import HomeComponent from '../components/HomeComponent';
 import CatalogoComponent from '../components/CatalogoComponent';
 import DetalleCamisetaComponent from '../components/DetalleCamisetaComponent';
 import QuienesSomosComponent from '../components/QuienesSomosComponent';
 import ContactoComponent from '../components/ContactoComponent';
-import { LoginScreen } from '../screens/LoginScreen';
-import { RegisterScreen } from '../screens/RegisterScreen';
+
+// Pantallas (Rutas corregidas con ../ y sin llaves para export default)
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -26,7 +32,7 @@ const screenOptions = {
 
 function BotonMenu({ onPress }: { onPress: () => void }) {
     return (
-        <Pressable onPress={onPress} hitSlop={8}>
+        <Pressable onPress={onPress} hitSlop={8} style={{ marginLeft: 15 }}>
             <MaterialCommunityIcons
                 name="menu"
                 size={40}
@@ -68,7 +74,7 @@ function CustomDrawerContent(props: any) {
 
 function HomeStack() {
     return (
-        <Stack.Navigator screenOptions={screenOptions}>
+        <Stack.Navigator id="HomeStack" screenOptions={screenOptions}>
             <Stack.Screen
                 name="Home"
                 component={HomeComponent}
@@ -85,7 +91,7 @@ function HomeStack() {
 
 function CatalogoStack() {
     return (
-        <Stack.Navigator screenOptions={screenOptions}>
+        <Stack.Navigator id="CatalogoStack" screenOptions={screenOptions}>
             <Stack.Screen
                 name="Catalogo"
                 component={CatalogoComponent}
@@ -102,7 +108,7 @@ function CatalogoStack() {
 
 function QuienesSomosStack() {
     return (
-        <Stack.Navigator screenOptions={screenOptions}>
+        <Stack.Navigator id="QuienesSomosStack" screenOptions={screenOptions}>
             <Stack.Screen
                 name="QuienesSomos"
                 component={QuienesSomosComponent}
@@ -114,7 +120,7 @@ function QuienesSomosStack() {
 
 function ContactoStack() {
     return (
-        <Stack.Navigator screenOptions={screenOptions}>
+        <Stack.Navigator id="ContactoStack" screenOptions={screenOptions}>
             <Stack.Screen
                 name="Contacto"
                 component={ContactoComponent}
@@ -126,7 +132,7 @@ function ContactoStack() {
 
 function AuthStack() {
     return (
-        <Stack.Navigator screenOptions={screenOptions}>
+        <Stack.Navigator id="AuthStack" screenOptions={screenOptions}>
             <Stack.Screen
                 name="Login"
                 component={LoginScreen}
@@ -145,7 +151,7 @@ export default function AppNavigator() {
     return (
         <NavigationContainer>
             <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight }}>
-                <Drawer.Navigator
+                <Drawer.Navigator id="MainDrawer"
                     initialRouteName="Inicio"
                     drawerContent={(props) => <CustomDrawerContent {...props} />}
                     screenOptions={{
@@ -190,7 +196,7 @@ export default function AppNavigator() {
                         }}
                     />
                     <Drawer.Screen
-                        name="Mi Cuenta"
+                        name="Acceso usuario"
                         component={AuthStack}
                         options={{
                             drawerIcon: ({ color, size }) => (
