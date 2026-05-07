@@ -8,15 +8,18 @@ const LoginFormComponent = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
 
-    const handleLogin = () => {
-        // Validación básica
+    const handleLogin = async () => {
         if (!email || !password) {
             Alert.alert("Error", "Por favor, introduce tu email y contraseña.");
             return;
         }
 
-        // Disparamos la acción de login de Redux
-        dispatch(login(email, password));
+        try {
+            await dispatch(login(email, password));
+            navigation.navigate('Inicio');
+        } catch (error) {
+            Alert.alert("Error de acceso", "Email o contraseña incorrectos.");
+        }
     };
 
     return (

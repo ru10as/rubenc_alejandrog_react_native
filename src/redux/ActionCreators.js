@@ -118,25 +118,23 @@ export const postComentario = (camisetaId, valoracion, autor, comentario) => asy
 
 export const addComentario = (comentario) => ({ type: ActionTypes.ADD_COMENTARIO, payload: comentario });
 
+const extractUser = (firebaseUser) => ({
+    uid: firebaseUser.uid,
+    email: firebaseUser.email,
+    displayName: firebaseUser.displayName ?? null,
+    photoURL: firebaseUser.photoURL ?? null,
+});
+
 // ACCIÓN PARA REGISTRO MANUAL
 export const signUp = (email, password) => async (dispatch) => {
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        // Firebase ya loguea al usuario automáticamente al crearlo
-        dispatch({ type: 'LOGIN_SUCCESS', payload: userCredential.user });
-    } catch (error) {
-        Alert.alert("Error en Registro", error.message);
-    }
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    dispatch({ type: 'LOGIN_SUCCESS', payload: extractUser(userCredential.user) });
 };
 
 // ACCIÓN PARA LOGIN MANUAL
 export const login = (email, password) => async (dispatch) => {
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        dispatch({ type: 'LOGIN_SUCCESS', payload: userCredential.user });
-    } catch (error) {
-        Alert.alert("Error de Acceso", "Email o contraseña incorrectos");
-    }
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    dispatch({ type: 'LOGIN_SUCCESS', payload: extractUser(userCredential.user) });
 };
 
 // --- LOGOUT ---

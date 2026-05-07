@@ -9,21 +9,23 @@ const RegisterFormComponent = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const dispatch = useDispatch();
 
-    const handleRegister = () => {
-        // Validación de campos vacíos
+    const handleRegister = async () => {
         if (!email || !password || !confirmPassword) {
             Alert.alert("Error", "Por favor, rellena todos los campos.");
             return;
         }
 
-        // VALIDACIÓN CRÍTICA: Comprobar que las contraseñas coinciden
         if (password !== confirmPassword) {
             Alert.alert("Error", "Las contraseñas no coinciden.");
             return;
         }
 
-        // Si todo está bien, disparamos la acción de Redux
-        dispatch(signUp(email, password));
+        try {
+            await dispatch(signUp(email, password));
+            navigation.navigate('Inicio');
+        } catch (error) {
+            Alert.alert("Error en Registro", "No se pudo crear la cuenta. Prueba con otro email.");
+        }
     };
 
     return (

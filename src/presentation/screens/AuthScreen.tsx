@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 // LIBRERÍAS DE AUTH
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import * as AuthSession from 'expo-auth-session';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { auth } from '../../api/firebaseConfig'; // Tu archivo con la persistencia
+import { auth } from '../../api/firebaseConfig';
+import { logout } from '../../redux/ActionCreators';
 
 // IMPORTANTE: Para que el navegador se cierre tras el login
 WebBrowser.maybeCompleteAuthSession();
@@ -15,6 +17,8 @@ import RegisterFormComponent from '../components/RegisterFormComponent';
 
 const AuthScreen = ({ navigation }: any) => {
     const [activeTab, setActiveTab] = useState(0);
+    const user = useSelector((state: any) => state.usuario.user);
+    const dispatch = useDispatch<any>();
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         // El que ya tenías
@@ -26,7 +30,7 @@ const AuthScreen = ({ navigation }: any) => {
         // Si vas a probar en iOS después, añade también esta con el mismo ID
         iosClientId: '831451288833-aknfkn3cjjgqpe81alb2s97nh0eod44j.apps.googleusercontent.com',
 
-        redirectUri: 'https://auth.expo.io/@erpisha100/the-12th-man',
+        redirectUri: 'https://auth.expo.io/@alexisgn02/The12thMan',
     });
 
     // ESCUCHADOR DE LA RESPUESTA DE GOOGLE
@@ -46,6 +50,24 @@ const AuthScreen = ({ navigation }: any) => {
                 });
         }
     }, [response]);
+
+    if (user) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.logo}>The 12th Man</Text>
+                <View style={styles.profileContainer}>
+                    <Text style={styles.profileTitle}>Sesión iniciada</Text>
+                    <Text style={styles.profileEmail}>{user.email}</Text>
+                    <TouchableOpacity
+                        style={styles.logoutButton}
+                        onPress={() => dispatch(logout())}
+                    >
+                        <Text style={styles.logoutButtonText}>Cerrar sesión</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -167,7 +189,41 @@ const styles = StyleSheet.create({
         color: '#555',
         fontWeight: 'bold',
         fontSize: 16,
-    }
+    },
+    profileContainer: {
+        backgroundColor: 'white',
+        marginHorizontal: 20,
+        borderRadius: 12,
+        padding: 30,
+        alignItems: 'center',
+        elevation: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+    },
+    profileTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 8,
+    },
+    profileEmail: {
+        fontSize: 15,
+        color: '#666',
+        marginBottom: 30,
+    },
+    logoutButton: {
+        backgroundColor: '#f44336',
+        paddingVertical: 12,
+        paddingHorizontal: 40,
+        borderRadius: 8,
+    },
+    logoutButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
 });
 
 export default AuthScreen;
