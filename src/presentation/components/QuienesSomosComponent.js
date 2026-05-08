@@ -4,31 +4,34 @@ import { connect } from 'react-redux';
 import { Avatar, Card, Text, List, Divider } from 'react-native-paper';
 import { baseUrl } from '../../comun/comun';
 import { IndicadorActividad } from './IndicadorActividadComponent';
+import { useTranslation } from 'react-i18next';
 
 const mapStateToProps = (state) => ({
     actividades: state.actividades || { isLoading: false, errMess: null, actividades: [] },
 });
 
 function Historia() {
+    const { t } = useTranslation();
+
     return (
         <Card style={styles.card}>
-            <Card.Title title="Un poquito de historia" titleStyle={styles.cardTitle} />
+            {/* Título más institucional */}
+            <Card.Title 
+                title={t('quienes_somos.historia.titulo')} 
+                subtitle={t('quienes_somos.historia.subtitulo')}
+                titleStyle={styles.cardTitle} 
+            />
             <Card.Content>
                 <Text style={styles.textoDeHistoria}>
-                    El nacimiento del club de montaña Gaztaroa se remonta a la
-                    primavera de 1976 cuando jóvenes aficionados a la montaña y
-                    pertenecientes a un club juvenil decidieron crear la sección
-                    montañera de dicho club. Fueron unos comienzos duros debido sobre
-                    todo a la situación política de entonces. Gracias al esfuerzo
-                    económico de sus socios y socias se logró alquilar una bajera.
-                    Gaztaroa ya tenía su sede social.
+                    {t('quienes_somos.historia.descripcion_larga')}
                 </Text>
-                <Text style={styles.textoDeHistoria}>
-                    Desde aquí queremos hacer llegar nuestro agradecimiento a todos
-                    los montañeros y montañeras que alguna vez habéis pasado por el
-                    club aportando vuestro granito de arena.
+                
+                <Divider style={[styles.linea, { marginVertical: 15, width: '100%' }]} />
+                
+                <Text style={styles.textoAgradecimiento}>
+                    {t('quienes_somos.historia.agradecimiento')}
                 </Text>
-                <Text style={styles.textoDeHistoria}>Gracias!</Text>
+                <Text style={styles.firma}>{t('quienes_somos.historia.firma')}</Text>
             </Card.Content>
         </Card>
     );

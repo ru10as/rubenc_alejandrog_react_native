@@ -6,7 +6,7 @@ import { ConfigureStore } from './src/redux/configureStore';
 import AppNavigator from './src/presentation/navigation/AppNavigator';
 import { fetchCamisetas, fetchComentarios, fetchCabeceras, fetchNovedades } from './src/redux/ActionCreators';
 import { importarDatos } from './src/api/migrador'; // De esta forma podemos importar datos desde json
-
+import './src/i18n/index'; // Importación directa para inicializar la config
 
 const store = ConfigureStore();
 

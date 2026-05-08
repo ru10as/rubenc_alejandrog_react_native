@@ -6,6 +6,8 @@ import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
 import { connect } from 'react-redux';
 import { postFavorito, postComentario } from '../../redux/ActionCreators';
 
+import { withTranslation } from 'react-i18next'; // ESTO ES TEMPORAL
+
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
     comentarios: state.comentarios,
@@ -33,6 +35,7 @@ class DetalleCamiseta extends Component {
 
     render() {
         const { camisetaId } = this.props.route.params;
+        const { t } = this.props; // Establecemos la funcion de traduccion
 
         if (this.props.camisetas.isLoading) {
             return <ActivityIndicator size="large" color={colorTiendaOscuro} style={{ flex: 1 }} />;

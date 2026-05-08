@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { db, auth } from '../api/firebaseConfig';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, setDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"; // Necesario para llevar a cabo la autenticacion con firebase
 import { Alert } from 'react-native';
 
@@ -118,6 +118,13 @@ export const postComentario = (camisetaId, valoracion, autor, comentario) => asy
 
 export const addComentario = (comentario) => ({ type: ActionTypes.ADD_COMENTARIO, payload: comentario });
 
+//const extractUser = (firebaseUser) => ({
+//    uid: firebaseUser.uid,
+//    email: firebaseUser.email,
+//    displayName: firebaseUser.displayName ?? null,
+//    photoURL: firebaseUser.photoURL ?? null,
+//});
+
 const extractUser = (firebaseUser) => ({
     uid: firebaseUser.uid,
     email: firebaseUser.email,
@@ -127,8 +134,28 @@ const extractUser = (firebaseUser) => ({
 
 // ACCIÓN PARA REGISTRO MANUAL
 export const signUp = (email, password) => async (dispatch) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    dispatch({ type: 'LOGIN_SUCCESS', payload: extractUser(userCredential.user) });
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userData = {
+            uid: user.uid,
+            email: user.email,
+            favoritos: [],
+            fechaRegistro: new Date().toISOString()
+        };
+
+        // 1. Mandamos al usuario a la Home YA (Sin esperar a la DB)
+        dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
+
+        // 2. Intentamos guardar en Firestore de fondo (sin await para no bloquear)
+        setDoc(doc(db, "usuarios", user.uid), userData)
+            .then(() => console.log("Perfil creado en DB"))
+            .catch(e => console.log("Error en DB (pero el usuario ya entró):", e));
+
+    } catch (error) {
+        Alert.alert("Error en Registro", error.message);
+    }
 };
 
 // ACCIÓN PARA LOGIN MANUAL

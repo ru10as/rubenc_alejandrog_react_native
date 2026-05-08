@@ -15,6 +15,7 @@ import CatalogoComponent from '../components/CatalogoComponent';
 import DetalleCamisetaComponent from '../components/DetalleCamisetaComponent';
 import QuienesSomosComponent from '../components/QuienesSomosComponent';
 import ContactoComponent from '../components/ContactoComponent';
+import ConfiguracionComponent from '../components/ConfiguracionComponent';
 
 import AuthScreen from '../screens/AuthScreen';
 import { useSelector } from 'react-redux';
@@ -75,7 +76,7 @@ function CustomDrawerContent(props: any) { // Esta funcion es la que vamos a imp
 
 function HomeStack() { // La parte de inicio o Home
     return (
-        <Stack.Navigator id="HomeStack" screenOptions={screenOptions}>
+        <Stack.Navigator id="HomeStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="Home"
                 component={HomeComponent}
@@ -92,7 +93,7 @@ function HomeStack() { // La parte de inicio o Home
 
 function CatalogoStack() { // Este es el subnavegador de la parte de Catalogo
     return (
-        <Stack.Navigator id="CatalogoStack" screenOptions={screenOptions}>
+        <Stack.Navigator id="CatalogoStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="Catalogo"
                 component={CatalogoComponent}
@@ -109,7 +110,7 @@ function CatalogoStack() { // Este es el subnavegador de la parte de Catalogo
 
 function QuienesSomosStack() { // Esta funcion la implementamos para el subnavegador de la parte de QuienesSomos
     return (
-        <Stack.Navigator id="QuienesSomosStack" screenOptions={screenOptions}>
+        <Stack.Navigator id="QuienesSomosStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="QuienesSomos"
                 component={QuienesSomosComponent}
@@ -121,7 +122,7 @@ function QuienesSomosStack() { // Esta funcion la implementamos para el subnaveg
 
 function ContactoStack() { // Esta funcion la implementamos para el subnavegador de la parte de Contacto
     return (
-        <Stack.Navigator id="ContactoStack" screenOptions={screenOptions}>
+        <Stack.Navigator id="ContactoStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="Contacto"
                 component={ContactoComponent}
@@ -138,6 +139,18 @@ function AuthStack() { // Con esta funcion lo que hacemos es un subnavegador de 
                 name="Autenticacion"
                 component={AuthScreen} //
                 // options={({ navigation }) => headerOptions('Acceso Jugadores', navigation)}
+            />
+        </Stack.Navigator>
+    );
+}
+
+function ConfiguracionStack() {
+    return (
+        <Stack.Navigator id="ConfiguracionStack" screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+                name="Configuracion"
+                component={ConfiguracionComponent}
+                options={({ navigation }) => headerOptions('Configuración', navigation)}
             />
         </Stack.Navigator>
     );
@@ -178,7 +191,7 @@ export default function AppNavigator() {
                                     style={styles.botonRegistroHeader} 
                                     onPress={() => navigation.navigate('Acceso usuario')}
                                 >
-                                    <Text style={{color: 'white', fontWeight: 'bold'}}>Registrarse</Text>
+                                    <Text style={{color: 'white', fontWeight: 'bold', fontSize:12}}>Registrarse</Text>
                                 </TouchableOpacity>
                             )
                         ),
@@ -230,6 +243,17 @@ export default function AppNavigator() {
                             ),
                         }}
                     />
+
+                    <Drawer.Screen
+                        name="Configuración"
+                        component={ConfiguracionStack}
+                        options={{
+                            drawerIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="cog" color={color} size={size} />
+                            ),
+                        }}
+                    />
+
                 </Drawer.Navigator>
             </View>
         </NavigationContainer>
