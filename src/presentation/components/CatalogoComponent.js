@@ -3,6 +3,7 @@ import { FlatList, View, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { List, Divider, Text } from 'react-native-paper';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { IndicadorActividad } from './IndicadorActividadComponent';
 
 const mapStateToProps = state => ({
@@ -13,11 +14,12 @@ class Catalogo extends Component {
     render() {
         const { navigate } = this.props.navigation;
 
+        const lang = this.props.i18n.language;
         const renderItem = ({ item }) => (
             <View>
                 <List.Item
-                    title={item.nombre}
-                    description={item.descripcion}
+                    title={item.nombres?.[lang] ?? item.nombres?.es}
+                    description={item.descripciones?.[lang] ?? item.descripciones?.es}
                     titleNumberOfLines={0}
                     descriptionNumberOfLines={6}
                     onPress={() => navigate('DetalleCamiseta', { camisetaId: item.id })}
@@ -81,4 +83,4 @@ const styles = StyleSheet.create({
     errorText: { color: 'red', textAlign: 'center' },
 });
 
-export default connect(mapStateToProps)(Catalogo);
+export default withTranslation()(connect(mapStateToProps)(Catalogo));

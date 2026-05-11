@@ -35,7 +35,8 @@ class DetalleCamiseta extends Component {
 
     render() {
         const { camisetaId } = this.props.route.params;
-        const { t } = this.props; // Establecemos la funcion de traduccion
+        const { t, i18n } = this.props;
+        const lang = i18n.language;
 
         if (this.props.camisetas.isLoading) {
             return <ActivityIndicator size="large" color={colorTiendaOscuro} style={{ flex: 1 }} />;
@@ -69,7 +70,7 @@ class DetalleCamiseta extends Component {
                     <View style={styles.seccionContenido}>
                         <View style={styles.headerRow}>
                             <View style={{ flex: 1 }}>
-                                <Text style={styles.titulo}>{camiseta.nombre}</Text>
+                                <Text style={styles.titulo}>{camiseta.nombres?.[lang] ?? camiseta.nombres?.es}</Text>
                                 {camiseta.destacado && <Text style={styles.badge}>Edición de Coleccionista</Text>}
                             </View>
                             <IconButton
@@ -79,7 +80,7 @@ class DetalleCamiseta extends Component {
                                 onPress={() => this.props.postFavorito(camisetaId)}
                             />
                         </View>
-                        <Text style={styles.descripcion}>{camiseta.descripcion}</Text>
+                        <Text style={styles.descripcion}>{camiseta.descripciones?.[lang] ?? camiseta.descripciones?.es}</Text>
                         <Button
                             mode="contained"
                             onPress={() => console.log('Añadir al carrito')}
@@ -194,4 +195,4 @@ const styles = StyleSheet.create({
     btnModal: { backgroundColor: colorTiendaOscuro, padding: 5, marginBottom: 10 },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetalleCamiseta);
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(DetalleCamiseta));
