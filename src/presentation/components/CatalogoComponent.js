@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { FlatList, View, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { List, Divider, Text } from 'react-native-paper';
-import { baseUrl } from '../../comun/comun';
 import { connect } from 'react-redux';
 import { IndicadorActividad } from './IndicadorActividadComponent';
 
@@ -25,7 +24,7 @@ class Catalogo extends Component {
                     left={() => (
                         <View style={styles.imagenContainer}>
                             <Image
-                                source={{ uri: baseUrl + item.imagen }}
+                                source={{ uri: item.imagen }}
                                 style={styles.imagen}
                                 resizeMode="cover"
                             />

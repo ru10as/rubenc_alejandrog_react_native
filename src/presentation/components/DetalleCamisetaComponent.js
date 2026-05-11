@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Image, ScrollView, Modal, ActivityIndicator, ImageBackground } from 'react-native';
 import { Text, Divider, IconButton, TextInput, Button, Surface } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
-import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
+import { colorTiendaOscuro } from '../../comun/comun';
 import { connect } from 'react-redux';
 import { postFavorito, postComentario } from '../../redux/ActionCreators';
 
@@ -59,7 +59,7 @@ class DetalleCamiseta extends Component {
                     {/* CABECERA VISUAL */}
                     <Surface style={styles.contenedorImagen} elevation={1}>
                         <Image
-                            source={{ uri: baseUrl + camiseta.imagen }}
+                            source={{ uri: camiseta.imagen }}
                             style={styles.imagenPrincipal}
                             resizeMode="contain"
                         />

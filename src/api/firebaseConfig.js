@@ -1,28 +1,26 @@
 // src/api/firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-// Añadimos estas tres importaciones para el Login
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyARBh4fxHvoGvKCV2F6Qg2n8Bakv45jDUU",
-  authDomain: "the-12th-man-4ddcf.firebaseapp.com",
-  projectId: "the-12th-man-4ddcf",
-  storageBucket: "the-12th-man-4ddcf.firebasestorage.app",
-  messagingSenderId: "831451288833",
-  appId: "1:831451288833:web:e26f50363b3b7b62a27700",
-  measurementId: "G-TP6CHEMBGY"
+  apiKey: "AIzaSyAB7DxuxgebjQknqwnpXfbY2YAm-GkoDR4",
+  authDomain: "the12thman2.firebaseapp.com",
+  projectId: "the12thman2",
+  storageBucket: "the12thman2.firebasestorage.app",
+  messagingSenderId: "35486353245",
+  appId: "1:35486353245:web:9797c18128214665340ab4",
+  measurementId: "G-P1J47SH1NB"
 };
 
-// Inicializamos la App
 const app = initializeApp(firebaseConfig);
 
-// Exportamos la conexión a la base de datos
 export const db = getFirestore(app);
 
-// CONFIGURACIÓN DE AUTH CON PERSISTENCIA
-// Esto soluciona el Warning amarillo que te salía antes
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
+
+export const storage = getStorage(app);
