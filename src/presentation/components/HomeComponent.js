@@ -19,7 +19,7 @@ function RenderItem({ item, isLoading, errMess, onPress }) {
     return (
         <Card style={styles.card} onPress={onPress}>
             <ImageBackground
-                source={{ uri: baseUrl + item.imagen }}
+                source={{ uri: item.imagen?.startsWith('http') ? item.imagen : baseUrl + item.imagen }}
                 style={styles.imageBackground}
                 imageStyle={styles.imageStyle}
             >
