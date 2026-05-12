@@ -2,8 +2,8 @@ import { Component } from 'react';
 import { FlatList, View, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { List, Divider, Text } from 'react-native-paper';
-import { baseUrl } from '../../comun/comun';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { IndicadorActividad } from './IndicadorActividadComponent';
 import { withTranslation } from 'react-i18next'; // Importante para detectar el idioma
 

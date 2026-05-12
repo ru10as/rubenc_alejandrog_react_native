@@ -29,6 +29,7 @@
     },
     "plugins": [
       "expo-web-browser",
+<<<<<<< HEAD
       [
         "@react-native-google-signin/google-signin",
         {
@@ -42,5 +43,9 @@
         "projectId": "5bb5af8d-6e8f-4059-a357-dd0b48b33ab1"
       }
     }
+=======
+      "expo-localization"
+    ]
+>>>>>>> main
   }
 }

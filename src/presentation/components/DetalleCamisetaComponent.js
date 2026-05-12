@@ -57,7 +57,7 @@ class DetalleCamiseta extends Component {
                 <ScrollView style={styles.mainContainer}>
                     <Surface style={styles.contenedorImagen} elevation={1}>
                         <Image
-                            source={{ uri: baseUrl + camiseta.imagen }}
+                            source={{ uri: camiseta.imagen }}
                             style={styles.imagenPrincipal}
                             resizeMode="contain"
                         />
@@ -76,7 +76,7 @@ class DetalleCamiseta extends Component {
                                 onPress={() => this.props.postFavorito(camisetaId)}
                             />
                         </View>
-                        <Text style={styles.descripcion}>{camiseta.descripcion}</Text>
+                        <Text style={styles.descripcion}>{camiseta.descripciones?.[lang] ?? camiseta.descripciones?.es}</Text>
                         <Button
                             mode="contained"
                             onPress={() => console.log('Comprar')}
