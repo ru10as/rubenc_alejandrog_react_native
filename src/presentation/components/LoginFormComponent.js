@@ -10,7 +10,7 @@ const LoginFormComponent = ({ navigation }) => {
 
     const handleLogin = async () => {
         if (!email || !password) {
-            Alert.alert("Error", "Por favor, introduce tu email y contraseña.");
+            Alert.alert(t('login_error_titulo'), t('login_error_campos'));
             return;
         }
 
@@ -18,16 +18,16 @@ const LoginFormComponent = ({ navigation }) => {
             await dispatch(login(email, password));
             navigation.navigate('Inicio');
         } catch (error) {
-            Alert.alert("Error de acceso", "Email o contraseña incorrectos.");
+            Alert.alert(t('login_error_titulo'), t('login_error_credenciales'));
         }
     };
 
     return (
         <View style={styles.innerContainer}>
-            <Text style={styles.label}>Identifícate para jugar</Text>
+            <Text style={styles.label}>{t('login_identificate')}</Text>
             
             <TextInput 
-                placeholder="Correo electrónico" 
+                placeholder={t('login_email')} 
                 onChangeText={setEmail} 
                 style={styles.input} 
                 autoCapitalize="none"
@@ -35,16 +35,21 @@ const LoginFormComponent = ({ navigation }) => {
             />
             
             <TextInput 
-                placeholder="Contraseña" 
+                placeholder={t('login_password')} 
                 secureTextEntry 
                 onChangeText={setPassword} 
                 style={styles.input} 
                 autoCapitalize="none"
             />
             
-            <View style={{ marginTop: 10 }}>
-                <Button title="Entrar" onPress={handleLogin} color="#f44336" />
-            </View>
+            <Button 
+                mode="contained" 
+                onPress={handleLogin} 
+                style={styles.button}
+                buttonColor={colorTiendaOscuro}
+            >
+                {t('login_boton_entrar')}
+            </Button>
         </View>
     );
 };

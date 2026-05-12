@@ -20,5 +20,19 @@
   "modal_nombre": "Izena",
   "modal_comentario": "Iruzkina",
   "modal_publicar": "Argitaratu",
-  "modal_cancelar": "Utzi"
+  "modal_cancelar": "Utzi",
+  "qs_titulo_principal": "Gure Ibilbidea",
+  "qs_historia_parrafo_1": "Gaztaroa mendi taldearen jaiotza 1976ko udaberrian izan zen, gazte gogotsu talde batek zelaira ateratzea eta bere mendi saila sortzea erabaki zuenean. Hasiera gogorrak izan ziren, orduko egoera politikoaren ondorioz partida zaila jokatuz.",
+  "qs_historia_parrafo_2": "Bazkideen ahalegin ekonomikoari esker, gure egoitza lortu genuen. Hemendik, gure ekipazioa jantzi duen eta espedizio honetan bere alea jarri duen mendizale bakoitzari eskerrak eman nahi dizkiogu.",
+  "qs_gracias": "Eskerrik asko taldeko kide izateagatik!",
+  "qs_actividades_titulo": "Ekintzak eta Baliabideak",
+  "qs_error_actividades": "Ezin izan dira ekintzak kargatu une honetan.",
+  "indicador_proceso":"Edukia kargatzen...",
+  "login_identificate":"Identifikatu zaitez",
+  "login_email":"Posta elektronikoa",
+  "login_password":"Pasahitza",
+  "login_boton_entrar":"Sartu",
+  "login_error_titulo":"Sarbide errorea",
+  "login_error_campos":"Sartu posta eta pasahitza",
+  "login_error_credenciales":"Datu okerrak"
 }

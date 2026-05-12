@@ -1,56 +1,134 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { Card, Text, Divider } from 'react-native-paper';
+import { ScrollView, StyleSheet, ImageBackground, View, Linking } from 'react-native';
+import { Card, Text, Divider, Button, Avatar, List } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-// Importamos el color de tu tienda para que sea coherente
 import { colorTiendaOscuro } from '../../comun/comun';
 
 function Contacto() {
     const { t } = useTranslation();
 
+    // Función para llamadas/emails reales
+    const abrirEnlace = (url) => Linking.openURL(url);
+
     return (
-        <ScrollView style={styles.container}>
-            <Card style={styles.card}>
-                <Card.Title 
-                    title={t('contacto_titulo')} 
-                    titleStyle={[styles.cardTitle, { color: colorTiendaOscuro }]} 
-                />
-                <Card.Content>
-                    <Text style={styles.saludo}>
-                        {t('contacto_saludo')}
-                    </Text>
-                    
-                    <Text style={styles.parrafo}>
-                        {t('contacto_descripcion')}
-                    </Text>
-                    
-                    <Text style={styles.parrafo}>
-                        {t('contacto_despedida')}
-                    </Text>
-                    
-                    <Divider style={styles.linea} />
-                    
-                    <Text style={styles.datosDeContacto}>
-                        <Text style={{ fontWeight: 'bold' }}>{t('tel')}:</Text> +34 600 123 456
-                    </Text>
-                    
-                    <Text style={styles.datosDeContacto}>
-                        <Text style={{ fontWeight: 'bold' }}>{t('email')}:</Text> soporte@the12thman.com
-                    </Text>
-                </Card.Content>
-            </Card>
-        </ScrollView>
+        <ImageBackground 
+            source={{ uri: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000' }} // Un estadio épico de fondo
+            style={styles.background}
+            blurRadius={2} // Un poco de desenfoque para que el texto resalte
+        >
+            <ScrollView contentContainerStyle={styles.container}>
+                
+                {/* Cabecera con Estilo */}
+                <View style={styles.header}>
+                    <Avatar.Icon size={80} icon="soccer" backgroundColor={colorTiendaOscuro} />
+                    <Text style={styles.tituloApp}>THE 12th MAN</Text>
+                    <Text style={styles.subtituloApp}>{t('contacto_titulo')}</Text>
+                </View>
+
+                <Card style={styles.card}>
+                    <Card.Content>
+                        <Text style={styles.saludo}>{t('contacto_saludo')}</Text>
+                        <Text style={styles.parrafo}>{t('contacto_descripcion')}</Text>
+                        
+                        <Divider style={styles.linea} />
+
+                        {/* Sección de Contacto con Iconos */}
+                        <List.Item
+                            title={t('tel')}
+                            description="+34 600 123 456"
+                            left={props => <List.Icon {...props} icon="phone" color={colorTiendaOscuro} />}
+                            onPress={() => abrirEnlace('tel:+34600123456')}
+                            style={styles.listItem}
+                        />
+                        
+                        <List.Item
+                            title={t('email')}
+                            description="soporte@the12thman.com"
+                            left={props => <List.Icon {...props} icon="email" color={colorTiendaOscuro} />}
+                            onPress={() => abrirEnlace('mailto:soporte@the12thman.com')}
+                            style={styles.listItem}
+                        />
+
+                        <Divider style={styles.linea} />
+
+                        <Text style={styles.despedida}>{t('contacto_despedida')}</Text>
+                        
+                        <Button 
+                            mode="contained" 
+                            style={styles.botonSocial}
+                            buttonColor={colorTiendaOscuro}
+                            icon="instagram"
+                            onPress={() => {}}
+                        >
+                            Follow the Squad
+                        </Button>
+                    </Card.Content>
+                </Card>
+            </ScrollView>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#f5f5f5' },
-    card: { margin: 15, borderRadius: 15, paddingVertical: 10 },
-    cardTitle: { fontWeight: 'bold', fontSize: 28, textAlign: 'center' },
-    saludo: { fontSize: 20, fontWeight: '600', marginBottom: 15, textAlign: 'center' },
-    parrafo: { marginBottom: 12, lineHeight: 22, textAlign: 'justify', color: '#444' },
-    datosDeContacto: { marginTop: 8, fontSize: 16 },
-    linea: { marginVertical: 20, height: 1, backgroundColor: '#ddd' },
+    background: { flex: 1, resizeMode: 'cover' },
+    container: { paddingBottom: 30 },
+    header: {
+        alignItems: 'center',
+        marginTop: 40,
+        marginBottom: 20,
+    },
+    tituloApp: {
+        fontSize: 32,
+        fontWeight: '900',
+        color: '#fff',
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: -1, height: 1 },
+        textShadowRadius: 10,
+        marginTop: 10
+    },
+    subtituloApp: {
+        fontSize: 18,
+        color: '#ddd',
+        letterSpacing: 2,
+        fontWeight: 'bold'
+    },
+    card: { 
+        marginHorizontal: 20, 
+        borderRadius: 20, 
+        backgroundColor: 'rgba(255, 255, 255, 0.92)', // Un blanco un poco transparente
+        elevation: 10 
+    },
+    saludo: { 
+        fontSize: 22, 
+        fontWeight: 'bold', 
+        color: colorTiendaOscuro, 
+        textAlign: 'center',
+        marginBottom: 10 
+    },
+    parrafo: { 
+        fontSize: 15, 
+        lineHeight: 22, 
+        textAlign: 'center', 
+        color: '#333',
+        paddingHorizontal: 10 
+    },
+    linea: { marginVertical: 15, height: 1.5, opacity: 0.5 },
+    listItem: {
+        backgroundColor: '#f9f9f9',
+        borderRadius: 10,
+        marginBottom: 8
+    },
+    despedida: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 15,
+        fontStyle: 'italic'
+    },
+    botonSocial: {
+        marginTop: 10,
+        borderRadius: 10
+    }
 });
 
 export default Contacto;

@@ -137,18 +137,13 @@ export const signUp = (email, password) => async (dispatch) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-
         const userData = {
             uid: user.uid,
             email: user.email,
             favoritos: [],
             fechaRegistro: new Date().toISOString()
         };
-
-        // 1. Mandamos al usuario a la Home YA (Sin esperar a la DB)
         dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
-
-        // 2. Intentamos guardar en Firestore de fondo (sin await para no bloquear)
         setDoc(doc(db, "usuarios", user.uid), userData)
             .then(() => console.log("Perfil creado en DB"))
             .catch(e => console.log("Error en DB (pero el usuario ya entró):", e));

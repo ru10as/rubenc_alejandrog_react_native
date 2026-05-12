@@ -20,5 +20,19 @@
   "modal_nombre": "Name",
   "modal_comentario": "Comment",
   "modal_publicar": "Publish",
-  "modal_cancelar": "Cancel"
+  "modal_cancelar": "Cancel",
+  "qs_titulo_principal": "Our Journey",
+  "qs_historia_parrafo_1": "The birth of the Gaztaroa mountain club dates back to the spring of 1976, when a team of passionate youths decided to take the field and found their own mountain section. Those were tough beginnings, playing a difficult match due to the political situation of the time.",
+  "qs_historia_parrafo_2": "Thanks to the financial effort of our members, we managed to secure our own headquarters. From here, we want to thank every mountaineer who has worn our kit and contributed their grain of sand to this expedition.",
+  "qs_gracias": "Thanks for being part of the team!",
+  "qs_actividades_titulo": "Activities and Resources",
+  "qs_error_actividades": "Activities could not be loaded at this time.",
+  "indicador_proceso":"Loading content...",
+  "login_identificate":"Sign In",
+  "login_email":"Email Address",
+  "login_password":"Password",
+  "login_boton_entrar":"Login",
+  "login_error_titulo":"Login Error",
+  "login_error_campos":"Enter email and password",
+  "login_error_credenciales":"Invalid credentials"
 }
