@@ -1,13 +1,13 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import * as Localization from 'expo-localization';
+import i18n from 'i18next'; // Traemos la libreria o motor principal 
+import { initReactI18next } from 'react-i18next'; // Importamos el puente para React entienda i18next
+import * as Localization from 'expo-localization'; // Importa la herramienta de expo para lectura de ajuste de idiomas del telefono
 
-// Importamos tus traducciones (asegúrate de que los nombres coincidan)
-import es from './es.json';
+import es from './es.json'; // Carga de diccionarios 
 import en from './en.json';
 import eu from './eu.json';
 
 // Detectamos el idioma del dispositivo (o ponemos 'es' por defecto)
+
 const deviceLanguage = Localization.locale ? Localization.locale.split('-')[0] : 'es';
 
 i18n
@@ -18,11 +18,11 @@ i18n
       en: { translation: en },
       eu: { translation: eu },
     },
-    lng: deviceLanguage, // Idioma inicial
-    fallbackLng: 'es',   // Si no encuentra un texto en inglés, lo pone en español
-    compatibilityJSON: 'v3', // ESTO arregla el fallo en Android
+    lng: deviceLanguage,
+    fallbackLng: 'es',
+    compatibilityJSON: 'v3',
     interpolation: {
-      escapeValue: false, // React ya protege contra XSS
+      escapeValue: false,
     },
   });
 

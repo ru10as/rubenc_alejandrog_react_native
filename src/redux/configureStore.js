@@ -4,7 +4,8 @@ import { comentarios } from './comentarios';
 import { cabeceras } from './cabeceras';      
 import { novedades } from './novedades';      
 import { favoritos } from './favoritos';      
-import { usuario } from './usuario'; // <--- ¡IMPORTANTE! Añade esta línea
+import { usuario } from './usuario'; //
+import { carrito } from './carrito';
 
 export const ConfigureStore = () => {
     const store = configureStore({
@@ -15,6 +16,7 @@ export const ConfigureStore = () => {
             novedades: novedades,
             favoritos: favoritos,
             usuario: usuario,
+            carrito:carrito,
         },
     });
 

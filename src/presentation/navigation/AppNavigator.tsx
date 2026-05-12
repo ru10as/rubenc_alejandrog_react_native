@@ -16,6 +16,7 @@ import DetalleCamisetaComponent from '../components/DetalleCamisetaComponent';
 import QuienesSomosComponent from '../components/QuienesSomosComponent';
 import ContactoComponent from '../components/ContactoComponent';
 import ConfiguracionComponent from '../components/ConfiguracionComponent';
+import CarritoComponent from '../components/CarritoComponent';
 
 import AuthScreen from '../screens/AuthScreen';
 import { useSelector } from 'react-redux';
@@ -98,6 +99,23 @@ function CatalogoStack() { // Este es el subnavegador de la parte de Catalogo
                 name="Catalogo"
                 component={CatalogoComponent}
                 options={({ navigation }) => headerOptions('Nuestras Camisetas', navigation)}
+            />
+            <Stack.Screen
+                name="DetalleCamiseta"
+                component={DetalleCamisetaComponent}
+                options={{ title: 'Detalle de Producto' }}
+            />
+        </Stack.Navigator>
+    );
+}
+
+function CarritoStack() {
+    return (
+        <Stack.Navigator id="CarritoStack" screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+                name="CarritoScreen"
+                component={CarritoComponent} // Asegúrate de importar tu componente de carrito
+                options={({ navigation }) => headerOptions('Mi Carrito', navigation)}
             />
             <Stack.Screen
                 name="DetalleCamiseta"
@@ -212,6 +230,15 @@ export default function AppNavigator() {
                         options={{
                             drawerIcon: ({ color, size }) => (
                                 <MaterialCommunityIcons name="tshirt-crew" color={color} size={size} />
+                            ),
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="Mi Carrito"
+                        component={CarritoStack}
+                        options={{
+                            drawerIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="cart" color={color} size={size} />
                             ),
                         }}
                     />

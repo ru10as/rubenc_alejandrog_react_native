@@ -20,5 +20,19 @@
   "modal_nombre": "Nombre",
   "modal_comentario": "Comentario",
   "modal_publicar": "Publicar",
-  "modal_cancelar": "Cancelar"
+  "modal_cancelar": "Cancelar",
+  "qs_titulo_principal": "Nuestra Trayectoria",
+  "qs_historia_parrafo_1": "El nacimiento del club de montaña Gaztaroa se remonta a la primavera de 1976, cuando un equipo de jóvenes apasionados decidió saltar al campo y fundar su propia sección montañera. Fueron comienzos duros, jugando un partido difícil debido a la situación política de entonces.",
+  "qs_historia_parrafo_2": "Gracias al esfuerzo económico de sus socios y socias, logramos conseguir nuestra propia sede. Desde aquí, queremos dar las gracias a cada montañero que ha vestido nuestra equipación y ha aportado su granito de arena en esta expedición.",
+  "qs_gracias": "¡Gracias por formar parte del equipo!",
+  "qs_actividades_titulo": "Actividades y Recursos",
+  "qs_error_actividades": "No se han podido cargar las actividades en este momento.",
+  "indicador_proceso":"Cargando contenido...",
+  "login_identificate":"Identifícate",
+  "login_email":"Correo electrónico",
+  "login_password":"Contraseña",
+  "login_boton_entrar":"Entrar",
+  "login_error_titulo":"Error de acceso",
+  "login_error_campos":"Introduce email y contraseña",
+  "login_error_credenciales":"Datos incorrectos"
 }

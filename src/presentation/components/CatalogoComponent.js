@@ -5,6 +5,7 @@ import { List, Divider, Text } from 'react-native-paper';
 import { baseUrl } from '../../comun/comun';
 import { connect } from 'react-redux';
 import { IndicadorActividad } from './IndicadorActividadComponent';
+import { withTranslation } from 'react-i18next'; // Importante para detectar el idioma
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
@@ -13,35 +14,44 @@ const mapStateToProps = state => ({
 class Catalogo extends Component {
     render() {
         const { navigate } = this.props.navigation;
+        const { t, i18n } = this.props; // i18n nos dice el idioma actual (es, en, eu)
 
-        const renderItem = ({ item }) => (
-            <View>
-                <List.Item
-                    title={item.nombre}
-                    description={item.descripcion}
-                    titleNumberOfLines={0}
-                    descriptionNumberOfLines={6}
-                    onPress={() => navigate('DetalleCamiseta', { camisetaId: item.id })}
-                    left={() => (
-                        <View style={styles.imagenContainer}>
-                            <Image
-                                source={{ uri: baseUrl + item.imagen }}
-                                style={styles.imagen}
-                                resizeMode="cover"
-                            />
-                        </View>
-                    )}
-                    titleStyle={styles.titulo}
-                    descriptionStyle={styles.descripcion}
-                    contentStyle={styles.contenido}
-                />
-                <Divider />
-            </View>
-        );
+        const renderItem = ({ item }) => {
+            // Lógica de selección de idioma:
+            // Buscamos el nombre en el idioma actual, si no existe, tiramos del español por defecto
+            const nombreTraducido = item.nombres?.[i18n.language] || item.nombres?.['es'] || item.nombre;
+            const descripcionTraducida = item.descripciones?.[i18n.language] || item.descripciones?.['es'] || item.descripcion;
+
+            return (
+                <View>
+                    <List.Item
+                        title={nombreTraducido}
+                        description={descripcionTraducida}
+                        titleNumberOfLines={0}
+                        descriptionNumberOfLines={2} // Reducido para que el catálogo sea más limpio
+                        onPress={() => navigate('DetalleCamiseta', { camisetaId: item.id })}
+                        left={() => (
+                            <View style={styles.imagenContainer}>
+                                <Image
+                                    source={{ uri: baseUrl + item.imagen }}
+                                    style={styles.imagen}
+                                    resizeMode="contain" // "contain" suele ir mejor para ver la camiseta entera
+                                />
+                            </View>
+                        )}
+                        titleStyle={styles.titulo}
+                        descriptionStyle={styles.descripcion}
+                        contentStyle={styles.contenido}
+                    />
+                    <Divider />
+                </View>
+            );
+        };
 
         if (this.props.camisetas.isLoading) {
             return <IndicadorActividad />;
         }
+        
         if (this.props.camisetas.errMess) {
             return (
                 <View style={styles.errorContainer}>
@@ -49,12 +59,14 @@ class Catalogo extends Component {
                 </View>
             );
         }
+
         return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.container} edges={['left', 'right']}>
                 <FlatList
                     data={this.props.camisetas.camisetas}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
+                    contentContainerStyle={{ paddingBottom: 20 }}
                 />
             </SafeAreaView>
         );
@@ -62,24 +74,25 @@ class Catalogo extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
+    container: { flex: 1, backgroundColor: '#fff' },
     imagenContainer: {
-        width: 70,
-        height: 70,
-        alignSelf: 'center',
-        marginLeft: 8,
-        marginRight: 4,
+        width: 80,
+        height: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 10,
     },
     imagen: {
-        width: 70,
-        height: 70,
-        borderRadius: 6,
+        width: 75,
+        height: 75,
+        borderRadius: 4,
     },
-    contenido: { paddingRight: 8 },
-    titulo: { fontSize: 16, fontWeight: 'bold' },
-    descripcion: { fontSize: 14, lineHeight: 20 },
+    contenido: { paddingVertical: 10 },
+    titulo: { fontSize: 16, fontWeight: 'bold', color: '#333' },
+    descripcion: { fontSize: 13, color: '#666' },
     errorContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
     errorText: { color: 'red', textAlign: 'center' },
 });
 
-export default connect(mapStateToProps)(Catalogo);
+// Envolvemos con la traducción y luego con Redux
+export default withTranslation()(connect(mapStateToProps)(Catalogo));

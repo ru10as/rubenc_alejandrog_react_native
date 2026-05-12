@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Image, ScrollView, Modal, ActivityIndicator, ImageBackground } from 'react-native';
+import { View, StyleSheet, Image, ScrollView, Modal, ImageBackground } from 'react-native';
 import { Text, Divider, IconButton, TextInput, Button, Surface } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
-import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
 import { connect } from 'react-redux';
-import { postFavorito, postComentario } from '../../redux/ActionCreators';
+import { withTranslation } from 'react-i18next'; // Importación necesaria
 
-import { withTranslation } from 'react-i18next'; // ESTO ES TEMPORAL
+import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
+import { postFavorito, postComentario } from '../../redux/ActionCreators';
+import { IndicadorActividad } from './IndicadorActividadComponent'; // Usamos tu componente pro
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
@@ -35,28 +36,25 @@ class DetalleCamiseta extends Component {
 
     render() {
         const { camisetaId } = this.props.route.params;
-        const { t } = this.props; // Establecemos la funcion de traduccion
+        const { t } = this.props; // Ahora 't' sí vendrá por props gracias a withTranslation
 
         if (this.props.camisetas.isLoading) {
-            return <ActivityIndicator size="large" color={colorTiendaOscuro} style={{ flex: 1 }} />;
+            return <IndicadorActividad />;
         }
 
         const camiseta = this.props.camisetas.camisetas.find(c => Number(c.id) === Number(camisetaId));
         const comentarios = this.props.comentarios.comentarios.filter(c => Number(c.camisetaId) === Number(camisetaId));
-        // favoritos en el store es un array plano de IDs
         const esFavorita = this.props.favoritos?.some(el => Number(el) === Number(camisetaId));
 
-        if (!camiseta) return <View style={styles.error}><Text>Camiseta no encontrada</Text></View>;
+        if (!camiseta) return <View style={styles.error}><Text>{t('detalle_error')}</Text></View>;
 
         return (
-            <ImageBackground
-                source={{ uri: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070' }}
-                style={styles.backgroundImage}
-                imageStyle={{ opacity: 0.05 }}
+            <ImageBackground 
+                source={{ uri: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000' }} 
+                style={styles.background}
+                blurRadius={2}
             >
                 <ScrollView style={styles.mainContainer}>
-
-                    {/* CABECERA VISUAL */}
                     <Surface style={styles.contenedorImagen} elevation={1}>
                         <Image
                             source={{ uri: baseUrl + camiseta.imagen }}
@@ -65,12 +63,11 @@ class DetalleCamiseta extends Component {
                         />
                     </Surface>
 
-                    {/* INFO DEL PRODUCTO */}
                     <View style={styles.seccionContenido}>
                         <View style={styles.headerRow}>
                             <View style={{ flex: 1 }}>
                                 <Text style={styles.titulo}>{camiseta.nombre}</Text>
-                                {camiseta.destacado && <Text style={styles.badge}>Edición de Coleccionista</Text>}
+                                {camiseta.destacado && <Text style={styles.badge}>{t('detalle_edicion_coleccionista')}</Text>}
                             </View>
                             <IconButton
                                 icon={esFavorita ? 'heart' : 'heart-outline'}
@@ -82,19 +79,18 @@ class DetalleCamiseta extends Component {
                         <Text style={styles.descripcion}>{camiseta.descripcion}</Text>
                         <Button
                             mode="contained"
-                            onPress={() => console.log('Añadir al carrito')}
+                            onPress={() => console.log('Comprar')}
                             style={styles.btnComprar}
                         >
-                            Comprar ahora
+                            {t('detalle_comprar')}
                         </Button>
                     </View>
 
                     <Divider style={styles.divisor} />
 
-                    {/* VOCES DE LA GRADA */}
                     <View style={styles.comentariosSeccion}>
                         <View style={styles.rowTitulo}>
-                            <Text style={styles.seccionTitulo}>Voces de la grada</Text>
+                            <Text style={styles.seccionTitulo}>{t('detalle_voces_grada')}</Text>
                             <IconButton icon="plus-circle" iconColor={colorTiendaOscuro} onPress={this.toggleModal} />
                         </View>
                         {comentarios.map((item, index) => (
@@ -105,12 +101,11 @@ class DetalleCamiseta extends Component {
                         ))}
                     </View>
 
-                    {/* CERTIFICADO DIGITAL QR */}
                     <View style={styles.seccionCromo}>
-                        <Text style={styles.seccionTitulo}>Certificado Digital QR</Text>
+                        <Text style={styles.seccionTitulo}>{t('detalle_certificado_titulo')}</Text>
                         <Surface style={styles.tarjetaCromo} elevation={4}>
                             <View style={styles.cromoHeader}>
-                                <Text style={styles.cromoID}>PRODUCTO CERTIFICADO: #TM-{camiseta.id}99</Text>
+                                <Text style={styles.cromoID}>{t('detalle_certificado_id')}: #TM-{camiseta.id}99</Text>
                             </View>
                             <View style={styles.qrWrapper}>
                                 <QRCode
@@ -120,43 +115,39 @@ class DetalleCamiseta extends Component {
                                     backgroundColor="white"
                                 />
                             </View>
-                            <Text style={styles.cromoFooter}>
-                                Comparte esta ficha para vender en el Marketplace o verificar tu propiedad.
-                            </Text>
+                            <Text style={styles.cromoFooter}>{t('detalle_certificado_footer')}</Text>
                         </Surface>
                     </View>
 
-                    {/* MODAL DE COMENTARIOS */}
-                    <Modal visible={this.state.showModal} animationType="slide" transparent={false}>
+                    <Modal visible={this.state.showModal} animationType="slide">
                         <View style={styles.modalContent}>
-                            <Text style={styles.modalTitulo}>Deja tu opinión</Text>
+                            <Text style={styles.modalTitulo}>{t('modal_titulo')}</Text>
                             <TextInput
-                                label="Nombre"
+                                label={t('modal_nombre')}
                                 mode="outlined"
                                 style={styles.input}
                                 value={this.state.autor}
-                                onChangeText={t => this.setState({ autor: t })}
+                                onChangeText={txt => this.setState({ autor: txt })}
                             />
                             <TextInput
-                                label="Comentario"
+                                label={t('modal_comentario')}
                                 mode="outlined"
                                 multiline
                                 numberOfLines={4}
                                 style={styles.input}
                                 value={this.state.comentario}
-                                onChangeText={t => this.setState({ comentario: t })}
+                                onChangeText={txt => this.setState({ comentario: txt })}
                             />
                             <Button
                                 mode="contained"
                                 onPress={() => this.enviarComentario(camisetaId)}
                                 style={styles.btnModal}
                             >
-                                Publicar
+                                {t('modal_publicar')}
                             </Button>
-                            <Button textColor="red" onPress={this.toggleModal}>Cancelar</Button>
+                            <Button textColor="red" onPress={this.toggleModal}>{t('modal_cancelar')}</Button>
                         </View>
                     </Modal>
-
                 </ScrollView>
             </ImageBackground>
         );
@@ -164,7 +155,7 @@ class DetalleCamiseta extends Component {
 }
 
 const styles = StyleSheet.create({
-    backgroundImage: { flex: 1, backgroundColor: '#fff' },
+    background: { flex: 1 },
     mainContainer: { flex: 1 },
     error: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     contenedorImagen: { backgroundColor: '#fff', paddingVertical: 20, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 },
@@ -174,7 +165,7 @@ const styles = StyleSheet.create({
     titulo: { fontSize: 24, fontWeight: 'bold', color: '#333' },
     badge: { color: colorTiendaOscuro, fontSize: 12, fontWeight: 'bold' },
     descripcion: { fontSize: 15, color: '#666', marginTop: 10, lineHeight: 22 },
-    btnComprar: { marginTop: 20, backgroundColor: colorTiendaOscuro, borderRadius: 10, paddingVertical: 5 },
+    btnComprar: { marginTop: 20, backgroundColor: colorTiendaOscuro, borderRadius: 10 },
     divisor: { marginHorizontal: 30, height: 1, backgroundColor: '#eee' },
     comentariosSeccion: { padding: 25 },
     rowTitulo: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
@@ -194,4 +185,4 @@ const styles = StyleSheet.create({
     btnModal: { backgroundColor: colorTiendaOscuro, padding: 5, marginBottom: 10 },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetalleCamiseta);
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(DetalleCamiseta));
