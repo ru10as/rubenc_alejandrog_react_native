@@ -5,7 +5,6 @@ import { List, Divider, Text } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { IndicadorActividad } from './IndicadorActividadComponent';
-import { withTranslation } from 'react-i18next'; // Importante para detectar el idioma
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,

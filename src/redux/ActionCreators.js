@@ -1,7 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 import { db, auth } from '../api/firebaseConfig';
 import { collection, getDocs, addDoc, doc, setDoc } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"; // Necesario para llevar a cabo la autenticacion con firebase
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Alert } from 'react-native';
 
 // --- COMENTARIOS ---
