@@ -5,6 +5,7 @@ import { List, Divider, Text } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { IndicadorActividad } from './IndicadorActividadComponent';
+import { baseUrl } from '../../comun/comun';
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,

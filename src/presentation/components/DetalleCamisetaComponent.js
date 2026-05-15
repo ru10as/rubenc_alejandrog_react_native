@@ -36,7 +36,7 @@ class DetalleCamiseta extends Component {
 
     render() {
         const { camisetaId } = this.props.route.params;
-        const { t } = this.props; // Ahora 't' sí vendrá por props gracias a withTranslation
+        const { t, i18n } = this.props; // Ahora 't' sí vendrá por props gracias a withTranslation
 
         if (this.props.camisetas.isLoading) {
             return <IndicadorActividad />;
@@ -76,7 +76,7 @@ class DetalleCamiseta extends Component {
                                 onPress={() => this.props.postFavorito(camisetaId)}
                             />
                         </View>
-                        <Text style={styles.descripcion}>{camiseta.descripciones?.[lang] ?? camiseta.descripciones?.es}</Text>
+                        <Text style={styles.descripcion}>{camiseta.descripciones?.[i18n.language] ?? camiseta.descripciones?.es ?? camiseta.descripcion}</Text>
                         <Button
                             mode="contained"
                             onPress={() => console.log('Comprar')}
