@@ -42,9 +42,9 @@ class DetalleCamiseta extends Component {
             return <IndicadorActividad />;
         }
 
-        const camiseta = this.props.camisetas.camisetas.find(c => Number(c.id) === Number(camisetaId));
-        const comentarios = this.props.comentarios.comentarios.filter(c => Number(c.camisetaId) === Number(camisetaId));
-        const esFavorita = this.props.favoritos?.some(el => Number(el) === Number(camisetaId));
+        const camiseta = this.props.camisetas.camisetas.find(c => String(c.id) === String(camisetaId));
+        const comentarios = this.props.comentarios.comentarios.filter(c => String(c.camisetaId) === String(camisetaId));
+        const esFavorita = this.props.favoritos?.some(el => String(el) === String(camisetaId));
 
         if (!camiseta) return <View style={styles.error}><Text>{t('detalle_error')}</Text></View>;
 
