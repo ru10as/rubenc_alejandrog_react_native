@@ -5,13 +5,20 @@ import {
 } from 'react-native';
 import { Text, TextInput, Button, ActivityIndicator } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
+import { fetchCamisetas } from '../../redux/ActionCreators';
 import { db, storage, auth } from '../../api/firebaseConfig';
 import { colorTiendaOscuro } from '../../comun/comun';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+const ANCHO_MAX_IMAGEN = 1024;
+const CALIDAD_JPEG = 0.7;
+
 export default function SubirProductoScreen({ navigation }: any) {
+    const dispatch = useDispatch();
     const [imagen, setImagen] = useState<string | null>(null);
     const [nombreEs, setNombreEs] = useState('');
     const [nombreEn, setNombreEn] = useState('');
@@ -62,7 +69,8 @@ export default function SubirProductoScreen({ navigation }: any) {
     };
 
     const subirProducto = async () => {
-        if (!auth.currentUser) return Alert.alert('Sin sesión', 'Debes iniciar sesión para publicar productos.');
+        const usuario = auth.currentUser;
+        if (!usuario) return Alert.alert('Sin sesión', 'Debes iniciar sesión para publicar productos.');
         if (!imagen) return Alert.alert('Falta la imagen', 'Selecciona una foto del producto.');
         if (!nombreEs.trim()) return Alert.alert('Nombre obligatorio', 'El nombre en español es obligatorio.');
         if (!descEs.trim()) return Alert.alert('Descripción obligatoria', 'La descripción en español es obligatoria.');
@@ -70,10 +78,16 @@ export default function SubirProductoScreen({ navigation }: any) {
 
         setSubiendo(true);
         try {
-            // Subir imagen a Firebase Storage
-            const respuesta = await fetch(imagen);
+            // Redimensionar y comprimir antes de subir para no malgastar Storage
+            const imagenOptimizada = await ImageManipulator.manipulateAsync(
+                imagen,
+                [{ resize: { width: ANCHO_MAX_IMAGEN } }],
+                { compress: CALIDAD_JPEG, format: ImageManipulator.SaveFormat.JPEG },
+            );
+
+            const respuesta = await fetch(imagenOptimizada.uri);
             const blob = await respuesta.blob();
-            const rutaStorage = `camisetas/${Date.now()}.jpg`;
+            const rutaStorage = `camisetas/${usuario.uid}/${Date.now()}.jpg`;
             const storageRef = ref(storage, rutaStorage);
 
             await new Promise<void>((resolve, reject) => {
@@ -103,7 +117,13 @@ export default function SubirProductoScreen({ navigation }: any) {
                 imagen: downloadURL,
                 precio: parseFloat(precio),
                 destacado: false,
+                creadoPor: usuario.uid,
+                vendedorNombre: usuario.displayName ?? usuario.email ?? 'Usuario anónimo',
+                vendedorFoto: usuario.photoURL ?? null,
+                creadoEn: serverTimestamp(),
             });
+
+            (dispatch as any)(fetchCamisetas());
 
             Alert.alert('¡Publicado!', 'El producto se ha añadido al catálogo.', [
                 { text: 'OK', onPress: () => navigation.goBack() },
