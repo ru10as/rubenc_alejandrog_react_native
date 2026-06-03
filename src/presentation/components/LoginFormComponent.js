@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { login } from '../../redux/ActionCreators'; // Asegúrate de que la ruta es correcta
+import { login } from '../../redux/ActionCreators';
 
 const LoginFormComponent = ({ navigation }) => {
     const [email, setEmail] = useState('');

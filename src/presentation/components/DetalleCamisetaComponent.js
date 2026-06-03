@@ -3,11 +3,11 @@ import { View, StyleSheet, Image, ScrollView, Modal, ImageBackground } from 'rea
 import { Text, Divider, IconButton, TextInput, Button, Surface } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next'; // Importación necesaria
+import { withTranslation } from 'react-i18next';
 
 import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
 import { postFavorito, postComentario } from '../../redux/ActionCreators';
-import { IndicadorActividad } from './IndicadorActividadComponent'; // Usamos tu componente pro
+import { IndicadorActividad } from './IndicadorActividadComponent';
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
@@ -36,7 +36,7 @@ class DetalleCamiseta extends Component {
 
     render() {
         const { camisetaId } = this.props.route.params;
-        const { t, i18n } = this.props; // Ahora 't' sí vendrá por props gracias a withTranslation
+        const { t, i18n } = this.props;
 
         if (this.props.camisetas.isLoading) {
             return <IndicadorActividad />;

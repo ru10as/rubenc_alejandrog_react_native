@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-// LIBRERÍA NATIVA (La que configuramos con el SHA-1)
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { auth } from '../../api/firebaseConfig'; // importamos la configuracion de firebase
+import { auth } from '../../api/firebaseConfig';
 
 import LoginFormComponent from '../components/LoginFormComponent';
 import RegisterFormComponent from '../components/RegisterFormComponent';
@@ -14,27 +13,26 @@ const AuthScreen = ({ navigation }: any) => {
     // CONFIGURACIÓN INICIAL
     useEffect(() => {
         GoogleSignin.configure({
-            webClientId: '831451288833-aknfkn3cjjgqpe81alb2s97nh0eod44j.apps.googleusercontent.com', // Para que google sepa inicialmente quien le esta pidiendo permiso
-            offlineAccess: true, // Para mantener la sesion aunque el usuario cierre la app
+            webClientId: '831451288833-aknfkn3cjjgqpe81alb2s97nh0eod44j.apps.googleusercontent.com',
         });
     }, []);
 
     // FUNCIÓN DE LOGIN
-    const onGoogleButtonPress = async () => { // Esta funcion la vamos a ejecutar cuando se pulsa el boton tipico
+    const onGoogleButtonPress = async () => { 
         try {
-            await GoogleSignin.hasPlayServices(); // Comprobamos si el movil tiene los servicios de Google actualizados
-            const response = await GoogleSignin.signIn(); // Aqui es donde va a aparecer la ventana de = seleccion de una cuenta 
-            const idToken = response.data?.idToken; // De toda la información que devuelve Google (nombre, foto, email), extraemos el Token
+            await GoogleSignin.hasPlayServices();
+            const response = await GoogleSignin.signIn();
+            const idToken = response.data?.idToken;
 
-            if (!idToken) { // Si por algún fallo de red no hay token, cortamos el proceso para evitar errores mayores.
+            if (!idToken) {
                 throw new Error("No se obtuvo el ID Token de Google");
             }
 
-            const credential = GoogleAuthProvider.credential(idToken); // Convertimos la llave de Google en una llave compatible con Firebase
-            await signInWithCredential(auth, credential); // Aquí es donde el usuario queda oficialmente registrado en vuestra base de datos.
+            const credential = GoogleAuthProvider.credential(idToken); 
+            await signInWithCredential(auth, credential); 
             
-            console.log("Logueado con Google correctamente"); // Sin mas, por depuracion
-            navigation.replace('Home'); // Mandamos al usuario log a pagina principal
+            console.log("Logueado con Google correctamente");
+            navigation.replace('Home');
         } catch (error: any) {
             console.error("Error al entrar con Google: ", error);
         }
@@ -74,7 +72,6 @@ const AuthScreen = ({ navigation }: any) => {
                     <View style={styles.line} />
                 </View>
 
-                {/* BOTÓN DE GOOGLE CORREGIDO */}
                 <TouchableOpacity 
                     style={styles.googleButton} 
                     onPress={onGoogleButtonPress}
@@ -126,7 +123,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  // ESTILOS NUEVOS PARA EL BOTÓN DE GOOGLE
   separatorContainer: {
     flexDirection: "row",
     alignItems: "center",

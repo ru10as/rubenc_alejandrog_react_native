@@ -168,3 +168,26 @@ export const logout = () => async (dispatch) => {
         console.error("Error al cerrar sesión:", error.message);
     }
 };
+
+// Añade una camiseta especificando su objeto completo y la talla elegida
+export const anadirAlCarrito = (camiseta, talla) => ({
+    type: ActionTypes.ANADIR_CARRITO,
+    payload: { camiseta, talla }
+});
+
+// Elimina por completo esa línea del carrito (sin importar la cantidad)
+export const eliminarDelCarrito = (id, talla) => ({
+    type: ActionTypes.ELIMINAR_CARRITO,
+    payload: { id, talla }
+});
+
+// Resta 1 a la cantidad de una camiseta. Si llega a 1, no baja más (o se borra según el reducer)
+export const restarDelCarrito = (id, talla) => ({
+    type: ActionTypes.RESTAR_CARRITO,
+    payload: { id, talla }
+});
+
+// Vacía por completo el carrito (útil para cuando completen el pago)
+export const limpiarCarrito = () => ({
+    type: ActionTypes.LIMPIAR_CARRITO
+});

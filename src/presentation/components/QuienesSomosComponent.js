@@ -11,7 +11,6 @@ const mapStateToProps = (state) => ({
     actividades: state.actividades || { actividades: [] },
 });
 
-// Componente de "Stats" para fardar de números
 const StatItem = ({ icon, count, label }) => (
     <View style={styles.statBox}>
         <IconButton icon={icon} iconColor={colorTiendaOscuro} size={30} />
@@ -26,7 +25,6 @@ function QuienesSomos({ actividades }) {
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             
-            {/* 1. HERO SECTION: FONDO GUAPO Y TITULAZO */}
             <ImageBackground 
                 source={{ uri: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000' }} 
                 style={styles.hero}

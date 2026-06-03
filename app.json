@@ -22,13 +22,15 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.erpisha100.The12thMan"
+      "package": "com.erpisha100.The12thMan",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-web-browser",
+      "expo-notifications", 
       [
         "@react-native-google-signin/google-signin",
         {

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "35486353245",
+    "project_id": "the12thman2",
+    "storage_bucket": "the12thman2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35486353245:android:efb3fc22868a32c2340ab4",
+        "android_client_info": {
+          "package_name": "com.erpisha100.The12thMan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35486353245-6ijrrm69jcqbjld6mo7gh7er9b7ddm4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEffHgyWcuZO4-kvVeXPAhK248oB4Bamo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35486353245-6ijrrm69jcqbjld6mo7gh7er9b7ddm4b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

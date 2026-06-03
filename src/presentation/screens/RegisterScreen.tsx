@@ -16,7 +16,6 @@ const RegisterScreen = ({ navigation }: Props) => {
     const handleRegister = () => {
         if (email !== '' && password !== '') {
             dispatch(signUp(email, password));
-            // No Alert.alert aquí si vas a navegar, mejor manejarlo en el Action
             navigation.navigate('Inicio'); 
         } else {
             Alert.alert("Error", "Por favor, rellena todos los campos");

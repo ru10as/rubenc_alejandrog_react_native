@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { signUp } from '../../redux/ActionCreators'; // Ajustad la ruta si es necesario
+import { signUp } from '../../redux/ActionCreators';
 
 const RegisterFormComponent = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 5,
         backgroundColor: '#f9f9f9',
+        color: '#000',
     },
 });
 

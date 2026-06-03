@@ -1,7 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Provider, useDispatch } from "react-redux";
+import { Provider as StoreProvider, useDispatch } from "react-redux"; // Renombrado como StoreProvider
+import { Provider as PaperProvider } from "react-native-paper"; // IMPORTACIÓN NECESARIA
 import { ConfigureStore } from "./src/redux/configureStore";
 import AppNavigator from "./src/presentation/navigation/AppNavigator";
 import {
@@ -10,8 +11,7 @@ import {
   fetchCabeceras,
   fetchNovedades,
 } from "./src/redux/ActionCreators";
-import { importarDatos } from "./src/api/migrador"; // De esta forma podemos importar datos desde json
-import "./src/i18n/index"; // Importación directa para inicializar la config
+import "./src/i18n/index";
 
 const store = ConfigureStore();
 
@@ -19,10 +19,6 @@ function AppContent() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // 1. COMENTA ESTA LÍNEA. Ya no la necesitas, los datos ya viven en la nube.
-    //importarDatos();
-
-    // 2. Ahora sí, lanza las peticiones de lectura
     dispatch(fetchCamisetas());
     dispatch(fetchComentarios());
     dispatch(fetchCabeceras());
@@ -34,11 +30,13 @@ function AppContent() {
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <AppContent />
-        <StatusBar style="auto" />
-      </SafeAreaProvider>
-    </Provider>
+    <StoreProvider store={store}>
+      <PaperProvider>
+        <SafeAreaProvider>
+          <AppContent />
+          <StatusBar style="auto" />
+        </SafeAreaProvider>
+      </PaperProvider>
+    </StoreProvider>
   );
 }

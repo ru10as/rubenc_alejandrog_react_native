@@ -3,174 +3,146 @@
     {
       "id": 0,
       "nombres": { "es": "Real Madrid - Local", "en": "Real Madrid - Home", "eu": "Real Madril - Etxekoa" },
-      "descripciones": { "es": "Clásica equipación blanca con detalles dorados, temporada 2025/26.", "en": "Classic white kit with gold details, 2025/26 season.", "eu": "Ekipazio zuri klasikoa urrezko xehetasunekin, 2025/26 denboraldia." },
-      "imagen": "barca_segunda_equip_2025_2026.png",
+      "descripciones": { "es": "Clásica equipación blanca con detalles dorados.", "en": "Classic white kit with gold details.", "eu": "Ekipazio zuri klasikoa urrezko xehetasunekin." },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fbarca_primera_eq_25_26.png?alt=media",
+      "precio": 89.99,
       "destacado": true,
-      "precio": 89.99
+      "liga": "LaLiga",
+      "esRetro": false,
+      "temporada": "2025/26",
+      "equipacion": "primera",
+      "esSeleccion": false,
+      "pais": "España",
+      "equipo": "Real Madrid",
+      "tallas": ["S", "M", "L", "XL"],
+      "estado": "usada", 
+      "vendedorId": "vvH4fVlyU8YwhHAp372g1GaMGbO2", 
+      "fechaPublicacion": "2026-06-02T10:45:00Z"
     },
     {
       "id": 1,
-      "nombres": { "es": "Real Madrid - Visitante", "en": "Real Madrid - Away", "eu": "Real Madril - Kanpokoa" },
-      "descripciones": { "es": "Diseño azul marino con patrones geométricos modernos.", "en": "Navy blue design with modern geometric patterns.", "eu": "Diseinu urdin iluna patroi geometriko modernoekin." },
-      "imagen": "barca_tercera_equip_2025_2026.png",
+      "nombres": { "es": "FC Barcelona - Local", "en": "FC Barcelona - Home", "eu": "FC Bartzelona - Etxekoa" },
+      "descripciones": { "es": "Tradicionales franjas azulgranas con tecnología transpirable.", "en": "Traditional Blaugrana stripes.", "eu": "Ohiko marra azulgranarak." },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fbarca_primera_eq_25_26.png?alt=media",
+      "precio": 94.99,
       "destacado": true,
-      "precio": 84.99
+      "liga": "LaLiga",
+      "esRetro": false,
+      "temporada": "2025/26",
+      "equipacion": "primera",
+      "esSeleccion": false,
+      "pais": "España",
+      "equipo": "Barcelona",
+      "tallas": ["M", "L", "XL"],
+      "estado": "usada", 
+      "vendedorId": "vvH4fVlyU8YwhHAp372g1GaMGbO2", 
+      "fechaPublicacion": "2026-06-02T10:45:00Z"
     },
     {
       "id": 2,
-      "nombres": { "es": "Real Madrid - Alternativa", "en": "Real Madrid - Third", "eu": "Real Madril - Hirugarrena" },
-      "descripciones": { "es": "Edición especial en color carbón y gris.", "en": "Special edition in charcoal and gray.", "eu": "Edizio berezia ikatza eta gris kolorean." },
-      "imagen": "milan_primera_equip_2025_2026.png",
+      "nombres": { "es": "Atlético de Madrid - Local", "en": "Atlético de Madrid - Home", "eu": "Madrilgo Atletico - Etxekoa" },
+      "descripciones": { "es": "Rojiblanca clásica con cuello tipo polo.", "en": "Classic red and white.", "eu": "Zuri-gorri klasikoa." },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fatletico_primera_eq_25_26.png?alt=media",
+      "precio": 84.99,
       "destacado": true,
-      "precio": 89.99
+      "liga": "LaLiga",
+      "esRetro": false,
+      "temporada": "2025/26",
+      "equipacion": "primera",
+      "esSeleccion": false,
+      "pais": "España",
+      "equipo": "Atlético de Madrid",
+      "tallas": ["S", "M", "L"],
+      "estado": "usada", 
+      "vendedorId": "vvH4fVlyU8YwhHAp372g1GaMGbO2", 
+      "fechaPublicacion": "2026-06-02T10:45:00Z"
     },
     {
       "id": 3,
-      "nombres": { "es": "FC Barcelona - Local", "en": "FC Barcelona - Home", "eu": "FC Bartzelona - Etxekoa" },
-      "descripciones": { "es": "Tradicionales franjas azulgranas con tecnología transpirable.", "en": "Traditional Blaugrana stripes with breathable technology.", "eu": "Ohiko marra azulgranarak teknologia transpiragarriarekin." },
-      "imagen": "barca_segunda_equip_2025_2026.png",
+      "nombres": { "es": "Manchester City - Local", "en": "Manchester City - Home", "eu": "Manchester City - Etxekoa" },
+      "descripciones": { "es": "Azul cielo inspirado en el código 0161.", "en": "Sky blue inspired by 0161.", "eu": "Urdin argia 0161 kodean oinarritua." },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fmancity_primera_eq_25_26.png?alt=media",
+      "precio": 89.99,
       "destacado": true,
-      "precio": 94.99
+      "liga": "Premier League",
+      "esRetro": false,
+      "temporada": "2025/26",
+      "equipacion": "primera",
+      "esSeleccion": false,
+      "pais": "Inglaterra",
+      "equipo": "Manchester City",
+      "tallas": ["S", "M", "L", "XL"],
+      "estado": "usada", 
+      "vendedorId": "vvH4fVlyU8YwhHAp372g1GaMGbO2", 
+      "fechaPublicacion": "2026-06-02T10:45:00Z"
     },
     {
       "id": 4,
-      "nombres": { "es": "FC Barcelona - Visitante", "en": "FC Barcelona - Away", "eu": "FC Bartzelona - Kanpokoa" },
-      "descripciones": { "es": "Elegante diseño negro con detalles en rombos.", "en": "Elegant black design with diamond details.", "eu": "Diseinu beltz dotorea erronbo xehetasunekin." },
-      "imagen": "barca_tercera_equip_2025_2026.png",
+      "nombres": { "es": "España - Segunda Equipación", "en": "Spain - Away Kit", "eu": "Espainia - Kanpoko ekipazioa" },
+      "descripciones": { "es": "Equipación oficial para el Mundial 2026.", "en": "Official kit for the 2026 World Cup.", "eu": "2026ko munduko txapelketarako ekipazio ofiziala." },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fespa%C3%B1a_segunda_mundial_2026.png?alt=media",
+      "precio": 84.99,
       "destacado": true,
-      "precio": 84.99
+      "liga": "Selecciones",
+      "esRetro": false,
+      "temporada": "2026",
+      "equipacion": "segunda",
+      "esSeleccion": true,
+      "pais": "España",
+      "equipo": "Selección Española",
+      "tallas": ["S", "M", "L", "XL"],
+      "estado": "usada", 
+      "vendedorId": "vvH4fVlyU8YwhHAp372g1GaMGbO2", 
+      "fechaPublicacion": "2026-06-02T10:45:00Z"
     },
     {
       "id": 5,
-      "nombres": { "es": "FC Barcelona - Alternativa", "en": "FC Barcelona - Third", "eu": "FC Bartzelona - Hirugarrena" },
-      "descripciones": { "es": "Color voltio brillante inspirada en la ciudad condal.", "en": "Bright volt color inspired by the city of Barcelona.", "eu": "Voltio kolore distiratsua Bartzelonako hirian oinarritua." },
-      "imagen": "osasuna_primera_equip_2025_2026.png",
+      "nombres": { "es": "Athletic Club - Retro", "en": "Athletic Club - Retro", "eu": "Athletic Club - Retro" },
+      "descripciones": { "es": "Diseño inspirado en la mítica temporada 2011/12.", "en": "Design inspired by the 2011/12 season.", "eu": "2011/12 denboraldian oinarritutako diseinua." },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fathletic_retro_11_12.png?alt=media",
+      "precio": 79.99,
       "destacado": false,
-      "precio": 79.99
+      "liga": "LaLiga",
+      "esRetro": true,
+      "temporada": "2011/12",
+      "equipacion": "primera",
+      "esSeleccion": false,
+      "pais": "España",
+      "equipo": "Athletic Club",
+      "tallas": ["S", "M", "L"],
+      "estado": "usada", 
+      "vendedorId": "vvH4fVlyU8YwhHAp372g1GaMGbO2", 
+      "fechaPublicacion": "2026-06-02T10:45:00Z"
     },
     {
       "id": 6,
-      "nombres": { "es": "Atlético de Madrid - Local", "en": "Atlético de Madrid - Home", "eu": "Madrilgo Atletico - Etxekoa" },
-      "descripciones": { "es": "Rojiblanca clásica con cuello tipo polo.", "en": "Classic red and white with polo-style collar.", "eu": "Zuri-gorri klasikoa polo motako lepoarekin." },
-      "imagen": "osasuna_segunda_equip_2025_2026.png",
+      "nombres": { "es": "FC Barcelona Retro - Travis Scott", "en": "FC Barcelona Retro - Travis Scott", "eu": "FC Barcelona Retro - Travis Scott" },
+      "descripciones": { "es": "Edición especial retro limitada.", "en": "Limited retro special edition.", "eu": "Edizio berezi mugatua." },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fbaca_retro_travis_scott.png?alt=media",
+      "precio": 99.99,
       "destacado": false,
-      "precio": 84.99
-    },
-    {
-      "id": 7,
-      "nombres": { "es": "Manchester City - Local", "en": "Manchester City - Home", "eu": "Manchester City - Etxekoa" },
-      "descripciones": { "es": "Azul cielo inspirado en el 0161 de Manchester.", "en": "Sky blue inspired by Manchester's 0161.", "eu": "Urdin argia Manchesterreko 0161 kodean oinarritua." },
-      "imagen": "osasuna_tercera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 89.99
-    },
-    {
-      "id": 8,
-      "nombres": { "es": "Manchester City - Visitante", "en": "Manchester City - Away", "eu": "Manchester City - Kanpokoa" },
-      "descripciones": { "es": "Homenaje a la mítica equipación de 1999.", "en": "Tribute to the legendary 1999 kit.", "eu": "1999ko ekipazio mitikoari omenaldia." },
-      "imagen": "sevilla_primera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 84.99
-    },
-    {
-      "id": 9,
-      "nombres": { "es": "Liverpool FC - Local", "en": "Liverpool FC - Home", "eu": "Liverpool FC - Etxekoa" },
-      "descripciones": { "es": "Rojo intenso con detalles en amarillo retro.", "en": "Deep red with retro yellow details.", "eu": "Gorri bizia retro hori koloreko xehetasunekin." },
-      "imagen": "barca_segunda_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 89.99
-    },
-    {
-      "id": 10,
-      "nombres": { "es": "Bayern Múnich - Local", "en": "Bayern Munich - Home", "eu": "Bayern Munich - Etxekoa" },
-      "descripciones": { "es": "Tres tonos de rojo que representan la identidad bávara.", "en": "Three shades of red representing the Bavarian identity.", "eu": "Identitate bavariarra irudikatzen duten hiru gorri tonu." },
-      "imagen": "barca_tercera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 89.99
-    },
-    {
-      "id": 11,
-      "nombres": { "es": "AC Milan - Local", "en": "AC Milan - Home", "eu": "AC Milan - Etxekoa" },
-      "descripciones": { "es": "Rossoneri clásica con tecnología ultra ligera.", "en": "Classic Rossoneri with ultra-light technology.", "eu": "Rossoneri klasikoa teknologia ultra-arinarekin." },
-      "imagen": "milan_primera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 84.99
-    },
-    {
-      "id": 12,
-      "nombres": { "es": "Inter de Milán - Local", "en": "Inter Milan - Home", "eu": "Inter Milan - Etxekoa" },
-      "descripciones": { "es": "Franjas verticales y diagonales que rompen esquemas.", "en": "Vertical and diagonal stripes that break the mold.", "eu": "Eskemak hausten dituzten marra bertikalak eta diagonalak." },
-      "imagen": "osasuna_primera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 84.99
-    },
-    {
-      "id": 13,
-      "nombres": { "es": "PSG - Local", "en": "PSG - Home", "eu": "PSG - Etxekoa" },
-      "descripciones": { "es": "Estilo Hechter moderno con los colores parisinos.", "en": "Modern Hechter style with Parisian colors.", "eu": "Hechter estilo modernoa paristar koloreekin." },
-      "imagen": "osasuna_segunda_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 89.99
-    },
-    {
-      "id": 14,
-      "nombres": { "es": "PSG - Visitante", "en": "PSG - Away", "eu": "PSG - Kanpokoa" },
-      "descripciones": { "es": "Blanca con la silueta de la Torre Eiffel difuminada.", "en": "White with a faded silhouette of the Eiffel Tower.", "eu": "Zuria Eiffel dorrearen silueta lausoarekin." },
-      "imagen": "osasuna_tercera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 84.99
-    },
-    {
-      "id": 15,
-      "nombres": { "es": "Arsenal FC - Local", "en": "Arsenal FC - Home", "eu": "Arsenal FC - Etxekoa" },
-      "descripciones": { "es": "Cuerpo rojo y mangas blancas con el cañón bordado.", "en": "Red body and white sleeves with the cannon embroidered.", "eu": "Gorputz gorria eta mahuka zuriak kanoi brodatuarekin." },
-      "imagen": "sevilla_primera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 89.99
-    },
-    {
-      "id": 16,
-      "nombres": { "es": "Bayer Leverkusen - Local", "en": "Bayer Leverkusen - Home", "eu": "Bayer Leverkusen - Etxekoa" },
-      "descripciones": { "es": "Edición especial campeones de la Bundesliga.", "en": "Special Edition Bundesliga Champions.", "eu": "Bundesligako txapeldunen edizio berezia." },
-      "imagen": "barca_segunda_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 84.99
-    },
-    {
-      "id": 17,
-      "nombres": { "es": "Bayer Leverkusen - Visitante", "en": "Bayer Leverkusen - Away", "eu": "Bayer Leverkusen - Kanpokoa" },
-      "descripciones": { "es": "Blanca pura con detalles en cobre.", "en": "Pure white with copper details.", "eu": "Zuri hutsa kobre koloreko xehetasunekin." },
-      "imagen": "barca_tercera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 79.99
-    },
-    {
-      "id": 18,
-      "nombres": { "es": "Borussia Dortmund - Local", "en": "Borussia Dortmund - Home", "eu": "Borussia Dortmund - Etxekoa" },
-      "descripciones": { "es": "Amarillo icónico con mangas negras texturizadas.", "en": "Iconic yellow with textured black sleeves.", "eu": "Hori ikonikoa mahuka beltz testurizatuekin." },
-      "imagen": "milan_primera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 84.99
-    },
-    {
-      "id": 19,
-      "nombres": { "es": "Juventus - Local", "en": "Juventus - Home", "eu": "Juventus - Etxekoa" },
-      "descripciones": { "es": "Bianconeri con efecto 'lunar' en las franjas.", "en": "Bianconeri with a 'moon' effect on the stripes.", "eu": "Bianconeri marretan 'ilargi' efektuarekin." },
-      "imagen": "osasuna_primera_equip_2025_2026.png",
-      "destacado": false,
-      "precio": 89.99
+      "liga": "Especial",
+      "esRetro": true,
+      "temporada": "Retro",
+      "equipacion": "especial",
+      "esSeleccion": false,
+      "pais": "Internacional",
+      "equipo": "Barcelona",
+      "tallas": ["M", "L", "XL"],
+      "estado": "usada", 
+      "vendedorId": "vvH4fVlyU8YwhHAp372g1GaMGbO2", 
+      "fechaPublicacion": "2026-06-02T10:45:00Z"
     }
   ],
   "comentarios": [
-    { "id": 0, "camisetaId": 0, "valoracion": 5, "comentario": "¡La calidad de la tela es increíble! El escudo viene bordado.", "autor": "Juan Pérez", "dia": "2026-03-21T17:57:28.556094Z" },
-    { "id": 1, "camisetaId": 0, "valoracion": 4, "comentario": "Talla un poco pequeña, pedid una más de la habitual.", "autor": "Sofía G.", "dia": "2026-03-22T10:30:00.000000Z" }
+    { "id": 0, "camisetaId": 0, "valoracion": 5, "comentario": "¡La calidad de la tela es increíble!", "autor": "Juan Pérez", "dia": "2026-03-21T17:57:28.556094Z" }
   ],
   "cabeceras": [
     { 
       "id": 0, 
       "nombres": { "es": "Nueva Temporada 2025/26", "en": "New 2025/26 Season", "eu": "2025/26 Denboraldi Berria" },
-      "descripciones": { "es": "Descubre las equipaciones oficiales de esta temporada", "en": "Discover this season's official kits", "eu": "Ezagutu denboraldi honetako ekipazio ofizialak" },
-      "imagen": "sevilla_primera_equip_2025_2026.png", 
+      "descripciones": { "es": "Descubre las equipaciones oficiales", "en": "Discover official kits", "eu": "Ezagutu ekipazio ofizialak" },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fbarca_primera_eq_25_26.png?alt=media", 
       "destacado": true 
     }
   ],
@@ -178,8 +150,8 @@
     { 
       "id": 0, 
       "nombres": { "es": "Últimas llegadas", "en": "Latest Arrivals", "eu": "Azken sarrerak" },
-      "descripciones": { "es": "Ya disponibles los modelos de élite de la temporada.", "en": "Elite models of the season now available.", "eu": "Denboraldiko eliteko ereduak eskuragarri." },
-      "imagen": "osasuna_tercera_equip_2025_2026.png", 
+      "descripciones": { "es": "Ya disponibles los modelos de élite.", "en": "Elite models now available.", "eu": "Eliteko ereduak eskuragarri." },
+      "imagen": "https://firebasestorage.googleapis.com/v0/b/the12thman2.firebasestorage.app/o/Venta%2Fmancity_primera_eq_25_26.png?alt=media", 
       "destacado": true 
     }
   ]

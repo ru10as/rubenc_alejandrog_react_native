@@ -6,13 +6,13 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-// Configuración y Colores
 import { colorTiendaOscuro, colorTiendaClaro } from '../../comun/comun';
 
 // Componentes
 import HomeComponent from '../components/HomeComponent';
 import CatalogoComponent from '../components/CatalogoComponent';
 import DetalleCamisetaComponent from '../components/DetalleCamisetaComponent';
+import DetalleCamisetaSMano from '../components/DetalleCamisetaSMano';
 import QuienesSomosComponent from '../components/QuienesSomosComponent';
 import ContactoComponent from '../components/ContactoComponent';
 import ConfiguracionComponent from '../components/ConfiguracionComponent';
@@ -52,7 +52,7 @@ function headerOptions(title: string, navigation: any) {
     };
 }
 
-function CustomDrawerContent(props: any) { // Esta funcion es la que vamos a implementar para tratar con el menu lateral
+function CustomDrawerContent(props: any) {
     return (
         <DrawerContentScrollView {...props}>
             <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
@@ -75,7 +75,7 @@ function CustomDrawerContent(props: any) { // Esta funcion es la que vamos a imp
 
 
 
-function HomeStack() { // La parte de inicio o Home
+function HomeStack() {
     return (
         <Stack.Navigator id="HomeStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
@@ -92,7 +92,7 @@ function HomeStack() { // La parte de inicio o Home
     );
 }
 
-function CatalogoStack() { // Este es el subnavegador de la parte de Catalogo
+function CatalogoStack() {
     return (
         <Stack.Navigator id="CatalogoStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
@@ -105,6 +105,11 @@ function CatalogoStack() { // Este es el subnavegador de la parte de Catalogo
                 component={DetalleCamisetaComponent}
                 options={{ title: 'Detalle de Producto' }}
             />
+            <Stack.Screen
+                name="DetalleCamisetaSMano"
+                component={DetalleCamisetaSMano}
+                options={{ title: 'Detalle Segunda Mano' }}
+            />
         </Stack.Navigator>
     );
 }
@@ -114,7 +119,7 @@ function CarritoStack() {
         <Stack.Navigator id="CarritoStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="CarritoScreen"
-                component={CarritoComponent} // Asegúrate de importar tu componente de carrito
+                component={CarritoComponent}
                 options={({ navigation }) => headerOptions('Mi Carrito', navigation)}
             />
             <Stack.Screen
@@ -126,7 +131,7 @@ function CarritoStack() {
     );
 }
 
-function QuienesSomosStack() { // Esta funcion la implementamos para el subnavegador de la parte de QuienesSomos
+function QuienesSomosStack() {
     return (
         <Stack.Navigator id="QuienesSomosStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
@@ -138,7 +143,7 @@ function QuienesSomosStack() { // Esta funcion la implementamos para el subnaveg
     );
 }
 
-function ContactoStack() { // Esta funcion la implementamos para el subnavegador de la parte de Contacto
+function ContactoStack() {
     return (
         <Stack.Navigator id="ContactoStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
@@ -150,13 +155,12 @@ function ContactoStack() { // Esta funcion la implementamos para el subnavegador
     );
 }
 
-function AuthStack() { // Con esta funcion lo que hacemos es un subnavegador de la parte de AuthStack
+function AuthStack() {
     return (
         <Stack.Navigator id="AuthStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="Autenticacion"
-                component={AuthScreen} //
-                // options={({ navigation }) => headerOptions('Acceso Jugadores', navigation)}
+                component={AuthScreen}
             />
         </Stack.Navigator>
     );
@@ -187,16 +191,14 @@ export default function AppNavigator() {
                     screenOptions={({ navigation }) => ({
                         headerShown: true, 
                         
-                        // --- ESTO ES LO QUE TIENES QUE AÑADIR PARA EL DISEÑO ---
-                        headerTitle: 'The 12th Man', // El nombre que antes tenías en la tarjeta blanca
+                        headerTitle: 'The 12th Man', 
                         headerStyle: {
-                            backgroundColor: '#001222', // Tu azul oscuro/negro corporativo
-                            elevation: 0, // Quita la línea de sombra en Android
-                            shadowOpacity: 0, // Quita la línea de sombra en iOS
+                            backgroundColor: '#001222',
+                            elevation: 0, 
+                            shadowOpacity: 0,
                         },
-                        headerTintColor: '#fff', // Hace que el título y las tres rayitas sean blancas
-                        headerTitleAlign: 'center', // Centra el título para que quede profesional
-                        // -------------------------------------------------------
+                        headerTintColor: '#fff',
+                        headerTitleAlign: 'center',
 
                         drawerStyle: { backgroundColor: colorTiendaClaro },
                         headerRight: () => (
@@ -315,13 +317,13 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     botonRegistroHeader: {
-    backgroundColor: '#f44336', // Rojo corporativo (podéis usar vuestra variable de color)
+    backgroundColor: '#f44336', 
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 20, // Esto lo hace redondeado tipo "píldora"
+    borderRadius: 20,
     marginRight: 15,
-    elevation: 3, // Sombra en Android
-    shadowColor: '#000', // Sombra en iOS
+    elevation: 3,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,

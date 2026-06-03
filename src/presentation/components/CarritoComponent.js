@@ -68,7 +68,7 @@ const CarritoComponent = ({ items, usuario, dispatch, navigation }) => {
                         contentContainerStyle={styles.listContent}
                     />
 
-                    {/* Resumen y Botón de Pago */}
+                    {/* Resumen y Boton de Pago */}
                     <Surface style={styles.footer} elevation={4}>
                         <View style={styles.totalRow}>
                             <Text variant="titleMedium">{t('total', 'Total')}:</Text>

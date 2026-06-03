@@ -30,7 +30,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             
-            {/* 1. CABECERA DINÁMICA */}
+            {/* 1. CABECERA */}
             <Surface style={styles.userCard} elevation={1}>
                 <Avatar.Icon 
                     size={70} 
@@ -48,7 +48,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                         <Button 
                             mode="text" 
                             compact 
-                            onPress={() => navigation.navigate('Login')} // Asegúrate de tener esta ruta
+                            onPress={() => navigation.navigate('Login')}
                             labelStyle={{ color: colorTiendaOscuro, marginLeft: 0, paddingLeft: 0 }}
                         >
                             {t('config_iniciar_sesion', 'Iniciar sesión')}
@@ -57,7 +57,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                 </View>
             </Surface>
 
-            {/* 2. SECCIÓN DE IDIOMA (Siempre disponible) */}
+            {/* 2. SECCIÓN DE IDIOMA */}
             <List.Section>
                 <List.Subheader style={styles.headerText}>{t('config_ajustes_generales', 'Ajustes Generales')}</List.Subheader>
                 <List.Accordion
@@ -73,7 +73,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                 </List.Accordion>
             </List.Section>
 
-            {/* 3. SECCIONES PRIVADAS (Solo si hay usuario) */}
+            {/* 3. SECCIONES PRIVADAS*/}
             {usuario && (
                 <>
                     <Divider style={styles.divider} />
@@ -94,7 +94,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
 
             <Divider style={styles.divider} />
 
-            {/* 4. SOPORTE (Siempre disponible) */}
+            {/* 4. SOPORTE */}
             <List.Section>
                 <List.Subheader style={styles.headerText}>{t('config_seccion_soporte', 'Soporte')}</List.Subheader>
                 <List.Item

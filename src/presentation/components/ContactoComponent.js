@@ -12,9 +12,9 @@ function Contacto() {
 
     return (
         <ImageBackground 
-            source={{ uri: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000' }} // Un estadio épico de fondo
+            source={{ uri: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000' }}
             style={styles.background}
-            blurRadius={2} // Un poco de desenfoque para que el texto resalte
+            blurRadius={2}
         >
             <ScrollView contentContainerStyle={styles.container}>
                 
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     card: { 
         marginHorizontal: 20, 
         borderRadius: 20, 
-        backgroundColor: 'rgba(255, 255, 255, 0.92)', // Un blanco un poco transparente
+        backgroundColor: 'rgba(255, 255, 255, 0.92)',
         elevation: 10 
     },
     saludo: { 
