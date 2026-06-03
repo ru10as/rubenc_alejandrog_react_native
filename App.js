@@ -4,6 +4,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider as StoreProvider, useDispatch } from "react-redux";
 import { Provider as PaperProvider } from "react-native-paper";
 import * as Notifications from 'expo-notifications';
+import { onAuthStateChanged } from "firebase/auth";
 import { ConfigureStore } from "./src/redux/configureStore";
 import AppNavigator from "./src/presentation/navigation/AppNavigator";
 import {
@@ -11,7 +12,10 @@ import {
   fetchComentarios,
   fetchCabeceras,
   fetchNovedades,
+  restoreSession,
 } from "./src/redux/ActionCreators";
+import { auth } from "./src/api/firebaseConfig";
+import { configureGoogleSignIn } from "./src/api/googleAuth";
 import "./src/i18n/index";
 
 // Configuración global (Fuera de los componentes)
@@ -24,6 +28,7 @@ Notifications.setNotificationHandler({
 });
 
 const store = ConfigureStore();
+configureGoogleSignIn();
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -49,7 +54,15 @@ function AppContent() {
       console.log("Notificación recibida:", notification);
     });
 
-    return () => subscription.remove();
+    // 4. Rehidrata la sesión de Firebase si quedó persistida en AsyncStorage
+    const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
+      dispatch(restoreSession(firebaseUser));
+    });
+
+    return () => {
+      subscription.remove();
+      unsubscribeAuth();
+    };
   }, [dispatch]);
 
   return <AppNavigator />;

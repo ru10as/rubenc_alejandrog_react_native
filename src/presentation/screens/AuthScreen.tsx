@@ -1,44 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { auth } from '../../api/firebaseConfig';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { statusCodes } from '@react-native-google-signin/google-signin';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
+import { loginWithGoogle } from '../../redux/ActionCreators';
 
-import LoginFormComponent from '../components/LoginFormComponent';
+import LoginScreen from './LoginScreen';
 import RegisterFormComponent from '../components/RegisterFormComponent';
-
-import { registrarTokenPush } from '../../comun/notificaciones';
 
 const AuthScreen = ({ navigation }: any) => {
     const [activeTab, setActiveTab] = useState(0);
+    const [googleLoading, setGoogleLoading] = useState(false);
+    const dispatch = useDispatch<any>();
+    const usuarioLogueado = useSelector((state: any) => state.usuario?.user);
 
-    // CONFIGURACIÓN INICIAL
-    useEffect(() => {
-        GoogleSignin.configure({
-            webClientId: '831451288833-aknfkn3cjjgqpe81alb2s97nh0eod44j.apps.googleusercontent.com',
-        });
-    }, []);
-
-    // FUNCIÓN DE LOGIN
-    const onGoogleButtonPress = async () => { 
-        try {
-            await GoogleSignin.hasPlayServices();
-            const response = await GoogleSignin.signIn();
-            const idToken = response.data?.idToken;
-
-            if (!idToken) {
-                throw new Error("No se obtuvo el ID Token de Google");
+    // Si el usuario ya está logueado y aterriza aquí (p.ej. por el header), lo mandamos a Inicio.
+    useFocusEffect(
+        React.useCallback(() => {
+            if (usuarioLogueado) {
+                navigation.navigate('Inicio');
             }
+        }, [usuarioLogueado, navigation])
+    );
 
-            const credential = GoogleAuthProvider.credential(idToken); 
-            const userCredential = await signInWithCredential(auth, credential); 
-            
-            await registrarTokenPush(userCredential.user.uid);
-            
-            console.log("Logueado con Google correctamente y token registrado");
-            navigation.replace('Home');
+    const onGoogleButtonPress = async () => {
+        if (googleLoading) return;
+        setGoogleLoading(true);
+        try {
+            await dispatch(loginWithGoogle());
+            navigation.navigate('Inicio');
         } catch (error: any) {
-            console.error("Error al entrar con Google: ", error);
+            if (error?.code === statusCodes.SIGN_IN_CANCELLED) {
+                // Usuario canceló: no avisamos.
+            } else if (error?.code === statusCodes.IN_PROGRESS) {
+                Alert.alert('Espera', 'Ya hay un inicio de sesión en curso.');
+            } else if (error?.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                Alert.alert('Google Play', 'Necesitas actualizar Google Play Services.');
+            } else {
+                Alert.alert('Error con Google', error?.message ?? 'No se pudo iniciar sesión.');
+                console.error('Error al entrar con Google:', error);
+            }
+        } finally {
+            setGoogleLoading(false);
         }
     };
 
@@ -48,15 +51,15 @@ const AuthScreen = ({ navigation }: any) => {
 
             {/* Selector de Pestañas */}
             <View style={styles.tabContainer}>
-                <TouchableOpacity 
-                    style={[styles.tab, activeTab === 0 && styles.activeTab]} 
+                <TouchableOpacity
+                    style={[styles.tab, activeTab === 0 && styles.activeTab]}
                     onPress={() => setActiveTab(0)}
                 >
                     <Text style={activeTab === 0 ? styles.activeTabText : styles.tabText}>Registrarse</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
-                    style={[styles.tab, activeTab === 1 && styles.activeTab]} 
+                <TouchableOpacity
+                    style={[styles.tab, activeTab === 1 && styles.activeTab]}
                     onPress={() => setActiveTab(1)}
                 >
                     <Text style={activeTab === 1 ? styles.activeTabText : styles.tabText}>Ya tengo cuenta</Text>
@@ -67,7 +70,7 @@ const AuthScreen = ({ navigation }: any) => {
                 {activeTab === 0 ? (
                     <RegisterFormComponent navigation={navigation} />
                 ) : (
-                    <LoginFormComponent navigation={navigation} />
+                    <LoginScreen navigation={navigation} />
                 )}
 
                 <View style={styles.separatorContainer}>
@@ -76,11 +79,14 @@ const AuthScreen = ({ navigation }: any) => {
                     <View style={styles.line} />
                 </View>
 
-                <TouchableOpacity 
-                    style={styles.googleButton} 
+                <TouchableOpacity
+                    style={styles.googleButton}
                     onPress={onGoogleButtonPress}
+                    disabled={googleLoading}
                 >
-                    <Text style={styles.googleButtonText}>Continuar con Google</Text>
+                    {googleLoading
+                        ? <ActivityIndicator />
+                        : <Text style={styles.googleButtonText}>Continuar con Google</Text>}
                 </TouchableOpacity>
             </View>
         </View>
