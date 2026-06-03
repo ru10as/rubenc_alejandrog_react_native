@@ -19,7 +19,7 @@ import ConfiguracionComponent from '../components/ConfiguracionComponent';
 import CarritoComponent from '../components/CarritoComponent';
 
 import AuthScreen from '../screens/AuthScreen';
-//import SubirProductoScreen from '../screens/SubirProductoScreen';
+import SubirProductoScreen from '../screens/SubirProductoScreen';
 import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
@@ -178,7 +178,6 @@ function ConfiguracionStack() {
         </Stack.Navigator>
     );
 }
-/*
 function SubirProductoStack() {
     return (
         <Stack.Navigator id="SubirProductoStack" screenOptions={{ headerShown: false }}>
@@ -190,7 +189,6 @@ function SubirProductoStack() {
         </Stack.Navigator>
     );
 }
-*/
 
 export default function AppNavigator() {
     const datosUsuario = useSelector((state: any) => state.usuario);
@@ -286,7 +284,16 @@ export default function AppNavigator() {
                             ),
                         }}
                     />
-                    
+
+                    <Drawer.Screen
+                        name="Publicar Producto"
+                        component={SubirProductoStack}
+                        options={{
+                            drawerIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="upload" color={color} size={size} />
+                            ),
+                        }}
+                    />
                     <Drawer.Screen
                         name="Configuración"
                         component={ConfiguracionStack}

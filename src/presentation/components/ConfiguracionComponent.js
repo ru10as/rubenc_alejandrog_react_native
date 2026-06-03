@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View, Alert } from 'react-native';
 import { List, Divider, Switch, Avatar, Text, Surface, Button } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { colorTiendaOscuro } from '../../comun/comun';
+import { logout } from '../../redux/ActionCreators';
 
 const mapStateToProps = (state) => ({
     usuario: state.usuario?.user || null,
@@ -13,8 +14,18 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
     const { t, i18n } = useTranslation();
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [notifications, setNotifications] = useState(true);
+    const dispatch = useDispatch();
 
     const cambiarIdioma = (lang) => i18n.changeLanguage(lang);
+
+    const ejecutarLogout = async () => {
+        try {
+            await dispatch(logout());
+            navigation.navigate('Inicio');
+        } catch (err) {
+            Alert.alert('Error', err?.message ?? 'No se pudo cerrar sesión.');
+        }
+    };
 
     const confirmarLogout = () => {
         Alert.alert(
@@ -22,7 +33,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
             t('configuracionComponent.logout_msg'),
             [
                 { text: t('configuracionComponent.cancelar'), style: 'cancel' },
-                { text: t('configuracionComponent.salir'), onPress: () => console.log('Logout'), style: 'destructive' }
+                { text: t('configuracionComponent.salir'), onPress: ejecutarLogout, style: 'destructive' }
             ]
         );
     };
