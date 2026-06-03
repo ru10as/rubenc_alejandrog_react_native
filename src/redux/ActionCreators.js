@@ -27,7 +27,7 @@ export const fetchComentarios = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "comentarios"));
         const comentarios = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...serializarFirestore(doc.data()),
         }));
         dispatch(addComentarios(comentarios));
     } catch (error) {
@@ -39,6 +39,20 @@ export const comentariosFailed = (errmess) => ({ type: ActionTypes.COMENTARIOS_F
 export const addComentarios = (comentarios) => ({ type: ActionTypes.ADD_COMENTARIOS, payload: comentarios });
 
 
+// Convierte recursivamente Timestamp de Firestore (y otros valores no
+// serializables) en strings/numeros antes de meterlos en Redux.
+const serializarFirestore = (valor) => {
+    if (valor === null || valor === undefined) return valor;
+    if (typeof valor !== 'object') return valor;
+    if (typeof valor.toDate === 'function') return valor.toDate().toISOString();
+    if (Array.isArray(valor)) return valor.map(serializarFirestore);
+    const salida = {};
+    for (const clave of Object.keys(valor)) {
+        salida[clave] = serializarFirestore(valor[clave]);
+    }
+    return salida;
+};
+
 // --- CAMISETAS ---
 export const fetchCamisetas = () => async (dispatch) => {
     dispatch(camisetasLoading());
@@ -46,7 +60,7 @@ export const fetchCamisetas = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "camisetas"));
         const camisetas = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...serializarFirestore(doc.data()),
         }));
         dispatch(addCamisetas(camisetas));
     } catch (error) {
@@ -66,7 +80,7 @@ export const fetchCabeceras = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "cabeceras"));
         const cabeceras = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...serializarFirestore(doc.data()),
         }));
         dispatch(addCabeceras(cabeceras));
     } catch (error) {
@@ -86,7 +100,7 @@ export const fetchNovedades = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "novedades"));
         const novedades = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...serializarFirestore(doc.data()),
         }));
         dispatch(addNovedades(novedades));
     } catch (error) {
