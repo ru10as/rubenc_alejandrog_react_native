@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "mcp__ide__getDiagnostics",
-      "Bash(ls -la ios/)",
-      "Bash(ls -la android/)"
-    ]
-  }
-}
