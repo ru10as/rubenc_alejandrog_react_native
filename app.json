@@ -38,7 +38,14 @@
         }
       ],
       "expo-localization",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "La app necesita acceso a la cámara para que puedas subir fotos de tus camisetas.",
+          "photosPermission": "La app necesita acceso a tu galería para elegir fotos de las camisetas."
+        }
+      ]
     ],
     "extra": {
       "eas": {
