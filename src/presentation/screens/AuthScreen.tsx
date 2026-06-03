@@ -7,6 +7,8 @@ import { auth } from '../../api/firebaseConfig';
 import LoginFormComponent from '../components/LoginFormComponent';
 import RegisterFormComponent from '../components/RegisterFormComponent';
 
+import { registrarTokenPush } from '../../comun/notificaciones';
+
 const AuthScreen = ({ navigation }: any) => {
     const [activeTab, setActiveTab] = useState(0);
 
@@ -29,9 +31,11 @@ const AuthScreen = ({ navigation }: any) => {
             }
 
             const credential = GoogleAuthProvider.credential(idToken); 
-            await signInWithCredential(auth, credential); 
+            const userCredential = await signInWithCredential(auth, credential); 
             
-            console.log("Logueado con Google correctamente");
+            await registrarTokenPush(userCredential.user.uid);
+            
+            console.log("Logueado con Google correctamente y token registrado");
             navigation.replace('Home');
         } catch (error: any) {
             console.error("Error al entrar con Google: ", error);

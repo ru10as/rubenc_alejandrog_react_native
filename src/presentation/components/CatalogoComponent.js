@@ -126,7 +126,7 @@ class Catalogo extends Component {
         const opcionesTallas = ['S', 'M', 'L', 'XL'];
 
         // Esto a continuacion para ponerle un breve titulo a lo que es el Acordeon con el filtrado
-        const textoTituloAcordeon = 'Filtrar por categorías';
+        const textoTituloAcordeon = t('catalogoComponent.filtrar_titulo');
 
         
 
@@ -138,17 +138,17 @@ class Catalogo extends Component {
                         selected={filtros.modo === 'tienda'} 
                         onPress={() => this.cambiarModo('tienda')}
                         style={{ marginHorizontal: 5 }}
-                    >Tienda Oficial</Chip>
+                    >{t('catalogoComponent.tienda_oficial')}</Chip>
                     <Chip 
                         selected={filtros.modo === 'segunda_mano'} 
                         onPress={() => this.cambiarModo('segunda_mano')}
                         style={{ marginHorizontal: 5 }}
-                    >Segunda Mano</Chip>
+                    >{t('catalogoComponent.segunda_mano')}</Chip>
                 </View>
 
                 {/* BUSCADOR PRINCIPAL */}
                 <Searchbar
-                    placeholder="Buscar camiseta..."
+                    placeholder={t('catalogoComponent.buscar_placeholder')}
                     onChangeText={(texto) => this.setState({ textoBusqueda: texto })}
                     value={textoBusqueda}
                     style={styles.searchbar}
@@ -167,7 +167,7 @@ class Catalogo extends Component {
                     <View style={styles.contenedorFiltros}>
                         
                         {/* FILTRO 1: PAÍSES */}
-                        <Text style={styles.tituloFiltro}>País</Text>
+                        <Text style={styles.tituloFiltro}>{t('catalogoComponent.filtro_pais')}</Text>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollFiltros}>
                             {opcionesPaises.map(pais => (
                                 <Chip
@@ -184,7 +184,7 @@ class Catalogo extends Component {
                         </ScrollView>
 
                         {/* FILTRO 2: EQUIPOS */}
-                        <Text style={styles.tituloFiltro}>Equipo</Text>
+                        <Text style={styles.tituloFiltro}>{t('catalogoComponent.filtro_equipo')}</Text>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollFiltros}>
                             {opcionesEquipos.map(equipo => (
                                 <Chip
@@ -201,7 +201,7 @@ class Catalogo extends Component {
                         </ScrollView>
 
                         {/* FILTRO 3: TALLAS */}
-                        <Text style={styles.tituloFiltro}>Talla</Text>
+                        <Text style={styles.tituloFiltro}>{t('catalogoComponent.filtro_talla')}</Text>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollFiltros}>
                             {opcionesTallas.map(talla => (
                                 <Chip

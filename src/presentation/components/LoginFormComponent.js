@@ -2,22 +2,40 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/ActionCreators';
+import { registrarTokenPush } from '../../comun/notificaciones'; // Esto es lo que vamos a emplear para las notificaciones
+import { auth } from '../../api/firebaseConfig';// Instancia de auth para obtener el UID del usuario
 
 const LoginFormComponent = ({ navigation }) => {
+    // Definimos los estados locales para tomar los datos del formulario
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    
+    // Hook de Redux para disparar las acciones de autenticación
     const dispatch = useDispatch();
 
     const handleLogin = async () => {
+        // 1. VALIDACIÓN: Evitamos procesos innecesarios si los campos están vacíos
         if (!email || !password) {
             Alert.alert(t('login_error_titulo'), t('login_error_campos'));
             return;
         }
 
         try {
+            // 2. AUTENTICACIÓN: Intentamos iniciar sesión mediante Firebase/Redux
             await dispatch(login(email, password));
+            
+            // 3. REGISTRO DE NOTIFICACIONES PUSH
+            // Una vez logueados, obtenemos el UID del usuario recién autenticado
+            // y registramos/actualizamos su token de dispositivo en Firestore.
+            if (auth.currentUser) {
+                // Esto vincula el token del dispositivo con el usuario en la BD.
+                // Es vital para que nuestro backend (Render) sepa a quién enviar las ofertas.
+                await registrarTokenPush(auth.currentUser.uid);
+            }
+
+            // 4. NAVEGACIÓN: Si todo salió bien, redirigimos al usuario a la pantalla de Inicio
             navigation.navigate('Inicio');
-        } catch (error) {
+        } catch (error) { // 5. GESTIÓN DE ERRORES: Alertamos si las credenciales son incorrectas
             Alert.alert(t('login_error_titulo'), t('login_error_credenciales'));
         }
     };

@@ -5,15 +5,16 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { colorTiendaOscuro } from '../../comun/comun';
 
+// 1. CONEXIÓN CON ESTADO GLOBAL: Extraemos los items y el usuario del estado de Redux
 const mapStateToProps = (state) => ({
     items: state.carrito.items,
     usuario: state.usuario?.user,
 });
 
 const CarritoComponent = ({ items, usuario, dispatch, navigation }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(); // Hook para traducciones (i18next)
 
-    // Cálculo del importe total
+    // 2. LÓGICA DE CÁLCULO: Sumamos el total del carrito dinámicamente
     const total = items.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
 
     const quitarProducto = (id, talla) => {
@@ -22,11 +23,11 @@ const CarritoComponent = ({ items, usuario, dispatch, navigation }) => {
 
     const vaciarCarrito = () => {
         Alert.alert(
-            t('carrito_vaciar_titulo', 'Vaciar carrito'),
-            t('carrito_vaciar_msg', '¿Seguro que quieres quitar todos los productos?'),
+            t('carritoComponent.carrito_vaciar_titulo'),
+            t('carritoComponent.carrito_vaciar_msg'),
             [
-                { text: t('cancelar', 'Cancelar'), style: 'cancel' },
-                { text: t('vaciar', 'Vaciar'), onPress: () => dispatch({ type: 'CLEAN_CART' }), style: 'destructive' }
+                { text: t('carritoComponent.cancelar'), style: 'cancel' },
+                { text: t('carritoComponent.vaciar'), onPress: () => dispatch({ type: 'CLEAN_CART' }), style: 'destructive' }
             ]
         );
     };
@@ -36,7 +37,7 @@ const CarritoComponent = ({ items, usuario, dispatch, navigation }) => {
             <List.Item
                 title={item.nombre}
                 titleStyle={styles.productoTitulo}
-                description={`${t('talla', 'Talla')}: ${item.talla} | ${t('cantidad', 'Cant')}: ${item.cantidad}\n${(item.precio * item.cantidad).toFixed(2)}€`}
+                description={`${t('carritoComponent.talla')}: ${item.talla} | ${t('carritoComponent.cantidad')}: ${item.cantidad}\n${(item.precio * item.cantidad).toFixed(2)}€`}
                 descriptionStyle={styles.productoDesc}
                 left={() => (
                     <Avatar.Image 
@@ -71,7 +72,7 @@ const CarritoComponent = ({ items, usuario, dispatch, navigation }) => {
                     {/* Resumen y Boton de Pago */}
                     <Surface style={styles.footer} elevation={4}>
                         <View style={styles.totalRow}>
-                            <Text variant="titleMedium">{t('total', 'Total')}:</Text>
+                            <Text variant="titleMedium">{t('carritoComponent.total')}:</Text>
                             <Text variant="headlineSmall" style={styles.precioTotal}>{total.toFixed(2)}€</Text>
                         </View>
                         
@@ -81,11 +82,11 @@ const CarritoComponent = ({ items, usuario, dispatch, navigation }) => {
                             style={styles.botonPago}
                             onPress={() => usuario ? navigation.navigate('Pasarela') : navigation.navigate('Configuracion')}
                         >
-                            {usuario ? t('finalizar_compra', 'Finalizar Pedido') : t('login_para_pagar', 'Inicia sesión para pagar')}
+                            {usuario ? t('carritoComponent.finalizar_compra') : t('carritoComponent.login_para_pagar')}
                         </Button>
                         
                         <Button mode="text" onPress={vaciarCarrito} textColor="#777">
-                            {t('vaciar_carrito', 'Vaciar Carrito')}
+                            {t('carritoComponent.vaciar_carrito')}
                         </Button>
                     </Surface>
                 </>
@@ -93,17 +94,17 @@ const CarritoComponent = ({ items, usuario, dispatch, navigation }) => {
                 <View style={styles.vacioContainer}>
                     <IconButton icon="cart-off" size={80} iconColor="#ccc" />
                     <Text variant="headlineSmall" style={styles.vacioTexto}>
-                        {t('carrito_vacio_titulo', 'Tu carrito está vacío')}
+                        {t('carritoComponent.carrito_vacio_titulo')}
                     </Text>
                     <Text style={styles.vacioSubtexto}>
-                        {t('carrito_vacio_msg', '¡Añade alguna camiseta de tu equipo!')}
+                        {t('carritoComponent.carrito_vacio_msg')}
                     </Text>
                     <Button 
                         mode="outlined" 
                         onPress={() => navigation.navigate('Camisetas')}
                         style={styles.botonVolver}
                     >
-                        {t('ir_a_tienda', 'Ir a la tienda')}
+                        {t('carritoComponent.ir_a_tienda')}
                     </Button>
                 </View>
             )}

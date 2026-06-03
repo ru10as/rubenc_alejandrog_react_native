@@ -30,14 +30,15 @@
     },
     "plugins": [
       "expo-web-browser",
-      "expo-notifications", 
+      "expo-notifications",
       [
         "@react-native-google-signin/google-signin",
         {
           "iosUrlScheme": "com.googleusercontent.apps.831451288833-do410b43v0v3j8q56duj5acgtr9q2gh1"
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      "expo-font"
     ],
     "extra": {
       "eas": {

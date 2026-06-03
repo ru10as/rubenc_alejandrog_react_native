@@ -3,8 +3,11 @@ import { View, StyleSheet, ScrollView, Image, Alert } from 'react-native';
 import { Text, Button, Avatar, Surface, Divider, IconButton, Portal, Dialog, TextInput } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { useTranslation } from 'react-i18next';
 
 const DetalleCamisetaSMano = ({ route }) => {
+    const { t } = useTranslation();
+    
     const { camiseta } = route.params;
     
     // Obtener datos del usuario desde Redux
@@ -16,7 +19,10 @@ const DetalleCamisetaSMano = ({ route }) => {
 
     const enviarOfertaAFirebase = async () => {
         if (!montoOferta || isNaN(montoOferta)) {
-            Alert.alert("Error", "Por favor, introduce un precio válido.");
+            Alert.alert(
+                t('detalleCamisetaSMano.error_titulo'),
+                t('detalleCamisetaSMano.error_precio_invalido')
+            );
             return;
         }
 
@@ -34,10 +40,16 @@ const DetalleCamisetaSMano = ({ route }) => {
             
             setVisible(false);
             setMontoOferta('');
-            Alert.alert("¡Éxito!", "Oferta enviada al vendedor.");
+            Alert.alert(
+                t('detalleCamisetaSMano.exito_titulo'),
+                t('detalleCamisetaSMano.exito_oferta_enviada')
+            );
         } catch (error) {
             console.error("Error al enviar oferta: ", error);
-            Alert.alert("Error", "No se pudo enviar la oferta.");
+            Alert.alert(
+                t('detalleCamisetaSMano.error_titulo'),
+                t('detalleCamisetaSMano.error_envio')
+            );
         }
     };
 
@@ -63,10 +75,10 @@ const DetalleCamisetaSMano = ({ route }) => {
 
                 <View style={styles.acciones}>
                     <Button mode="contained" style={styles.btnOferta} onPress={() => setVisible(true)}>
-                        Hacer Oferta
+                        {t('detalleCamisetaSMano.oferta')}
                     </Button>
                     <Button mode="outlined" style={styles.btnChat} onPress={() => console.log('Chat')}>
-                        Chat con Vendedor
+                        {t('detalleCamisetaSMano.chat')}
                     </Button>
                 </View>
             </View>
@@ -74,10 +86,10 @@ const DetalleCamisetaSMano = ({ route }) => {
             {/* Diálogo para capturar el precio */}
             <Portal>
                 <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-                    <Dialog.Title>Hacer Oferta</Dialog.Title>
+                    <Dialog.Title>{t('detalleCamisetaSMano.dialog_titulo')}</Dialog.Title>
                     <Dialog.Content>
                         <TextInput
-                            label="Tu oferta (€)"
+                            label={t('detalleCamisetaSMano.dialog_input')}
                             keyboardType="numeric"
                             value={montoOferta}
                             onChangeText={setMontoOferta}
@@ -85,8 +97,8 @@ const DetalleCamisetaSMano = ({ route }) => {
                         />
                     </Dialog.Content>
                     <Dialog.Actions>
-                        <Button onPress={() => setVisible(false)}>Cancelar</Button>
-                        <Button onPress={enviarOfertaAFirebase}>Enviar</Button>
+                        <Button onPress={() => setVisible(false)}>{t('detalleCamisetaSMano.dialog_cancelar')}</Button>
+                        <Button onPress={enviarOfertaAFirebase}>{t('detalleCamisetaSMano.dialog_enviar')}</Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>

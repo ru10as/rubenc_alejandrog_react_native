@@ -18,11 +18,11 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
 
     const confirmarLogout = () => {
         Alert.alert(
-            t('config_logout_titulo', 'Cerrar Sesión'),
-            t('config_logout_msg', '¿Seguro que quieres salir?'),
+            t('configuracionComponent.logout_titulo'),
+            t('configuracionComponent.logout_msg'),
             [
-                { text: t('cancelar', 'Cancelar'), style: 'cancel' },
-                { text: t('salir', 'Salir'), onPress: () => console.log('Logout'), style: 'destructive' }
+                { text: t('configuracionComponent.cancelar'), style: 'cancel' },
+                { text: t('configuracionComponent.salir'), onPress: () => console.log('Logout'), style: 'destructive' }
             ]
         );
     };
@@ -40,7 +40,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                 />
                 <View style={styles.userInfo}>
                     <Text style={styles.userName}>
-                        {usuario ? usuario.nombre : t('usuario_invitado', 'Invitado')}
+                        {usuario ? usuario.nombre : t('configuracionComponent.usuario_invitado')}
                     </Text>
                     {usuario ? (
                         <Text style={styles.userEmail}>{usuario.email}</Text>
@@ -51,7 +51,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                             onPress={() => navigation.navigate('Login')}
                             labelStyle={{ color: colorTiendaOscuro, marginLeft: 0, paddingLeft: 0 }}
                         >
-                            {t('config_iniciar_sesion', 'Iniciar sesión')}
+                            {t('configuracionComponent.iniciar_sesion')}
                         </Button>
                     )}
                 </View>
@@ -59,9 +59,9 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
 
             {/* 2. SECCIÓN DE IDIOMA */}
             <List.Section>
-                <List.Subheader style={styles.headerText}>{t('config_ajustes_generales', 'Ajustes Generales')}</List.Subheader>
+                <List.Subheader style={styles.headerText}>{t('configuracionComponent.ajustes_generales')}</List.Subheader>
                 <List.Accordion
-                    title={t('configuracion_idioma', 'Idioma')}
+                    title={t('configuracionComponent.idioma')}
                     left={props => <List.Icon {...props} icon="translate" />}
                 >
                     <List.Item title="Español" onPress={() => cambiarIdioma('es')} 
@@ -78,13 +78,13 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                 <>
                     <Divider style={styles.divider} />
                     <List.Section>
-                        <List.Subheader style={styles.headerText}>{t('config_seccion_cuenta', 'Mi Cuenta')}</List.Subheader>
+                        <List.Subheader style={styles.headerText}>{t('configuracionComponent.seccion_cuenta')}</List.Subheader>
                         <List.Item
-                            title={t('config_perfil', 'Editar Perfil')}
+                            title={t('configuracionComponent.perfil')}
                             left={props => <List.Icon {...props} icon="account-cog-outline" />}
                         />
                         <List.Item
-                            title={t('config_notificaciones', 'Notificaciones')}
+                            title={t('configuracionComponent.notificaciones')}
                             left={props => <List.Icon {...props} icon="bell-outline" />}
                             right={() => <Switch value={notifications} onValueChange={setNotifications} color={colorTiendaOscuro} />}
                         />
@@ -96,13 +96,13 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
 
             {/* 4. SOPORTE */}
             <List.Section>
-                <List.Subheader style={styles.headerText}>{t('config_seccion_soporte', 'Soporte')}</List.Subheader>
+                <List.Subheader style={styles.headerText}>{t('configuracionComponent.seccion_soporte')}</List.Subheader>
                 <List.Item
-                    title={t('config_ayuda', 'Ayuda')}
+                    title={t('configuracionComponent.ayuda', 'Ayuda')}
                     left={props => <List.Icon {...props} icon="help-circle-outline" />}
                 />
                 <List.Item
-                    title={t('config_terminos', 'Legal')}
+                    title={t('configuracionComponent.terminos', 'Legal')}
                     left={props => <List.Icon {...props} icon="file-document-outline" />}
                 />
             </List.Section>
@@ -110,7 +110,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
             {/* 5. LOGOUT (Solo si hay usuario) */}
             {usuario && (
                 <List.Item
-                    title={t('config_logout', 'Cerrar Sesión')}
+                    title={t('configuracionComponent.logout', 'Cerrar Sesión')}
                     titleStyle={{ color: '#d32f2f', fontWeight: 'bold' }}
                     left={props => <List.Icon {...props} icon="logout" color="#d32f2f" />}
                     onPress={confirmarLogout}
