@@ -1,42 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-// LIBRERÍA NATIVA (La que configuramos con el SHA-1)
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { auth } from '../../api/firebaseConfig'; // importamos la configuracion de firebase
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { statusCodes } from '@react-native-google-signin/google-signin';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
+import { loginWithGoogle } from '../../redux/ActionCreators';
 
-import LoginFormComponent from '../components/LoginFormComponent';
+import LoginScreen from './LoginScreen';
 import RegisterFormComponent from '../components/RegisterFormComponent';
 
 const AuthScreen = ({ navigation }: any) => {
     const [activeTab, setActiveTab] = useState(0);
+    const [googleLoading, setGoogleLoading] = useState(false);
+    const dispatch = useDispatch<any>();
+    const usuarioLogueado = useSelector((state: any) => state.usuario?.user);
 
-    // CONFIGURACIÓN INICIAL
-    useEffect(() => {
-        GoogleSignin.configure({
-            webClientId: '831451288833-aknfkn3cjjgqpe81alb2s97nh0eod44j.apps.googleusercontent.com', // Para que google sepa inicialmente quien le esta pidiendo permiso
-            offlineAccess: true, // Para mantener la sesion aunque el usuario cierre la app
-        });
-    }, []);
-
-    // FUNCIÓN DE LOGIN
-    const onGoogleButtonPress = async () => { // Esta funcion la vamos a ejecutar cuando se pulsa el boton tipico
-        try {
-            await GoogleSignin.hasPlayServices(); // Comprobamos si el movil tiene los servicios de Google actualizados
-            const response = await GoogleSignin.signIn(); // Aqui es donde va a aparecer la ventana de = seleccion de una cuenta 
-            const idToken = response.data?.idToken; // De toda la información que devuelve Google (nombre, foto, email), extraemos el Token
-
-            if (!idToken) { // Si por algún fallo de red no hay token, cortamos el proceso para evitar errores mayores.
-                throw new Error("No se obtuvo el ID Token de Google");
+    // Si el usuario ya está logueado y aterriza aquí (p.ej. por el header), lo mandamos a Inicio.
+    useFocusEffect(
+        React.useCallback(() => {
+            if (usuarioLogueado) {
+                navigation.navigate('Inicio');
             }
+        }, [usuarioLogueado, navigation])
+    );
 
-            const credential = GoogleAuthProvider.credential(idToken); // Convertimos la llave de Google en una llave compatible con Firebase
-            await signInWithCredential(auth, credential); // Aquí es donde el usuario queda oficialmente registrado en vuestra base de datos.
-            
-            console.log("Logueado con Google correctamente"); // Sin mas, por depuracion
-            navigation.replace('Home'); // Mandamos al usuario log a pagina principal
+    const onGoogleButtonPress = async () => {
+        if (googleLoading) return;
+        setGoogleLoading(true);
+        try {
+            await dispatch(loginWithGoogle());
+            navigation.navigate('Inicio');
         } catch (error: any) {
-            console.error("Error al entrar con Google: ", error);
+            if (error?.code === statusCodes.SIGN_IN_CANCELLED) {
+                // Usuario canceló: no avisamos.
+            } else if (error?.code === statusCodes.IN_PROGRESS) {
+                Alert.alert('Espera', 'Ya hay un inicio de sesión en curso.');
+            } else if (error?.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                Alert.alert('Google Play', 'Necesitas actualizar Google Play Services.');
+            } else {
+                Alert.alert('Error con Google', error?.message ?? 'No se pudo iniciar sesión.');
+                console.error('Error al entrar con Google:', error);
+            }
+        } finally {
+            setGoogleLoading(false);
         }
     };
 
@@ -65,7 +70,7 @@ const AuthScreen = ({ navigation }: any) => {
                 {activeTab === 0 ? (
                     <RegisterFormComponent navigation={navigation} />
                 ) : (
-                    <LoginFormComponent navigation={navigation} />
+                    <LoginScreen navigation={navigation} />
                 )}
 
                 <View style={styles.separatorContainer}>
@@ -74,12 +79,14 @@ const AuthScreen = ({ navigation }: any) => {
                     <View style={styles.line} />
                 </View>
 
-                {/* BOTÓN DE GOOGLE CORREGIDO */}
-                <TouchableOpacity 
-                    style={styles.googleButton} 
+                <TouchableOpacity
+                    style={styles.googleButton}
                     onPress={onGoogleButtonPress}
+                    disabled={googleLoading}
                 >
-                    <Text style={styles.googleButtonText}>Continuar con Google</Text>
+                    {googleLoading
+                        ? <ActivityIndicator />
+                        : <Text style={styles.googleButtonText}>Continuar con Google</Text>}
                 </TouchableOpacity>
             </View>
         </View>

@@ -1,7 +1,14 @@
 import * as ActionTypes from './ActionTypes';
 import { db, auth } from '../api/firebaseConfig';
-import { collection, getDocs, addDoc, doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { collection, getDocs, addDoc, doc, setDoc, getDoc } from 'firebase/firestore';
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    GoogleAuthProvider,
+    signInWithCredential,
+} from "firebase/auth";
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { Alert } from 'react-native';
 
 // --- COMENTARIOS ---
@@ -143,7 +150,7 @@ export const signUp = (email, password) => async (dispatch) => {
             favoritos: [],
             fechaRegistro: new Date().toISOString()
         };
-        dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
+        dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: userData });
         setDoc(doc(db, "usuarios", user.uid), userData)
             .then(() => console.log("Perfil creado en DB"))
             .catch(e => console.log("Error en DB (pero el usuario ya entró):", e));
@@ -156,15 +163,64 @@ export const signUp = (email, password) => async (dispatch) => {
 // ACCIÓN PARA LOGIN MANUAL
 export const login = (email, password) => async (dispatch) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    dispatch({ type: 'LOGIN_SUCCESS', payload: extractUser(userCredential.user) });
+    dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: extractUser(userCredential.user) });
+};
+
+// ACCIÓN PARA LOGIN CON GOOGLE (nativo + Firebase)
+export const loginWithGoogle = () => async (dispatch) => {
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    const response = await GoogleSignin.signIn();
+    const idToken = response?.data?.idToken ?? response?.idToken;
+    if (!idToken) {
+        throw new Error("No se obtuvo el ID Token de Google");
+    }
+    const credential = GoogleAuthProvider.credential(idToken);
+    const userCredential = await signInWithCredential(auth, credential);
+    const user = userCredential.user;
+
+    const userRef = doc(db, "usuarios", user.uid);
+    const snapshot = await getDoc(userRef);
+    if (!snapshot.exists()) {
+        await setDoc(userRef, {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName ?? null,
+            photoURL: user.photoURL ?? null,
+            favoritos: [],
+            fechaRegistro: new Date().toISOString(),
+            proveedor: 'google',
+        });
+    }
+
+    dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: extractUser(user) });
+};
+
+// Rehidrata el estado de Redux si Firebase ya tiene una sesión persistida.
+export const restoreSession = (firebaseUser) => (dispatch) => {
+    if (firebaseUser) {
+        dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: extractUser(firebaseUser) });
+    } else {
+        dispatch({ type: ActionTypes.LOGOUT_SUCCESS });
+    }
 };
 
 // --- LOGOUT ---
 export const logout = () => async (dispatch) => {
     try {
-        await signOut(auth); // Le dice a Firebase: "Cierra la sesión"
-        dispatch({ type: ActionTypes.LOGOUT_SUCCESS }); // Limpia el Reducer (pone user: null)
+        try {
+            const isSignedIn = await GoogleSignin.getCurrentUser();
+            if (isSignedIn) {
+                await GoogleSignin.signOut();
+            }
+        } catch (gErr) {
+            // Si Google Sign-In no estaba inicializado o falla, seguimos con el logout de Firebase
+            console.warn("GoogleSignin.signOut falló (continúa):", gErr?.message);
+        }
+        await signOut(auth);
+        dispatch({ type: ActionTypes.LOGOUT_SUCCESS });
     } catch (error) {
         console.error("Error al cerrar sesión:", error.message);
     }
 };
+
+export { statusCodes as googleStatusCodes };
