@@ -22,6 +22,8 @@ export async function registrarTokenPush(uid) {
   const projectId = Constants.expoConfig?.extra?.eas?.projectId;
   const { data: token } = await Notifications.getExpoPushTokenAsync({ projectId });
   
+  console.log('Token de notificación obtenido:', token);
+
   // 4. Guardar en Firestore (donde tu servidor lo buscará)
   await setDoc(doc(db, 'usuarios', uid), {
     pushToken: token,

@@ -78,5 +78,54 @@
     "exito_oferta_enviada": "Offer sent to seller.",
     "chat_label": "Chat with seller",
     "ventas_label": "sales"
+  },
+  "IndicadorActividad":{
+    "indicador_proceso":"Loading catalog..."
+  },
+  "LoginForm":{
+    "login_error_campos":"Please fill in all fields.",
+    "login_error_credenciales":"Incorrect email or password.",
+    "login_identificate":"Log in to your account",
+    "login_email":"Email",
+    "login_password":"Password",
+    "login_boton_entrar":"Sign in"
+  },
+  "QuienesSomos": {
+    "qs_historia_subtitulo": "Football culture in your hands",
+    "qs_que_vendemos_titulo": "What makes us unique?",
+    "qs_historia_parrafo_1": "At THE 12th MAN, we live football with the same passion you do. Our goal is to offer you unique pieces, caring for every detail so that every jersey tells a legendary story.",
+    "qs_tiendas_titulo": "Our Locations",
+    "qs_actividades_titulo": "Our Team"
+  },
+  "RegisterForm": {
+    "register_titulo": "Create your account",
+    "register_error_campos": "Please fill in all fields.",
+    "register_error_no_coinciden": "Passwords do not match.",
+    "register_error_registro": "Could not create account. Try a different email.",
+    "register_email": "Email",
+    "register_password": "Password",
+    "register_repeat_password": "Repeat password",
+    "register_boton_empezar": "Get started"
+  },
+  "Navigation": {
+    "DetalleProducto": "Product Details",
+    "NuestrasCamisetas": "Our Jerseys",
+    "DetalleSegundaMano": "Second Hand Details",
+    "MiCarrito": "My Cart",
+    "QuienesSomos": "About Us",
+    "Contacto": "Contact",
+    "Configuracion": "Settings",
+    "PublicarProducto": "Post Product",
+    "Registrarse": "Sign up",
+    "Inicio": "Home",
+    "Camisetas": "Jerseys"
+  },
+  "authScreen": {
+    "registrar": "Sign up",
+    "ya_tengo_cuenta": "Already have an account",
+    "o_tambien": "OR",
+    "continuar_google": "Continue with Google",
+    "error_google": "Google Sign-In Error",
+    "error_login_default": "Could not sign in."
   }
 }

@@ -18,7 +18,7 @@ import { auth } from "./src/api/firebaseConfig";
 import { configureGoogleSignIn } from "./src/api/googleAuth";
 import "./src/i18n/index";
 
-// Configuración global (Fuera de los componentes)
+// Configuración global de notificaciones
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -34,27 +34,24 @@ function AppContent() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // 1. Cargar datos
+    // 1. Cargar datos iniciales
     dispatch(fetchCamisetas());
     dispatch(fetchComentarios());
     dispatch(fetchCabeceras());
     dispatch(fetchNovedades());
 
-    // 2. Pedir permisos al arrancar
+    // 2. Gestión de Notificaciones
     const requestPermissions = async () => {
       const { status } = await Notifications.requestPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permisos denegados');
-      }
+      if (status !== 'granted') console.log('Permisos de notificaciones denegados');
     };
     requestPermissions();
 
-    // 3. Escuchar notificaciones
     const subscription = Notifications.addNotificationReceivedListener(notification => {
       console.log("Notificación recibida:", notification);
     });
 
-    // 4. Rehidrata la sesión de Firebase si quedó persistida en AsyncStorage
+    // 3. Gestión de Autenticación (Firebase + Google)
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
       dispatch(restoreSession(firebaseUser));
     });

@@ -2,30 +2,42 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/ActionCreators';
-// Añadimos la importación del tipo para la navegación
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+// IMPORTACIONES PARA TU LÓGICA DE NOTIFICACIONES
+import { registrarTokenPush } from '../../comun/notificaciones';
+import { auth } from '../../api/firebaseConfig';
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>;
 }
 
 const LoginScreen = ({ navigation }: Props) => {
-    const [email, setEmail] = useState(''); // Iniciamos el estado 
-    const [password, setPassword] = useState(''); // Iniciamos el estado de la contra
-    const dispatch = useDispatch<any>(); // El <any> evita quejas con dispatch asíncronos
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const dispatch = useDispatch<any>();
 
     const handleLogin = async () => {
         if (email !== '' && password !== '') {
             try {
-                // 2. Esperamos a que el dispatch termine
+                // 1. Ejecutamos el login original
                 await dispatch(login(email, password));
                 
-                // Navegar al éxito
-                Alert.alert("Éxito", "Bienvenido a la tienda"); // Esto habria que cambiarlo por otra cosa que no sea alerta
-                navigation.navigate('Inicio'); // Montamos la pantalla que habéis etiquetado como 'Inicio' en vuestro Navigator.
+                // 2. INTEGRACIÓN: Registrar el token de notificaciones
+                if (auth.currentUser) {
+                    try {
+                        console.log('Login exitoso. Registrando token de notificaciones...');
+                        await registrarTokenPush(auth.currentUser.uid);
+                    } catch (notifError) {
+                        // No bloqueamos el acceso si falla el registro del token
+                        console.error('Error al registrar notificaciones tras login:', notifError);
+                    }
+                }
+                
+                // 3. Navegación directa tras login exitoso
+                navigation.navigate('Inicio');
 
             } catch (error: any) {
-                // 4. Si el login falla, avisamos al usuario
                 Alert.alert("Error de acceso", "Email o contraseña incorrectos");
                 console.log("Error en login: ", error.message);
             }
@@ -43,7 +55,7 @@ const LoginScreen = ({ navigation }: Props) => {
                 onChangeText={(text) => setEmail(text)}
                 value={email}
                 autoCapitalize="none"
-                keyboardType="email-address" // Mejora la experiencia de usuario
+                keyboardType="email-address"
             />
             <TextInput
                 style={styles.input}
@@ -67,7 +79,6 @@ const LoginScreen = ({ navigation }: Props) => {
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#f5f5f5' },

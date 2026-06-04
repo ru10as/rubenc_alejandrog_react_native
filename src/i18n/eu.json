@@ -78,5 +78,54 @@
     "exito_oferta_enviada": "Eskaintza saltzaileari bidali zaio.",
     "chat_label": "Saltzailearekin txata",
     "ventas_label": "salmentak"
+  },
+  "IndicadorActividad":{
+    "indicador_proceso":"Katalogoa kargatzen..."
+  },
+  "LoginForm":{
+    "login_error_campos":"Mesedez, bete eremu guztiak.",
+    "login_error_credenciales":"Emaila edo pasahitza okerrak dira.",
+    "login_identificate":"Hasi saioa zure kontuan",
+    "login_email":"Posta elektronikoa",
+    "login_password":"Pasahitza",
+    "login_boton_entrar":"Sartu"
+  },
+  "QuienesSomos": {
+    "qs_historia_subtitulo": "Futbolaren kultura zure esku",
+    "qs_que_vendemos_titulo": "Zerk egiten gaitu bakar?",
+    "qs_historia_parrafo_1": "THE 12th MAN-en, futbolarekin zuk adinako pasioa dugu. Gure helburua pieza bakarrak eskaintzea da, xehetasun bakoitza zainduz, elastiko bakoitzak istorio mitiko bat konta dezan.",
+    "qs_tiendas_titulo": "Gure Egoitzak",
+    "qs_actividades_titulo": "Gure Taldea"
+  },
+  "RegisterForm": {
+    "register_titulo": "Sortu zure kontua",
+    "register_error_campos": "Mesedez, bete eremu guztiak.",
+    "register_error_no_coinciden": "Pasahitzak ez datoz bat.",
+    "register_error_registro": "Ezin izan da kontua sortu. Saiatu beste email batekin.",
+    "register_email": "Posta elektronikoa",
+    "register_password": "Pasahitza",
+    "register_repeat_password": "Errepikatu pasahitza",
+    "register_boton_empezar": "Hasi"
+  },
+  "Navigation": {
+    "DetalleProducto": "Produktuaren xehetasunak",
+    "NuestrasCamisetas": "Gure Elastikoak",
+    "DetalleSegundaMano": "Bigarren Eskuko Xehetasunak",
+    "MiCarrito": "Nire Saskia",
+    "QuienesSomos": "Nor Gara",
+    "Contacto": "Kontaktua",
+    "Configuracion": "Ezarpenak",
+    "PublicarProducto": "Argitaratu Produktua",
+    "Registrarse": "Izena eman",
+    "Inicio": "Hasiera",
+    "Camisetas": "Elastikoak"
+  },
+  "authScreen": {
+    "registrar": "Izena eman",
+    "ya_tengo_cuenta": "Kontua badut",
+    "o_tambien": "EDO",
+    "continuar_google": "Google-ekin jarraitu",
+    "error_google": "Google-eko errorea",
+    "error_login_default": "Ezin izan da saioa hasi."
   }
 }

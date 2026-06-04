@@ -10,7 +10,7 @@ export const IndicadorActividad = () => {
         <View style={styles.indicadorView}>
             <ActivityIndicator size="large" color={colorTiendaOscuro} />
             <Text style={styles.indicadorText}>
-                {t('indicador_proceso')}
+                {t('IndicadorActividad.indicador_proceso')}
             </Text>
         </View>
     );

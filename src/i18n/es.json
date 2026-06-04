@@ -78,5 +78,55 @@
     "exito_oferta_enviada": "Oferta enviada al vendedor.",
     "chat_label": "Chat con vendedor",
     "ventas_label": "ventas"
+  },
+  "IndicadorActividad":{
+    "indicador_proceso":"Cargando catálogo..."
+  },
+  "LoginForm":{
+    "login_error_campos":"Por favor, rellena todos los campos.",
+    "login_error_credenciales":"Email o contraseña incorrectos.",
+    "login_identificate":"Inicia sesión en tu cuenta",
+    "login_email":"Correo electrónico",
+    "login_password":"Contraseña",
+    "login_boton_entrar":"Entrar"
+  },
+  "QuienesSomos":{
+    "qs_historia_subtitulo":"La cultura del fútbol en tus manos",
+    "qs_que_vendemos_titulo":"¿Qué nos hace únicos?",
+    "qs_historia_parrafo_1":"En THE 12th MAN, vivimos el fútbol con la misma pasión que tú. Nuestro objetivo es ofrecerte piezas únicas, cuidando cada detalle para que cada camiseta cuente una historia legendaria.",
+    "qs_tiendas_titulo":"Nuestras Sedes",
+    "qs_actividades_titulo":"Nuestro Equipo"
+  },
+  "RegisterForm": {
+    "register_titulo": "Crea tu cuenta",
+    "register_error_campos": "Por favor, rellena todos los campos.",
+    "register_error_no_coinciden": "Las contraseñas no coinciden.",
+    "register_error_registro": "No se pudo crear la cuenta. Prueba con otro email.",
+    "register_email": "Correo electrónico",
+    "register_password": "Contraseña",
+    "register_repeat_password": "Repetir contraseña",
+    "register_boton_empezar": "Empezar"
+  },
+  "Navigation": {
+    "DetalleProducto": "Detalle de Producto",
+    "NuestrasCamisetas": "Nuestras Camisetas",
+    "DetalleSegundaMano": "Detalle Segunda Mano",
+    "MiCarrito": "Mi Carrito",
+    "QuienesSomos": "Quiénes Somos",
+    "Contacto": "Contacto",
+    "Configuracion": "Configuración",
+    "PublicarProducto": "Publicar Producto",
+    "Registrarse": "Registrarse",
+    "Inicio": "Inicio",
+    "Camisetas": "Camisetas"
+  },
+  "authScreen": {
+    "registrar": "Registrarse",
+    "ya_tengo_cuenta": "Ya tengo cuenta",
+    "o_tambien": "O TAMBIÉN",
+    "continuar_google": "Continuar con Google",
+    "error_google": "Error con Google",
+    "error_login_default": "No se pudo iniciar sesión."
   }
+
 }

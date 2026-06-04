@@ -116,6 +116,7 @@ export default function SubirProductoScreen({ navigation }: any) {
                 },
                 imagen: downloadURL,
                 precio: parseFloat(precio),
+                estado: 'usada',
                 destacado: false,
                 creadoPor: usuario.uid,
                 vendedorNombre: usuario.displayName ?? usuario.email ?? 'Usuario anónimo',
