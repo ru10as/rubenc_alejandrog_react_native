@@ -79,6 +79,18 @@
     "chat_label": "Chat with seller",
     "ventas_label": "sales"
   },
+  "chat": {
+    "placeholder": "Type a message...",
+    "vacio": "No messages yet. Say hi to the seller!",
+    "login_titulo": "Sign in",
+    "login_msg": "You need an account to chat with the seller.",
+    "aviso_titulo": "Notice",
+    "propio_articulo": "This item is yours, you can't chat with yourself."
+  },
+  "chats": {
+    "vacio": "You don't have any conversations yet.",
+    "login": "Sign in to see your chats."
+  },
   "IndicadorActividad":{
     "indicador_proceso":"Loading catalog..."
   },
@@ -112,13 +124,15 @@
     "NuestrasCamisetas": "Our Jerseys",
     "DetalleSegundaMano": "Second Hand Details",
     "MiCarrito": "My Cart",
+    "MisChats": "My Chats",
     "QuienesSomos": "About Us",
     "Contacto": "Contact",
     "Configuracion": "Settings",
     "PublicarProducto": "Post Product",
     "Registrarse": "Sign up",
     "Inicio": "Home",
-    "Camisetas": "Jerseys"
+    "Camisetas": "Jerseys",
+    "Chat": "Chat"
   },
   "authScreen": {
     "registrar": "Sign up",

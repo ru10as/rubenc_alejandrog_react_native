@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
     View, ScrollView, StyleSheet, Alert, Image,
     TouchableOpacity, KeyboardAvoidingView, Platform,
@@ -29,6 +30,25 @@ export default function SubirProductoScreen({ navigation }: any) {
     const [precio, setPrecio] = useState('');
     const [subiendo, setSubiendo] = useState(false);
     const [progreso, setProgreso] = useState(0);
+
+    const limpiarFormulario = useCallback(() => {
+        setImagen(null);
+        setNombreEs('');
+        setNombreEn('');
+        setNombreEu('');
+        setDescEs('');
+        setDescEn('');
+        setDescEu('');
+        setPrecio('');
+        setProgreso(0);
+    }, []);
+
+    // Limpia el formulario al salir de la pantalla, así al volver siempre está vacío
+    useFocusEffect(
+        useCallback(() => {
+            return () => limpiarFormulario();
+        }, [limpiarFormulario])
+    );
 
     const abrirSelector = () => {
         Alert.alert('Añadir foto', '¿Desde dónde quieres subir la imagen?', [
@@ -127,7 +147,8 @@ export default function SubirProductoScreen({ navigation }: any) {
             (dispatch as any)(fetchCamisetas());
 
             Alert.alert('¡Publicado!', 'El producto se ha añadido al catálogo.', [
-                { text: 'OK', onPress: () => navigation.goBack() },
+                { text: 'Publicar otro', onPress: limpiarFormulario },
+                { text: 'Volver', onPress: () => navigation.goBack() },
             ]);
         } catch (error: any) {
             Alert.alert('Error al subir', error.message);

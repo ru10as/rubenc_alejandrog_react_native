@@ -80,6 +80,18 @@
     "chat_label": "Chat con vendedor",
     "ventas_label": "ventas"
   },
+  "chat": {
+    "placeholder": "Escribe un mensaje...",
+    "vacio": "Aún no hay mensajes. ¡Saluda al vendedor!",
+    "login_titulo": "Inicia sesión",
+    "login_msg": "Necesitas una cuenta para chatear con el vendedor.",
+    "aviso_titulo": "Aviso",
+    "propio_articulo": "Este artículo es tuyo, no puedes chatear contigo mismo."
+  },
+  "chats": {
+    "vacio": "Todavía no tienes conversaciones.",
+    "login": "Inicia sesión para ver tus chats."
+  },
   "IndicadorActividad":{
     "indicador_proceso":"Cargando catálogo..."
   },
@@ -113,13 +125,15 @@
     "NuestrasCamisetas": "Nuestras Camisetas",
     "DetalleSegundaMano": "Detalle Segunda Mano",
     "MiCarrito": "Mi Carrito",
+    "MisChats": "Mis Chats",
     "QuienesSomos": "Quiénes Somos",
     "Contacto": "Contacto",
     "Configuracion": "Configuración",
     "PublicarProducto": "Publicar Producto",
     "Registrarse": "Registrarse",
     "Inicio": "Inicio",
-    "Camisetas": "Camisetas"
+    "Camisetas": "Camisetas",
+    "Chat": "Chat"
   },
   "authScreen": {
     "registrar": "Registrarse",

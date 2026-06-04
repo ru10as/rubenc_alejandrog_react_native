@@ -79,6 +79,18 @@
     "chat_label": "Saltzailearekin txata",
     "ventas_label": "salmentak"
   },
+  "chat": {
+    "placeholder": "Idatzi mezu bat...",
+    "vacio": "Oraindik mezurik ez. Agurtu saltzailea!",
+    "login_titulo": "Hasi saioa",
+    "login_msg": "Kontu bat behar duzu saltzailearekin txateatzeko.",
+    "aviso_titulo": "Oharra",
+    "propio_articulo": "Artikulu hau zurea da, ezin duzu zeure buruarekin txateatu."
+  },
+  "chats": {
+    "vacio": "Oraindik ez duzu elkarrizketarik.",
+    "login": "Hasi saioa zure txatak ikusteko."
+  },
   "IndicadorActividad":{
     "indicador_proceso":"Katalogoa kargatzen..."
   },
@@ -112,13 +124,15 @@
     "NuestrasCamisetas": "Gure Elastikoak",
     "DetalleSegundaMano": "Bigarren Eskuko Xehetasunak",
     "MiCarrito": "Nire Saskia",
+    "MisChats": "Nire Txatak",
     "QuienesSomos": "Nor Gara",
     "Contacto": "Kontaktua",
     "Configuracion": "Ezarpenak",
     "PublicarProducto": "Argitaratu Produktua",
     "Registrarse": "Izena eman",
     "Inicio": "Hasiera",
-    "Camisetas": "Elastikoak"
+    "Camisetas": "Elastikoak",
+    "Chat": "Txata"
   },
   "authScreen": {
     "registrar": "Izena eman",

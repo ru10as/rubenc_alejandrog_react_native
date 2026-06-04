@@ -14,6 +14,8 @@ import HomeComponent from '../components/HomeComponent';
 import CatalogoComponent from '../components/CatalogoComponent';
 import DetalleCamisetaComponent from '../components/DetalleCamisetaComponent';
 import DetalleCamisetaSMano from '../components/DetalleCamisetaSMano';
+import ChatComponent from '../components/ChatComponent';
+import ChatsListComponent from '../components/ChatsListComponent';
 import QuienesSomosComponent from '../components/QuienesSomosComponent';
 import ContactoComponent from '../components/ContactoComponent';
 import ConfiguracionComponent from '../components/ConfiguracionComponent';
@@ -77,6 +79,17 @@ function CatalogoStack() {
             <Stack.Screen name="Catalogo" component={CatalogoComponent} options={({ navigation }) => headerOptions(t('Navigation.NuestrasCamisetas'), navigation)} />
             <Stack.Screen name="DetalleCamiseta" component={DetalleCamisetaComponent} options={{ title: t('Navigation.DetalleProducto') }} />
             <Stack.Screen name="DetalleCamisetaSMano" component={DetalleCamisetaSMano} options={{ title: t('Navigation.DetalleSegundaMano') }} />
+            <Stack.Screen name="Chat" component={ChatComponent} options={({ route }: any) => ({ title: route.params?.vendedorNombre || t('Navigation.Chat') })} />
+        </Stack.Navigator>
+    );
+}
+
+function ChatsStack() {
+    const { t } = useTranslation();
+    return (
+        <Stack.Navigator id="ChatsStack" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="MisChats" component={ChatsListComponent} options={({ navigation }) => headerOptions(t('Navigation.MisChats'), navigation)} />
+            <Stack.Screen name="Chat" component={ChatComponent} options={({ route }: any) => ({ title: route.params?.vendedorNombre || t('Navigation.Chat') })} />
         </Stack.Navigator>
     );
 }
@@ -166,6 +179,7 @@ export default function AppNavigator() {
                     <Drawer.Screen name="Inicio" component={HomeStack} options={{ title: t('Navigation.Inicio'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />) }} />
                     <Drawer.Screen name="Camisetas" component={CatalogoStack} options={{ title: t('Navigation.Camisetas'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="tshirt-crew" color={color} size={size} />) }} />
                     <Drawer.Screen name="Mi Carrito" component={CarritoStack} options={{ title: t('Navigation.MiCarrito'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="cart" color={color} size={size} />) }} />
+                    <Drawer.Screen name="Mis Chats" component={ChatsStack} options={{ title: t('Navigation.MisChats'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="chat" color={color} size={size} />) }} />
                     <Drawer.Screen name="Quiénes Somos" component={QuienesSomosStack} options={{ title: t('Navigation.QuienesSomos'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="information" color={color} size={size} />) }} />
                     <Drawer.Screen name="Contacto" component={ContactoStack} options={{ title: t('Navigation.Contacto'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="phone" color={color} size={size} />) }} />
                     <Drawer.Screen name="Acceso usuario" component={AuthStack} options={{ drawerItemStyle: { display: 'none' }, drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />) }} />
