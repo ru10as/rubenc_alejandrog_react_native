@@ -119,6 +119,7 @@ export default function SubirProductoScreen({ navigation }: any) {
                 estado: 'usada',
                 destacado: false,
                 creadoPor: usuario.uid,
+                vendedorId: usuario.uid,
                 vendedorNombre: usuario.displayName ?? usuario.email ?? 'Usuario anónimo',
                 vendedorFoto: usuario.photoURL ?? null,
                 creadoEn: serverTimestamp(),
