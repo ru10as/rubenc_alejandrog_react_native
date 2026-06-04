@@ -12,9 +12,9 @@ function Contacto() {
 
     return (
         <ImageBackground 
-            source={{ uri: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000' }} // Un estadio épico de fondo
+            source={{ uri: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000' }}
             style={styles.background}
-            blurRadius={2} // Un poco de desenfoque para que el texto resalte
+            blurRadius={2}
         >
             <ScrollView contentContainerStyle={styles.container}>
                 
@@ -22,19 +22,19 @@ function Contacto() {
                 <View style={styles.header}>
                     <Avatar.Icon size={80} icon="soccer" backgroundColor={colorTiendaOscuro} />
                     <Text style={styles.tituloApp}>THE 12th MAN</Text>
-                    <Text style={styles.subtituloApp}>{t('contacto_titulo')}</Text>
+                    <Text style={styles.subtituloApp}>{t('contactoComponent.titulo')}</Text>
                 </View>
 
                 <Card style={styles.card}>
                     <Card.Content>
-                        <Text style={styles.saludo}>{t('contacto_saludo')}</Text>
-                        <Text style={styles.parrafo}>{t('contacto_descripcion')}</Text>
+                        <Text style={styles.saludo}>{t('contactoComponent.saludo')}</Text>
+                        <Text style={styles.parrafo}>{t('contactoComponent.descripcion')}</Text>
                         
                         <Divider style={styles.linea} />
 
                         {/* Sección de Contacto con Iconos */}
                         <List.Item
-                            title={t('tel')}
+                            title={t('contactoComponent.tel')}
                             description="+34 600 123 456"
                             left={props => <List.Icon {...props} icon="phone" color={colorTiendaOscuro} />}
                             onPress={() => abrirEnlace('tel:+34600123456')}
@@ -42,7 +42,7 @@ function Contacto() {
                         />
                         
                         <List.Item
-                            title={t('email')}
+                            title={t('contactoComponent.email')}
                             description="soporte@the12thman.com"
                             left={props => <List.Icon {...props} icon="email" color={colorTiendaOscuro} />}
                             onPress={() => abrirEnlace('mailto:soporte@the12thman.com')}
@@ -51,7 +51,7 @@ function Contacto() {
 
                         <Divider style={styles.linea} />
 
-                        <Text style={styles.despedida}>{t('contacto_despedida')}</Text>
+                        <Text style={styles.despedida}>{t('contactoComponent.despedida')}</Text>
                         
                         <Button 
                             mode="contained" 
@@ -60,7 +60,7 @@ function Contacto() {
                             icon="instagram"
                             onPress={() => {}}
                         >
-                            Follow the Squad
+                            {t('contactoComponent.follow')}
                         </Button>
                     </Card.Content>
                 </Card>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     card: { 
         marginHorizontal: 20, 
         borderRadius: 20, 
-        backgroundColor: 'rgba(255, 255, 255, 0.92)', // Un blanco un poco transparente
+        backgroundColor: 'rgba(255, 255, 255, 0.92)',
         elevation: 10 
     },
     saludo: { 

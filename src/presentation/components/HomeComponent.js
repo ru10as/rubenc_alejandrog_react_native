@@ -12,15 +12,13 @@ const mapStateToProps = state => ({
     novedades: state.novedades,
 });
 
-// Componente funcional para los items de la Home
 function RenderItem({ item, isLoading, errMess, onPress }) {
-    const { i18n } = useTranslation(); // Hook para sacar el idioma actual
+    const { i18n } = useTranslation();
 
     if (isLoading) return <IndicadorActividad />;
     if (errMess) return <View style={styles.error}><Text>{errMess}</Text></View>;
     if (!item) return <View />;
 
-    // Lógica de traducción: prioriza el idioma actual, cae a español, o al campo antiguo si existe
     const nombre = item.nombres?.[i18n.language] || item.nombres?.['es'] || item.nombre;
     const descripcion = item.descripciones?.[i18n.language] || item.descripciones?.['es'] || item.descripcion;
 
@@ -53,7 +51,6 @@ class Home extends Component {
 
         return (
             <ScrollView style={styles.main}>
-                {/* Podrías añadir la cabecera aquí también si quieres */}
                 <RenderItem
                     item={camiseta}
                     isLoading={this.props.camisetas.isLoading}
@@ -91,12 +88,11 @@ const styles = StyleSheet.create({
     imageStyle: { resizeMode: 'cover' },
     imageBackground: {
         width: '100%',
-        height: 200, // Un poco más alto para que luzca
+        height: 200,
         justifyContent: 'center',
         alignItems: 'center',
     },
     error: { padding: 20, alignItems: 'center' }
 });
 
-// Envolvemos con withTranslation para que toda la clase tenga acceso al contexto de idiomas
 export default withTranslation()(connect(mapStateToProps)(Home));

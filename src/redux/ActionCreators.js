@@ -4,13 +4,36 @@ import { collection, getDocs, addDoc, doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Alert } from 'react-native';
 
+// Funcion para limpiar objetos complejos de Firebase antes de Redux
+const sanitizarData = (data) => {
+    if (!data) return data;
+    
+    // Si es un objeto, recorremos sus propiedades
+    return Object.keys(data).reduce((acc, key) => {
+        const value = data[key];
+        
+        // Si el valor tiene un método toMillis (como los Timestamp de Firebase)
+        if (value && typeof value.toMillis === 'function') {
+            acc[key] = value.toMillis(); // Convertimos a número (milisegundos)
+        } 
+        // Si es un objeto genérico (y no nulo), lo sanitizamos recursivamente
+        else if (value && typeof value === 'object' && !Array.isArray(value)) {
+            acc[key] = sanitizarData(value);
+        }
+        else {
+            acc[key] = value;
+        }
+        return acc;
+    }, {});
+};
+
 // --- COMENTARIOS ---
 export const fetchComentarios = () => async (dispatch) => {
     try {
         const querySnapshot = await getDocs(collection(db, "comentarios"));
         const comentarios = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...sanitizarData(doc.data())
         }));
         dispatch(addComentarios(comentarios));
     } catch (error) {
@@ -29,7 +52,7 @@ export const fetchCamisetas = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "camisetas"));
         const camisetas = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...sanitizarData(doc.data())
         }));
         dispatch(addCamisetas(camisetas));
     } catch (error) {
@@ -49,7 +72,7 @@ export const fetchCabeceras = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "cabeceras"));
         const cabeceras = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...sanitizarData(doc.data())
         }));
         dispatch(addCabeceras(cabeceras));
     } catch (error) {
@@ -69,7 +92,7 @@ export const fetchNovedades = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "novedades"));
         const novedades = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...sanitizarData(doc.data())
         }));
         dispatch(addNovedades(novedades));
     } catch (error) {
@@ -168,3 +191,26 @@ export const logout = () => async (dispatch) => {
         console.error("Error al cerrar sesión:", error.message);
     }
 };
+
+// Añade una camiseta especificando su objeto completo y la talla elegida
+export const anadirAlCarrito = (camiseta, talla) => ({
+    type: ActionTypes.ANADIR_CARRITO,
+    payload: { camiseta, talla }
+});
+
+// Elimina por completo esa línea del carrito (sin importar la cantidad)
+export const eliminarDelCarrito = (id, talla) => ({
+    type: ActionTypes.ELIMINAR_CARRITO,
+    payload: { id, talla }
+});
+
+// Resta 1 a la cantidad de una camiseta. Si llega a 1, no baja más (o se borra según el reducer)
+export const restarDelCarrito = (id, talla) => ({
+    type: ActionTypes.RESTAR_CARRITO,
+    payload: { id, talla }
+});
+
+// Vacía por completo el carrito (útil para cuando completen el pago)
+export const limpiarCarrito = () => ({
+    type: ActionTypes.LIMPIAR_CARRITO
+});

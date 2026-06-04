@@ -3,11 +3,11 @@ import { View, StyleSheet, Image, ScrollView, Modal, ImageBackground } from 'rea
 import { Text, Divider, IconButton, TextInput, Button, Surface } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next'; // Importación necesaria
+import { withTranslation } from 'react-i18next';
 
 import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
 import { postFavorito, postComentario } from '../../redux/ActionCreators';
-import { IndicadorActividad } from './IndicadorActividadComponent'; // Usamos tu componente pro
+import { IndicadorActividad } from './IndicadorActividadComponent';
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
@@ -36,7 +36,7 @@ class DetalleCamiseta extends Component {
 
     render() {
         const { camisetaId } = this.props.route.params;
-        const { t, i18n } = this.props; // Ahora 't' sí vendrá por props gracias a withTranslation
+        const { t, i18n } = this.props;
 
         if (this.props.camisetas.isLoading) {
             return <IndicadorActividad />;
@@ -46,7 +46,7 @@ class DetalleCamiseta extends Component {
         const comentarios = this.props.comentarios.comentarios.filter(c => String(c.camisetaId) === String(camisetaId));
         const esFavorita = this.props.favoritos?.some(el => String(el) === String(camisetaId));
 
-        if (!camiseta) return <View style={styles.error}><Text>{t('detalle_error')}</Text></View>;
+        if (!camiseta) return <View style={styles.error}><Text>{t('detalleCamisetaComponent.error')}</Text></View>;
 
         return (
             <ImageBackground 
@@ -67,7 +67,7 @@ class DetalleCamiseta extends Component {
                         <View style={styles.headerRow}>
                             <View style={{ flex: 1 }}>
                                 <Text style={styles.titulo}>{camiseta.nombre}</Text>
-                                {camiseta.destacado && <Text style={styles.badge}>{t('detalle_edicion_coleccionista')}</Text>}
+                                {camiseta.destacado && <Text style={styles.badge}>{t('detalleCamisetaComponent.edicion_coleccionista')}</Text>}
                             </View>
                             <IconButton
                                 icon={esFavorita ? 'heart' : 'heart-outline'}
@@ -82,7 +82,7 @@ class DetalleCamiseta extends Component {
                             onPress={() => console.log('Comprar')}
                             style={styles.btnComprar}
                         >
-                            {t('detalle_comprar')}
+                            {t('detalleCamisetaComponent.comprar')}
                         </Button>
                     </View>
 
@@ -90,7 +90,7 @@ class DetalleCamiseta extends Component {
 
                     <View style={styles.comentariosSeccion}>
                         <View style={styles.rowTitulo}>
-                            <Text style={styles.seccionTitulo}>{t('detalle_voces_grada')}</Text>
+                            <Text style={styles.seccionTitulo}>{t('detalleCamisetaComponent.voces_grada')}</Text>
                             <IconButton icon="plus-circle" iconColor={colorTiendaOscuro} onPress={this.toggleModal} />
                         </View>
                         {comentarios.map((item, index) => (
@@ -102,10 +102,10 @@ class DetalleCamiseta extends Component {
                     </View>
 
                     <View style={styles.seccionCromo}>
-                        <Text style={styles.seccionTitulo}>{t('detalle_certificado_titulo')}</Text>
+                        <Text style={styles.seccionTitulo}>{t('detalleCamisetaComponent.certificado_titulo')}</Text>
                         <Surface style={styles.tarjetaCromo} elevation={4}>
                             <View style={styles.cromoHeader}>
-                                <Text style={styles.cromoID}>{t('detalle_certificado_id')}: #TM-{camiseta.id}99</Text>
+                                <Text style={styles.cromoID}>{t('detalleCamisetaComponent.certificado_id')}: #TM-{camiseta.id}99</Text>
                             </View>
                             <View style={styles.qrWrapper}>
                                 <QRCode
@@ -115,22 +115,22 @@ class DetalleCamiseta extends Component {
                                     backgroundColor="white"
                                 />
                             </View>
-                            <Text style={styles.cromoFooter}>{t('detalle_certificado_footer')}</Text>
+                            <Text style={styles.cromoFooter}>{t('detalleCamisetaComponent.certificado_footer')}</Text>
                         </Surface>
                     </View>
 
                     <Modal visible={this.state.showModal} animationType="slide">
                         <View style={styles.modalContent}>
-                            <Text style={styles.modalTitulo}>{t('modal_titulo')}</Text>
+                            <Text style={styles.modalTitulo}>{t('detalleCamisetaComponent.modal_titulo')}</Text>
                             <TextInput
-                                label={t('modal_nombre')}
+                                label={t('detalleCamisetaComponent.modal_nombre')}
                                 mode="outlined"
                                 style={styles.input}
                                 value={this.state.autor}
                                 onChangeText={txt => this.setState({ autor: txt })}
                             />
                             <TextInput
-                                label={t('modal_comentario')}
+                                label={t('detalleCamisetaComponent.modal_comentario')}
                                 mode="outlined"
                                 multiline
                                 numberOfLines={4}
@@ -143,9 +143,9 @@ class DetalleCamiseta extends Component {
                                 onPress={() => this.enviarComentario(camisetaId)}
                                 style={styles.btnModal}
                             >
-                                {t('modal_publicar')}
+                                {t('detalleCamisetaComponent.modal_publicar')}
                             </Button>
-                            <Button textColor="red" onPress={this.toggleModal}>{t('modal_cancelar')}</Button>
+                            <Button textColor="red" onPress={this.toggleModal}>{t('detalleCamisetaComponent.modal_cancelar')}</Button>
                         </View>
                     </Modal>
                 </ScrollView>

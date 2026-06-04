@@ -1,40 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-// LIBRERÍA NATIVA (La que configuramos con el SHA-1)
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { auth } from '../../api/firebaseConfig'; // importamos la configuracion de firebase
+import { auth } from '../../api/firebaseConfig';
 
 import LoginFormComponent from '../components/LoginFormComponent';
 import RegisterFormComponent from '../components/RegisterFormComponent';
+import { registrarTokenPush } from '../../comun/notificaciones';
 
 const AuthScreen = ({ navigation }: any) => {
     const [activeTab, setActiveTab] = useState(0);
+    const [isLoading, setIsLoading] = useState(false); // Evita interacciones mientras cambia la pestaña
 
-    // CONFIGURACIÓN INICIAL
     useEffect(() => {
         GoogleSignin.configure({
-            webClientId: '831451288833-aknfkn3cjjgqpe81alb2s97nh0eod44j.apps.googleusercontent.com', // Para que google sepa inicialmente quien le esta pidiendo permiso
-            offlineAccess: true, // Para mantener la sesion aunque el usuario cierre la app
+            webClientId: '831451288833-aknfkn3cjjgqpe81alb2s97nh0eod44j.apps.googleusercontent.com',
         });
     }, []);
 
-    // FUNCIÓN DE LOGIN
-    const onGoogleButtonPress = async () => { // Esta funcion la vamos a ejecutar cuando se pulsa el boton tipico
+    // Memoizamos la función de cambio de tab para mejorar rendimiento
+    const handleTabChange = useCallback((index: number) => {
+        setIsLoading(true);
+        setActiveTab(index);
+        setTimeout(() => setIsLoading(false), 100); // Pequeño delay para estabilizar el render
+    }, []);
+
+    const onGoogleButtonPress = async () => { 
         try {
-            await GoogleSignin.hasPlayServices(); // Comprobamos si el movil tiene los servicios de Google actualizados
-            const response = await GoogleSignin.signIn(); // Aqui es donde va a aparecer la ventana de = seleccion de una cuenta 
-            const idToken = response.data?.idToken; // De toda la información que devuelve Google (nombre, foto, email), extraemos el Token
+            await GoogleSignin.hasPlayServices();
+            const response = await GoogleSignin.signIn();
+            const idToken = response.data?.idToken;
 
-            if (!idToken) { // Si por algún fallo de red no hay token, cortamos el proceso para evitar errores mayores.
-                throw new Error("No se obtuvo el ID Token de Google");
-            }
+            if (!idToken) throw new Error("No se obtuvo el ID Token");
 
-            const credential = GoogleAuthProvider.credential(idToken); // Convertimos la llave de Google en una llave compatible con Firebase
-            await signInWithCredential(auth, credential); // Aquí es donde el usuario queda oficialmente registrado en vuestra base de datos.
+            const credential = GoogleAuthProvider.credential(idToken); 
+            const userCredential = await signInWithCredential(auth, credential); 
             
-            console.log("Logueado con Google correctamente"); // Sin mas, por depuracion
-            navigation.replace('Home'); // Mandamos al usuario log a pagina principal
+            await registrarTokenPush(userCredential.user.uid);
+            navigation.replace('Home');
         } catch (error: any) {
             console.error("Error al entrar con Google: ", error);
         }
@@ -44,28 +47,21 @@ const AuthScreen = ({ navigation }: any) => {
         <View style={styles.container}>
             <Text style={styles.logo}>The 12th Man</Text>
 
-            {/* Selector de Pestañas */}
             <View style={styles.tabContainer}>
-                <TouchableOpacity 
-                    style={[styles.tab, activeTab === 0 && styles.activeTab]} 
-                    onPress={() => setActiveTab(0)}
-                >
+                <TouchableOpacity style={[styles.tab, activeTab === 0 && styles.activeTab]} onPress={() => handleTabChange(0)}>
                     <Text style={activeTab === 0 ? styles.activeTabText : styles.tabText}>Registrarse</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
-                    style={[styles.tab, activeTab === 1 && styles.activeTab]} 
-                    onPress={() => setActiveTab(1)}
-                >
+                <TouchableOpacity style={[styles.tab, activeTab === 1 && styles.activeTab]} onPress={() => handleTabChange(1)}>
                     <Text style={activeTab === 1 ? styles.activeTabText : styles.tabText}>Ya tengo cuenta</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.formContainer}>
-                {activeTab === 0 ? (
-                    <RegisterFormComponent navigation={navigation} />
+                {isLoading ? (
+                    <ActivityIndicator size="small" color="#f44336" />
                 ) : (
-                    <LoginFormComponent navigation={navigation} />
+                    activeTab === 0 ? <RegisterFormComponent navigation={navigation} /> : <LoginFormComponent navigation={navigation} />
                 )}
 
                 <View style={styles.separatorContainer}>
@@ -74,17 +70,15 @@ const AuthScreen = ({ navigation }: any) => {
                     <View style={styles.line} />
                 </View>
 
-                {/* BOTÓN DE GOOGLE CORREGIDO */}
-                <TouchableOpacity 
-                    style={styles.googleButton} 
-                    onPress={onGoogleButtonPress}
-                >
+                <TouchableOpacity style={styles.googleButton} onPress={onGoogleButtonPress}>
                     <Text style={styles.googleButtonText}>Continuar con Google</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
 };
+
+// (Mantén tus mismos estilos aquí abajo)
 
 const styles = StyleSheet.create({
   container: {
@@ -126,7 +120,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  // ESTILOS NUEVOS PARA EL BOTÓN DE GOOGLE
   separatorContainer: {
     flexDirection: "row",
     alignItems: "center",

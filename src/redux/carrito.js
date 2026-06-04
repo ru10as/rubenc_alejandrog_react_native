@@ -1,29 +1,49 @@
+import * as ActionTypes from './ActionTypes';
+
 const initialState = {
-    items: [], 
+    items: [], // Estructura: [{ camiseta: {...}, talla: 'M', cantidad: 1 }]
 };
 
 export const carrito = (state = initialState, action) => {
     switch (action.type) {
-        case 'ADD_TO_CART':
-            const existe = state.items.find(i => i.id === action.payload.id && i.talla === action.payload.talla);
+        
+        case ActionTypes.ANADIR_CARRITO: {
+            const { camiseta, talla } = action.payload;
+            const existe = state.items.find(i => i.camiseta.id === camiseta.id && i.talla === talla);
+            
             if (existe) {
                 return {
                     ...state,
                     items: state.items.map(i => 
-                        (i.id === action.payload.id && i.talla === action.payload.talla) 
+                        (i.camiseta.id === camiseta.id && i.talla === talla) 
                         ? { ...i, cantidad: i.cantidad + 1 } : i
                     )
                 };
             }
-            return { ...state, items: [...state.items, { ...action.payload, cantidad: 1 }] };
+            return { ...state, items: [...state.items, { camiseta, talla, cantidad: 1 }] };
+        }
 
-        case 'REMOVE_FROM_CART':
+        case ActionTypes.RESTAR_CARRITO: {
+            const { id, talla } = action.payload;
             return {
                 ...state,
-                items: state.items.filter(i => !(i.id === action.payload.id && i.talla === action.payload.talla))
+                items: state.items.map(i => 
+                    (i.camiseta.id === id && i.talla === talla)
+                        ? { ...i, cantidad: i.cantidad > 1 ? i.cantidad - 1 : 1 }
+                        : i
+                )
             };
+        }
 
-        case 'CLEAN_CART':
+        case ActionTypes.ELIMINAR_CARRITO: {
+            const { id, talla } = action.payload;
+            return {
+                ...state,
+                items: state.items.filter(i => !(i.camiseta.id === id && i.talla === talla))
+            };
+        }
+
+        case ActionTypes.LIMPIAR_CARRITO:
             return initialState;
 
         default:

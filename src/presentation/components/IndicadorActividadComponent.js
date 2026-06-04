@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next'; // 1. Importación necesaria
 import { colorTiendaOscuro } from '../../comun/comun';
 
 export const IndicadorActividad = () => {
-    // 2. Extraemos la función t del hook
-    const { t } = useTranslation(); 
+    const { t } = useTranslation(); // Extraemos la función t del hook
 
     return (
         <View style={styles.indicadorView}>
