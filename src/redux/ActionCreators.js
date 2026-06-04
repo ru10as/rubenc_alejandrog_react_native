@@ -182,6 +182,7 @@ export const login = (email, password) => async (dispatch) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: extractUser(userCredential.user) });
     await registrarTokenSeguro(userCredential.user.uid);
+    dispatch(cargarCarritoDesdeFirebase(userCredential.user.uid));
 };
 
 // ACCIÓN PARA LOGIN CON GOOGLE (nativo + Firebase)
@@ -211,6 +212,7 @@ export const loginWithGoogle = () => async (dispatch) => {
     }
 
     dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: extractUser(user) });
+    dispatch(cargarCarritoDesdeFirebase(user.uid));
     await registrarTokenSeguro(user.uid);
 };
 
@@ -218,6 +220,7 @@ export const loginWithGoogle = () => async (dispatch) => {
 export const restoreSession = (firebaseUser) => (dispatch) => {
     if (firebaseUser) {
         dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: extractUser(firebaseUser) });
+        dispatch(cargarCarritoDesdeFirebase(firebaseUser.uid));
     } else {
         dispatch({ type: ActionTypes.LOGOUT_SUCCESS });
     }
@@ -244,26 +247,42 @@ export const logout = () => async (dispatch) => {
 
 export { statusCodes as googleStatusCodes };
 
-// --- CARRITO ---
-// Añade una camiseta especificando su objeto completo y la talla elegida
-export const anadirAlCarrito = (camiseta, talla) => ({
-    type: ActionTypes.ANADIR_CARRITO,
-    payload: { camiseta, talla }
-});
+const guardarEnFirebase = async (dispatch, getState) => {
+    const { usuario, carrito } = getState();
+    if (usuario?.user?.uid) {
+        try {
+            await setDoc(doc(db, "carritos", usuario.user.uid), { items: carrito.items });
+        } catch (e) { 
+            console.error("Error sincronizando carrito:", e); 
+        }
+    }
+};
 
-// Elimina por completo esa línea del carrito (sin importar la cantidad)
-export const eliminarDelCarrito = (id, talla) => ({
-    type: ActionTypes.ELIMINAR_CARRITO,
-    payload: { id, talla }
-});
+export const anadirAlCarrito = (camiseta, talla) => async (dispatch, getState) => {
+    dispatch({ type: ActionTypes.ANADIR_CARRITO, payload: { camiseta, talla } });
+    guardarEnFirebase(dispatch, getState);
+};
 
-// Resta 1 a la cantidad de una camiseta. Si llega a 1, no baja más (o se borra según el reducer)
-export const restarDelCarrito = (id, talla) => ({
-    type: ActionTypes.RESTAR_CARRITO,
-    payload: { id, talla }
-});
+export const restarDelCarrito = (id, talla) => async (dispatch, getState) => {
+    dispatch({ type: ActionTypes.RESTAR_CARRITO, payload: { id, talla } });
+    guardarEnFirebase(dispatch, getState);
+};
 
-// Vacía por completo el carrito (útil para cuando completen el pago)
-export const limpiarCarrito = () => ({
-    type: ActionTypes.LIMPIAR_CARRITO
-});
+export const eliminarDelCarrito = (id, talla) => async (dispatch, getState) => {
+    dispatch({ type: ActionTypes.ELIMINAR_CARRITO, payload: { id, talla } });
+    guardarEnFirebase(dispatch, getState);
+};
+
+export const limpiarCarrito = () => ({ type: ActionTypes.LIMPIAR_CARRITO });
+
+// Función para cargar los datos desde Firebase
+export const cargarCarritoDesdeFirebase = (uid) => async (dispatch) => {
+    try {
+        const docSnap = await getDoc(doc(db, "carritos", uid));
+        if (docSnap.exists()) {
+            dispatch({ type: ActionTypes.CARGAR_CARRITO, payload: docSnap.data().items });
+        }
+    } catch (e) { 
+        console.error("Error cargando carrito:", e); 
+    }
+};

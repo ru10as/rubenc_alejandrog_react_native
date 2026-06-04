@@ -52,7 +52,7 @@
   "detalleCamisetaComponent": {
     "error": "Camiseta no encontrada",
     "edicion_coleccionista": "Edición de Coleccionista",
-    "comprar": "Comprar Ahora",
+    "comprar": "Añadir al carrito",
     "voces_grada": "Voces de la Grada",
     "certificado_titulo": "Certificado QR Digital",
     "certificado_id": "PRODUCTO CERTIFICADO",
@@ -61,7 +61,8 @@
     "modal_nombre": "Nombre",
     "modal_comentario": "Comentario",
     "modal_publicar": "Publicar",
-    "modal_cancelar": "Cancelar"
+    "modal_cancelar": "Cancelar",
+    "anadida_al_carrito": "Camiseta añadida al carrito"
   },
   "detalleCamisetaSMano": {
     "titulo": "Detalle de segunda mano",
