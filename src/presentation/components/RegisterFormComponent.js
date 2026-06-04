@@ -1,60 +1,67 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { signUp } from '../../redux/ActionCreators';
-
 import { registrarTokenPush } from '../../comun/notificaciones';
 import { auth } from '../../api/firebaseConfig';
 
 const RegisterFormComponent = ({ navigation }) => {
-    // Estados locales para gestionar la entrada de datos del usuario
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorMsg, setErrorMsg] = useState(null); 
     
-    // Hook de Redux para ejecutar la lógica de registro global
     const dispatch = useDispatch();
     
-    
     const handleRegister = async () => {
-        // 1. VALIDACIÓN PREVIA: Comprobar que no haya campos vacíos
+        setErrorMsg(null); 
+
         if (!email || !password || !confirmPassword) {
-            Alert.alert("Error", "Por favor, rellena todos los campos.");
+            setErrorMsg("Por favor, rellena todos los campos.");
             return;
         }
 
-        // 2. VALIDACIÓN DE CONSISTENCIA: Comprobar que las contraseñas coincidan
         if (password !== confirmPassword) {
-            Alert.alert("Error", "Las contraseñas no coinciden.");
+            setErrorMsg("Las contraseñas no coinciden.");
             return;
         }
 
         try {
-            // 3. REGISTRO EN FIREBASE: Creamos el usuario en la base de datos
+            console.log('Iniciando proceso de registro para:', email);
             await dispatch(signUp(email, password));
             
-            // 4. REGISTRO DE TOKEN PUSH (Notificaciones)
-            // Tras el registro exitoso, Firebase nos autentica automáticamente.
-            // Aprovechamos esto para registrar el token de este móvil en Firestore 
-            // asociado al UID del nuevo usuario.
             if (auth.currentUser) {
-                await registrarTokenPush(auth.currentUser.uid);
+                console.log('Registro exitoso. UID:', auth.currentUser.uid);
+                
+                // PEQUEÑO RETRASO PARA ASEGURAR INICIALIZACIÓN NATIVA
+                console.log('Esperando inicialización nativa de Firebase...');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                try {
+                    console.log('Intentando registrar token de notificaciones...');
+                    await registrarTokenPush(auth.currentUser.uid);
+                    console.log('Notificaciones registradas correctamente en el registro.');
+                } catch (notifError) {
+                    console.error('Error al registrar notificaciones tras el registro:', notifError);
+                }
             }
             
-            // 5. NAVEGACIÓN: Enviamos al usuario a la pantalla principal
             navigation.navigate('Inicio');
         } catch (error) {
-            // 6. GESTIÓN DE ERRORES: Alertamos si el email ya existe o hay problemas de red
-            Alert.alert("Error en Registro", "No se pudo crear la cuenta. Prueba con otro email.");
+            console.error('Error durante el registro:', error);
+            setErrorMsg("No se pudo crear la cuenta. Prueba con otro email.");
         }
     };
 
     return (
         <View style={styles.innerContainer}>
             <Text style={styles.label}>Crea tu cuenta</Text>
+            
+            {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
+            
             <TextInput 
                 placeholder="Correo electrónico" 
-                onChangeText={setEmail} 
+                onChangeText={(text) => { setEmail(text); setErrorMsg(null); }} 
                 style={styles.input} 
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -62,13 +69,13 @@ const RegisterFormComponent = ({ navigation }) => {
             <TextInput 
                 placeholder="Contraseña" 
                 secureTextEntry 
-                onChangeText={setPassword} 
+                onChangeText={(text) => { setPassword(text); setErrorMsg(null); }} 
                 style={styles.input} 
             />
             <TextInput 
                 placeholder="Repetir contraseña" 
                 secureTextEntry 
-                onChangeText={setConfirmPassword} 
+                onChangeText={(text) => { setConfirmPassword(text); setErrorMsg(null); }} 
                 style={styles.input} 
             />
             <View style={{ marginTop: 10 }}>
@@ -79,11 +86,20 @@ const RegisterFormComponent = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        justifyContent: 'center',
-        backgroundColor: '#fff',
+    innerContainer: { 
+        padding: 20 
+    },
+    label: { 
+        fontSize: 18, 
+        fontWeight: 'bold', 
+        marginBottom: 15, 
+        textAlign: 'center' 
+    },
+    errorText: {
+        color: 'red',
+        textAlign: 'center',
+        marginBottom: 10,
+        fontWeight: 'bold'
     },
     input: {
         height: 50,

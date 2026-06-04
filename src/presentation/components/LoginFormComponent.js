@@ -1,42 +1,56 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/ActionCreators';
-import { registrarTokenPush } from '../../comun/notificaciones'; // Esto es lo que vamos a emplear para las notificaciones
-import { auth } from '../../api/firebaseConfig';// Instancia de auth para obtener el UID del usuario
+import { registrarTokenPush } from '../../comun/notificaciones';
+import { auth } from '../../api/firebaseConfig';
+import { useTranslation } from 'react-i18next';
+import { Button } from 'react-native-paper';
 
 const LoginFormComponent = ({ navigation }) => {
-    // Definimos los estados locales para tomar los datos del formulario
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(null); // Nuevo estado para errores
     
-    // Hook de Redux para disparar las acciones de autenticación
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+    const colorTiendaOscuro = '#f44336';
 
     const handleLogin = async () => {
-        // 1. VALIDACIÓN: Evitamos procesos innecesarios si los campos están vacíos
+        // Limpiar error previo
+        setErrorMsg(null);
+
         if (!email || !password) {
-            Alert.alert(t('login_error_titulo'), t('login_error_campos'));
+            setErrorMsg(t('login_error_campos'));
             return;
         }
 
+        setLoading(true);
+
         try {
-            // 2. AUTENTICACIÓN: Intentamos iniciar sesión mediante Firebase/Redux
             await dispatch(login(email, password));
             
-            // 3. REGISTRO DE NOTIFICACIONES PUSH
-            // Una vez logueados, obtenemos el UID del usuario recién autenticado
-            // y registramos/actualizamos su token de dispositivo en Firestore.
             if (auth.currentUser) {
-                // Esto vincula el token del dispositivo con el usuario en la BD.
-                // Es vital para que nuestro backend (Render) sepa a quién enviar las ofertas.
-                await registrarTokenPush(auth.currentUser.uid);
+                console.log('UID del usuario:', auth.currentUser.uid);
+                
+                try {
+                    await registrarTokenPush(auth.currentUser.uid);
+                    console.log('Notificaciones registradas correctamente');
+                } catch (notifError) {
+                    console.error('Error al registrar notificaciones:', notifError);
+                }
             }
 
-            // 4. NAVEGACIÓN: Si todo salió bien, redirigimos al usuario a la pantalla de Inicio
             navigation.navigate('Inicio');
-        } catch (error) { // 5. GESTIÓN DE ERRORES: Alertamos si las credenciales son incorrectas
-            Alert.alert(t('login_error_titulo'), t('login_error_credenciales'));
+        } catch (error) {
+            if (auth.currentUser) {
+                navigation.navigate('Inicio');
+            } else {
+                setErrorMsg(t('login_error_credenciales'));
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -44,20 +58,25 @@ const LoginFormComponent = ({ navigation }) => {
         <View style={styles.innerContainer}>
             <Text style={styles.label}>{t('login_identificate')}</Text>
             
+            {/* Mensaje de error visual en pantalla */}
+            {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
+            
             <TextInput 
                 placeholder={t('login_email')} 
-                onChangeText={setEmail} 
+                onChangeText={(text) => { setEmail(text); setErrorMsg(null); }} 
                 style={styles.input} 
                 autoCapitalize="none"
                 keyboardType="email-address"
+                editable={!loading}
             />
             
             <TextInput 
                 placeholder={t('login_password')} 
                 secureTextEntry 
-                onChangeText={setPassword} 
+                onChangeText={(text) => { setPassword(text); setErrorMsg(null); }} 
                 style={styles.input} 
                 autoCapitalize="none"
+                editable={!loading}
             />
             
             <Button 
@@ -65,23 +84,31 @@ const LoginFormComponent = ({ navigation }) => {
                 onPress={handleLogin} 
                 style={styles.button}
                 buttonColor={colorTiendaOscuro}
+                disabled={loading}
             >
-                {t('login_boton_entrar')}
+                {loading ? <ActivityIndicator color="white" /> : t('login_boton_entrar')}
             </Button>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    innerContainer: {
+    innerContainer: { 
         width: '100%',
+        padding: 20 
     },
-    label: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 15,
-        textAlign: 'center'
+    label: { 
+        fontSize: 16, 
+        fontWeight: 'bold', 
+        color: '#333', 
+        marginBottom: 15, 
+        textAlign: 'center' 
+    },
+    errorText: {
+        color: 'red',
+        textAlign: 'center',
+        marginBottom: 10,
+        fontWeight: '600'
     },
     input: {
         height: 50,
@@ -91,6 +118,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 5,
         backgroundColor: '#f9f9f9',
+        color: '#000'
+    },
+    button: { 
+        marginTop: 10, 
+        borderRadius: 5, 
+        height: 50, 
+        justifyContent: 'center' 
     },
 });
 

@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { colorTiendaOscuro, colorTiendaClaro } from '../../comun/comun';
-
+import { Menu, Divider, Provider as PaperProvider } from 'react-native-paper';
 // Componentes
 import HomeComponent from '../components/HomeComponent';
 import CatalogoComponent from '../components/CatalogoComponent';
@@ -20,7 +20,8 @@ import CarritoComponent from '../components/CarritoComponent';
 
 import AuthScreen from '../screens/AuthScreen';
 import SubirProductoScreen from '../screens/SubirProductoScreen';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
+import { logout } from '../../redux/ActionCreators';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -193,124 +194,140 @@ function SubirProductoStack() {
 
 
 export default function AppNavigator() {
+    const dispatch = useDispatch();
     const datosUsuario = useSelector((state: any) => state.usuario);
     const estaLogueado = datosUsuario?.user;
-    return (
-        <NavigationContainer>
-            <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight }}>
-                <Drawer.Navigator 
-                    id="MainDrawer"
-                    initialRouteName="Inicio"
-                    drawerContent={(props) => <CustomDrawerContent {...props} />}
-                    screenOptions={({ navigation }) => ({
-                        headerShown: true, 
-                        
-                        headerTitle: 'The 12th Man', 
-                        headerStyle: {
-                            backgroundColor: '#001222',
-                            elevation: 0, 
-                            shadowOpacity: 0,
-                        },
-                        headerTintColor: '#fff',
-                        headerTitleAlign: 'center',
+    const [visible, setVisible] = React.useState(false);
 
-                        drawerStyle: { backgroundColor: colorTiendaClaro },
-                        headerRight: () => (
-                            estaLogueado ? (
-                                <TouchableOpacity onPress={() => navigation.navigate('Acceso usuario')}>
-                                    <MaterialCommunityIcons name="account-check" size={28} color="green" style={{marginRight: 15}} />
-                                </TouchableOpacity>
-                            ) : (
-                                <TouchableOpacity 
-                                    style={styles.botonRegistroHeader} 
-                                    onPress={() => navigation.navigate('Acceso usuario')}
-                                >
-                                    <Text style={{color: 'white', fontWeight: 'bold', fontSize:12}}>Registrarse</Text>
-                                </TouchableOpacity>
-                            )
-                        ),
-                    })}
-                >
-                    <Drawer.Screen
-                        name="Inicio"
-                        component={HomeStack}
-                        options={{
-                            drawerIcon: ({ color, size }) => (
-                                <MaterialCommunityIcons name="home" color={color} size={size} />
+    return (
+        <PaperProvider>
+            <NavigationContainer>
+                <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight }}>
+                    <Drawer.Navigator 
+                        id="MainDrawer"
+                        initialRouteName="Inicio"
+                        drawerContent={(props) => <CustomDrawerContent {...props} />}
+                        screenOptions={({ navigation }) => ({
+                            headerShown: true, 
+                            
+                            headerTitle: 'The 12th Man', 
+                            headerStyle: {
+                                backgroundColor: '#001222',
+                                elevation: 0, 
+                                shadowOpacity: 0,
+                            },
+                            headerTintColor: '#fff',
+                            headerTitleAlign: 'center',
+
+                            drawerStyle: { backgroundColor: colorTiendaClaro },
+                            headerRight: () => (
+                                estaLogueado ? (
+                                    <Menu
+                                        visible={visible}
+                                        onDismiss={() => setVisible(false)}
+                                        anchor={
+                                            <TouchableOpacity onPress={() => setVisible(true)}>
+                                                <MaterialCommunityIcons name="account-check" size={28} color="green" style={{marginRight: 15}} />
+                                            </TouchableOpacity>
+                                        }
+                                    >
+                                        <Menu.Item onPress={() => { setVisible(false); /* Navegar a Perfil */ }} title="Mi Perfil" />
+                                        <Divider />
+                                        <Menu.Item onPress={() => { 
+                                            setVisible(false); 
+                                            dispatch({ type: 'LOGOUT' }); // Asegúrate de tener esta acción en tu Redux
+                                        }} title="Cerrar sesión" />
+                                    </Menu>
+                                ) : (
+                                    // Tu botón de registrarse igual que antes
+                                    <TouchableOpacity style={styles.botonRegistroHeader} onPress={() => navigation.navigate('Acceso usuario')}>
+                                        <Text style={{color: 'white', fontWeight: 'bold', fontSize:12}}>Registrarse</Text>
+                                    </TouchableOpacity>
+                                )
                             ),
-                        }}
-                    />
-                    <Drawer.Screen
-                        name="Camisetas"
-                        component={CatalogoStack}
-                        options={{
-                            drawerIcon: ({ color, size }) => (
-                                <MaterialCommunityIcons name="tshirt-crew" color={color} size={size} />
-                            ),
-                        }}
-                    />
-                    {estaLogueado && (
+                        })}
+                    >
                         <Drawer.Screen
-                            name="Subir Producto"
-                            component={SubirProductoStack}
+                            name="Inicio"
+                            component={HomeStack}
                             options={{
                                 drawerIcon: ({ color, size }) => (
-                                    <MaterialCommunityIcons name="cloud-upload" color={color} size={size} />
+                                    <MaterialCommunityIcons name="home" color={color} size={size} />
                                 ),
                             }}
                         />
-                    )}
-                    <Drawer.Screen
-                        name="Mi Carrito"
-                        component={CarritoStack}
-                        options={{
-                            drawerIcon: ({ color, size }) => (
-                                <MaterialCommunityIcons name="cart" color={color} size={size} />
-                            ),
-                        }}
-                    />
-                    <Drawer.Screen
-                        name="Quiénes Somos"
-                        component={QuienesSomosStack}
-                        options={{
-                            drawerIcon: ({ color, size }) => (
-                                <MaterialCommunityIcons name="information" color={color} size={size} />
-                            ),
-                        }}
-                    />
-                    <Drawer.Screen
-                        name="Contacto"
-                        component={ContactoStack}
-                        options={{
-                            drawerIcon: ({ color, size }) => (
-                                <MaterialCommunityIcons name="phone" color={color} size={size} />
-                            ),
-                        }}
-                    />
-                    <Drawer.Screen
-                        name="Acceso usuario" 
-                        component={AuthStack}
-                        options={{
-                            drawerItemStyle: { display: 'none' }, 
-                            drawerIcon: ({ color, size }) => (
-                                <MaterialCommunityIcons name="account" color={color} size={size} />
-                            ),
-                        }}
-                    />
-                    
-                    <Drawer.Screen
-                        name="Configuración"
-                        component={ConfiguracionStack}
-                        options={{
-                            drawerIcon: ({ color, size }) => (
-                                <MaterialCommunityIcons name="cog" color={color} size={size} />
-                            ),
-                        }}
-                    />
+                        <Drawer.Screen
+                            name="Camisetas"
+                            component={CatalogoStack}
+                            options={{
+                                drawerIcon: ({ color, size }) => (
+                                    <MaterialCommunityIcons name="tshirt-crew" color={color} size={size} />
+                                ),
+                            }}
+                        />
+                        {estaLogueado && (
+                            <Drawer.Screen
+                                name="Subir Producto"
+                                component={SubirProductoStack}
+                                options={{
+                                    drawerIcon: ({ color, size }) => (
+                                        <MaterialCommunityIcons name="cloud-upload" color={color} size={size} />
+                                    ),
+                                }}
+                            />
+                        )}
+                        <Drawer.Screen
+                            name="Mi Carrito"
+                            component={CarritoStack}
+                            options={{
+                                drawerIcon: ({ color, size }) => (
+                                    <MaterialCommunityIcons name="cart" color={color} size={size} />
+                                ),
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="Quiénes Somos"
+                            component={QuienesSomosStack}
+                            options={{
+                                drawerIcon: ({ color, size }) => (
+                                    <MaterialCommunityIcons name="information" color={color} size={size} />
+                                ),
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="Contacto"
+                            component={ContactoStack}
+                            options={{
+                                drawerIcon: ({ color, size }) => (
+                                    <MaterialCommunityIcons name="phone" color={color} size={size} />
+                                ),
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="Acceso usuario" 
+                            component={AuthStack}
+                            options={{
+                                drawerItemStyle: { display: 'none' }, 
+                                drawerIcon: ({ color, size }) => (
+                                    <MaterialCommunityIcons name="account" color={color} size={size} />
+                                ),
+                            }}
+                        />
+                        
+                        <Drawer.Screen
+                            name="Configuración"
+                            component={ConfiguracionStack}
+                            options={{
+                                drawerIcon: ({ color, size }) => (
+                                    <MaterialCommunityIcons name="cog" color={color} size={size} />
+                                ),
+                            }}
+                        />
 
-                </Drawer.Navigator>
-            </View>
-        </NavigationContainer>
+                    </Drawer.Navigator>
+                </View>
+            </NavigationContainer>
+        </PaperProvider>
     );
 }
 

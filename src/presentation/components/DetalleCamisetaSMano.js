@@ -62,7 +62,7 @@ const DetalleCamisetaSMano = ({ route }) => {
                     <Avatar.Text size={50} label={camiseta.vendedorNombre?.[0] || 'U'} />
                     <View style={styles.infoVendedor}>
                         <Text style={styles.nombreVendedor}>{camiseta.vendedorNombre}</Text>
-                        <Text style={styles.valoracion}>⭐ 4.8 (12 ventas)</Text>
+                        <Text style={styles.valoracion}>⭐ 4.8 (12 {t('detalleCamisetaSMano.ventas_label')})</Text>
                     </View>
                     <IconButton icon="message-text" onPress={() => console.log('Abrir Chat')} />
                 </Surface>

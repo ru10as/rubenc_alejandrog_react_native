@@ -1,41 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { auth } from '../../api/firebaseConfig';
 
 import LoginFormComponent from '../components/LoginFormComponent';
 import RegisterFormComponent from '../components/RegisterFormComponent';
-
 import { registrarTokenPush } from '../../comun/notificaciones';
 
 const AuthScreen = ({ navigation }: any) => {
     const [activeTab, setActiveTab] = useState(0);
+    const [isLoading, setIsLoading] = useState(false); // Evita interacciones mientras cambia la pestaña
 
-    // CONFIGURACIÓN INICIAL
     useEffect(() => {
         GoogleSignin.configure({
             webClientId: '831451288833-aknfkn3cjjgqpe81alb2s97nh0eod44j.apps.googleusercontent.com',
         });
     }, []);
 
-    // FUNCIÓN DE LOGIN
+    // Memoizamos la función de cambio de tab para mejorar rendimiento
+    const handleTabChange = useCallback((index: number) => {
+        setIsLoading(true);
+        setActiveTab(index);
+        setTimeout(() => setIsLoading(false), 100); // Pequeño delay para estabilizar el render
+    }, []);
+
     const onGoogleButtonPress = async () => { 
         try {
             await GoogleSignin.hasPlayServices();
             const response = await GoogleSignin.signIn();
             const idToken = response.data?.idToken;
 
-            if (!idToken) {
-                throw new Error("No se obtuvo el ID Token de Google");
-            }
+            if (!idToken) throw new Error("No se obtuvo el ID Token");
 
             const credential = GoogleAuthProvider.credential(idToken); 
             const userCredential = await signInWithCredential(auth, credential); 
             
             await registrarTokenPush(userCredential.user.uid);
-            
-            console.log("Logueado con Google correctamente y token registrado");
             navigation.replace('Home');
         } catch (error: any) {
             console.error("Error al entrar con Google: ", error);
@@ -46,28 +47,21 @@ const AuthScreen = ({ navigation }: any) => {
         <View style={styles.container}>
             <Text style={styles.logo}>The 12th Man</Text>
 
-            {/* Selector de Pestañas */}
             <View style={styles.tabContainer}>
-                <TouchableOpacity 
-                    style={[styles.tab, activeTab === 0 && styles.activeTab]} 
-                    onPress={() => setActiveTab(0)}
-                >
+                <TouchableOpacity style={[styles.tab, activeTab === 0 && styles.activeTab]} onPress={() => handleTabChange(0)}>
                     <Text style={activeTab === 0 ? styles.activeTabText : styles.tabText}>Registrarse</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
-                    style={[styles.tab, activeTab === 1 && styles.activeTab]} 
-                    onPress={() => setActiveTab(1)}
-                >
+                <TouchableOpacity style={[styles.tab, activeTab === 1 && styles.activeTab]} onPress={() => handleTabChange(1)}>
                     <Text style={activeTab === 1 ? styles.activeTabText : styles.tabText}>Ya tengo cuenta</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.formContainer}>
-                {activeTab === 0 ? (
-                    <RegisterFormComponent navigation={navigation} />
+                {isLoading ? (
+                    <ActivityIndicator size="small" color="#f44336" />
                 ) : (
-                    <LoginFormComponent navigation={navigation} />
+                    activeTab === 0 ? <RegisterFormComponent navigation={navigation} /> : <LoginFormComponent navigation={navigation} />
                 )}
 
                 <View style={styles.separatorContainer}>
@@ -76,16 +70,15 @@ const AuthScreen = ({ navigation }: any) => {
                     <View style={styles.line} />
                 </View>
 
-                <TouchableOpacity 
-                    style={styles.googleButton} 
-                    onPress={onGoogleButtonPress}
-                >
+                <TouchableOpacity style={styles.googleButton} onPress={onGoogleButtonPress}>
                     <Text style={styles.googleButtonText}>Continuar con Google</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
 };
+
+// (Mantén tus mismos estilos aquí abajo)
 
 const styles = StyleSheet.create({
   container: {
