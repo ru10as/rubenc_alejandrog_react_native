@@ -8,9 +8,11 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../api/firebaseConfig';
 
-const ChatsListComponent = ({ navigation }) => {
+const ChatsListComponent = ({ navigation, route }) => {
     const { t } = useTranslation();
     const usuario = useSelector((state) => state.usuario?.user);
+
+    const camisetaIdFiltro = route.params?.camisetaId;
 
     const [chats, setChats] = useState([]);
 
@@ -19,16 +21,29 @@ const ChatsListComponent = ({ navigation }) => {
             setChats([]);
             return;
         }
-        const q = query(
-            collection(db, 'chats'),
-            where('participantes', 'array-contains', usuario.uid),
-            orderBy('ultimaFecha', 'desc')
-        );
+
+        let q;
+        if (camisetaIdFiltro) {
+            q = query(
+                collection(db, 'chats'),
+                where('participantes', 'array-contains', usuario.uid),
+                where('camisetaId', '==', camisetaIdFiltro),
+                orderBy('ultimaFecha', 'desc')
+            );
+        } else {
+            q = query(
+                collection(db, 'chats'),
+                where('participantes', 'array-contains', usuario.uid),
+                orderBy('ultimaFecha', 'desc')
+            );
+        }
+
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setChats(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
         });
+
         return unsubscribe;
-    }, [usuario?.uid]);
+    }, [usuario?.uid, camisetaIdFiltro]);
 
     const abrirChat = (chat) => {
         navigation.navigate('Chat', {

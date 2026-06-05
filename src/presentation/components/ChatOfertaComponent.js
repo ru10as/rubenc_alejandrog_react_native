@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, TextInput, IconButton } from 'react-native-paper';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useSafeAreaInsets } from 'react-native-safe-area-context'; // IMPORTANTE
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,52 +10,58 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../api/firebaseConfig';
 
-const ChatComponent = ({ route, navigation }) => {
+const ChatOfertaComponent = ({ route, navigation }) => { // Cuando se toca una oferta
     const { t } = useTranslation();
-    const { chatId, compradorId, compradorNombre, vendedorId, vendedorNombre, camiseta } = route.params;
+    const { oferta } = route.params; 
     const usuario = useSelector((state) => state.usuario?.user);
     const headerHeight = useHeaderHeight();
     const insets = useSafeAreaInsets();
-    const soyVendedor = usuario?.uid === vendedorId;
-    const nombreOtro = soyVendedor ? compradorNombre : vendedorNombre;
     const [mensajes, setMensajes] = useState([]);
     const [texto, setTexto] = useState('');
     const listaRef = useRef(null);
 
+    // Para poner el nombre del comprador
     useEffect(() => {
-        if (nombreOtro) navigation.setOptions({ title: nombreOtro });
-    }, [navigation, nombreOtro]);
+        if (oferta.nombreComprador) navigation.setOptions({ title: oferta.nombreComprador });
+    }, [navigation, oferta.nombreComprador]);
 
+    // Motor de escucha en tiempo real // Mensajes de la pantalla siempre sincronizada
     useEffect(() => {
         const q = query(
-            collection(db, 'chats', chatId, 'mensajes'),
+            collection(db, 'chats', oferta.id, 'mensajes'),
             orderBy('fecha', 'asc')
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setMensajes(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
         });
         return unsubscribe;
-    }, [chatId]);
+    }, [oferta.id]);
 
     const enviarMensaje = async () => {
         const contenido = texto.trim();
-        if (!contenido || !usuario?.uid) return;
-        setTexto('');
+        if (!contenido || !usuario?.uid) return; // Por ejemplo, si el mensaje esta vacio
+        setTexto(''); // Llevamos a cabo la limpieza de la barra de escritura inmediatamente
         try {
-            await setDoc(doc(db, 'chats', chatId), {
-                participantes: [compradorId, vendedorId],
-                compradorId, compradorNombre, vendedorId, vendedorNombre,
-                camisetaId: camiseta?.id, camisetaNombre: camiseta?.nombre, camisetaImagen: camiseta?.imagen,
-                ultimoMensaje: contenido, ultimoAutorId: usuario.uid, ultimaFecha: serverTimestamp(),
+            await setDoc(doc(db, 'chats', oferta.id), { // Para escribir o actualizar en la coleccion de chats
+                participantes: [oferta.compradorId, oferta.vendedorId],
+                compradorId: oferta.compradorId,
+                compradorNombre: oferta.nombreComprador,
+                vendedorId: oferta.vendedorId,
+                camisetaId: oferta.camisetaId,
+                ultimoMensaje: contenido,
+                ultimoAutorId: usuario.uid,
+                ultimaFecha: serverTimestamp(),
             }, { merge: true });
 
-            await addDoc(collection(db, 'chats', chatId, 'mensajes'), {
-                texto: contenido, autorId: usuario.uid, fecha: serverTimestamp(),
+            await addDoc(collection(db, 'chats', oferta.id, 'mensajes'), { // Para llevar a cabo el registro
+                texto: contenido,
+                autorId: usuario.uid,
+                fecha: serverTimestamp(),
             });
-        } catch (error) { console.error('Error:', error); }
+        } catch (error) { console.error('Error al enviar:', error); }
     };
 
-    const renderMensaje = ({ item }) => {
+    const renderMensaje = ({ item }) => { // Para indicar como se dibuja cada mensaje en pantalla
         const esMio = item.autorId === usuario?.uid;
         return (
             <View style={[styles.burbuja, esMio ? styles.burbujaMia : styles.burbujaSuya]}>
@@ -130,4 +136,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ChatComponent;
+export default ChatOfertaComponent;

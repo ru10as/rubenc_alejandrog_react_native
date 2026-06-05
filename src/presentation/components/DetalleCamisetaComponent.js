@@ -3,7 +3,6 @@ import { View, StyleSheet, Image, ScrollView, Modal, ImageBackground } from 'rea
 import { Text, Divider, IconButton, Button, Surface, Snackbar } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-
 import { colorTiendaOscuro } from '../../comun/comun';
 import { postFavorito, postComentario, anadirAlCarrito } from '../../redux/ActionCreators';
 import { IndicadorActividad } from './IndicadorActividadComponent';
@@ -12,7 +11,7 @@ const mapStateToProps = state => ({
     camisetas: state.camisetas,
     comentarios: state.comentarios,
     favoritos: state.favoritos,
-    usuario: state.usuario, // Conectamos la rama completa de usuario
+    usuario: state.usuario,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -37,8 +36,7 @@ class DetalleCamiseta extends Component {
 
     toggleModal = () => this.setState({ showModal: !this.state.showModal });
 
-    handleAnadirAlCarrito = (camiseta) => {
-        // Validación: verificamos si existe el usuario o su propiedad user
+    handleAnadirAlCarrito = (camiseta) => { // Dependiendo de si este logueado o no, se podra añadir al carrito
         const estaLogueado = this.props.usuario && this.props.usuario.user;
 
         if (!estaLogueado) {
@@ -89,14 +87,12 @@ class DetalleCamiseta extends Component {
                         </Button>
                     </View>
 
-                    {/* MODAL DE BLOQUEO POR LOGIN */}
                     <Modal visible={this.state.showLoginModal} animationType="fade" transparent={true}>
                         <View style={styles.modalBloqueo}>
                             <Surface style={styles.contenedorBloqueo}>
                                 <Text style={styles.modalTitulo}>{t('detalleCamisetaComponent.login_requerido') || 'Acceso restringido'}</Text>
                                 <Text style={styles.modalTexto}>{t('detalleCamisetaComponent.mensaje_login') || 'Debes iniciar sesión para añadir productos al carrito.'}</Text>
                                 
-                                {/* Botón de cerrar único, eliminamos el de navegación */}
                                 <Button 
                                     mode="contained" 
                                     style={[styles.btnModal, { backgroundColor: colorTiendaOscuro }]} 
@@ -148,25 +144,25 @@ const styles = StyleSheet.create({
     btnModal: { backgroundColor: colorTiendaOscuro, padding: 5, marginBottom: 10 },
     modalBloqueo: { 
         flex: 1, 
-        justifyContent: 'center', // Centra verticalmente
-        alignItems: 'center',     // Centra horizontalmente
-        backgroundColor: 'rgba(0,0,0,0.6)', // Un poco más oscuro para que resalte
-        position: 'absolute', // Asegura que se posicione sobre todo
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        elevation: 10,        // (Android) Le da prioridad visual
-        zIndex: 1000          // (iOS) Le da prioridad visual
+        elevation: 10,
+        zIndex: 1000
     },
     contenedorBloqueo: { 
         padding: 25, 
         borderRadius: 15, 
         width: '80%', 
-        backgroundColor: 'white', // Asegúrate de que el fondo sea opaco
+        backgroundColor: 'white',
         alignItems: 'center',
-        elevation: 5,             // Sombra bonita en Android
-        shadowColor: '#000',      // Sombra en iOS
+        elevation: 5,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84

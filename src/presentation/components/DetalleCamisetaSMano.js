@@ -7,19 +7,11 @@ import { useTranslation } from 'react-i18next';
 
 const DetalleCamisetaSMano = ({ route, navigation }) => {
     const { t, i18n } = useTranslation();
-
     const { camiseta } = route.params;
-
-    // El producto guarda nombre/descripción como objetos multi-idioma y el
-    // vendedor en "creadoPor"; resolvemos los valores que vamos a mostrar/usar.
     const nombre = camiseta.nombres?.[i18n.language] || camiseta.nombres?.es || camiseta.nombre || '';
     const descripcion = camiseta.descripciones?.[i18n.language] || camiseta.descripciones?.es || camiseta.descripcion || '';
     const vendedorId = camiseta.creadoPor || camiseta.vendedorId;
-
-    // Obtener datos del usuario desde Redux
     const usuario = useSelector((state) => state.usuario?.user);
-
-    // Estados para el diálogo de oferta
     const [visible, setVisible] = useState(false);
     const [montoOferta, setMontoOferta] = useState('');
 
@@ -32,7 +24,7 @@ const DetalleCamisetaSMano = ({ route, navigation }) => {
             Alert.alert(t('chat.aviso_titulo'), t('chat.propio_articulo'));
             return;
         }
-        // Id determinista: una conversación por (artículo, comprador)
+
         const chatId = `${camiseta.id}_${usuario.uid}`;
         navigation.navigate('Chat', {
             chatId,
@@ -58,7 +50,7 @@ const DetalleCamisetaSMano = ({ route, navigation }) => {
             await addDoc(collection(db, "ofertas"), {
                 camisetaId: camiseta.id,
                 vendedorId: vendedorId,
-                compradorId: usuario?.uid || 'anonimo', // Asegúrate de tener el UID
+                compradorId: usuario?.uid || 'anonimo',
                 nombreComprador: usuario?.displayName || usuario?.email || 'Usuario',
                 monto: parseFloat(montoOferta),
                 estado: 'pendiente',
@@ -104,13 +96,9 @@ const DetalleCamisetaSMano = ({ route, navigation }) => {
                     <Button mode="contained" style={styles.btnOferta} onPress={() => setVisible(true)}>
                         {t('detalleCamisetaSMano.oferta')}
                     </Button>
-                    <Button mode="outlined" style={styles.btnChat} onPress={abrirChat}>
-                        {t('detalleCamisetaSMano.chat')}
-                    </Button>
                 </View>
             </View>
 
-            {/* Diálogo para capturar el precio */}
             <Portal>
                 <Dialog visible={visible} onDismiss={() => setVisible(false)}>
                     <Dialog.Title>{t('detalleCamisetaSMano.dialog_titulo')}</Dialog.Title>

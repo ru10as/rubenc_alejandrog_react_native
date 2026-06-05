@@ -15,10 +15,9 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [notifications, setNotifications] = useState(true);
     const dispatch = useDispatch();
-
     const cambiarIdioma = (lang) => i18n.changeLanguage(lang);
 
-    const ejecutarLogout = async () => {
+    const ejecutarLogout = async () => { // Proceso de salida de la aplicacion 
         try {
             await dispatch(logout());
             navigation.navigate('Inicio');
@@ -27,6 +26,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
         }
     };
 
+    // Este lo hacemos para evitar que el usuario cierre sesion por error
     const confirmarLogout = () => {
         Alert.alert(
             t('configuracionComponent.logout_titulo'),
@@ -41,7 +41,6 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             
-            {/* 1. CABECERA */}
             <Surface style={styles.userCard} elevation={1}>
                 <Avatar.Icon 
                     size={70} 
@@ -68,7 +67,6 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                 </View>
             </Surface>
 
-            {/* 2. SECCIÓN DE IDIOMA */}
             <List.Section>
                 <List.Subheader style={styles.headerText}>{t('configuracionComponent.ajustes_generales')}</List.Subheader>
                 <List.Accordion
@@ -84,7 +82,6 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                 </List.Accordion>
             </List.Section>
 
-            {/* 3. SECCIONES PRIVADAS*/}
             {usuario && (
                 <>
                     <Divider style={styles.divider} />
@@ -105,7 +102,6 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
 
             <Divider style={styles.divider} />
 
-            {/* 4. SOPORTE */}
             <List.Section>
                 <List.Subheader style={styles.headerText}>{t('configuracionComponent.seccion_soporte')}</List.Subheader>
                 <List.Item
@@ -118,7 +114,6 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                 />
             </List.Section>
 
-            {/* 5. LOGOUT (Solo si hay usuario) */}
             {usuario && (
                 <List.Item
                     title={t('configuracionComponent.logout', 'Cerrar Sesión')}

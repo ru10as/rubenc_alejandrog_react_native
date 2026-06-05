@@ -12,8 +12,8 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { Alert } from 'react-native';
 import { registrarTokenPush } from '../comun/notificaciones';
 
-// Registra el push token sin romper el flujo de login si falla.
-const registrarTokenSeguro = async (uid) => {
+// Para el registro de notificaciones de nuestra app / Registra el dispositivo del usuario
+const registrarTokenSeguro = async (uid) => { // Recibimos el uid del usuario logueado
     try {
         await registrarTokenPush(uid);
     } catch (err) {
@@ -22,7 +22,9 @@ const registrarTokenSeguro = async (uid) => {
 };
 
 // --- COMENTARIOS ---
-export const fetchComentarios = () => async (dispatch) => {
+// descarga los comentarios desde Firebase, los convierte a un formato compatible con Redux y los 
+// guarda en el estado global para su visualizacion, gestionando cualquier error de conexion para evitar que la aplicacion falle.
+export const fetchComentarios = () => async (dispatch) => { 
     try {
         const querySnapshot = await getDocs(collection(db, "comentarios"));
         const comentarios = querySnapshot.docs.map(doc => ({
@@ -35,12 +37,13 @@ export const fetchComentarios = () => async (dispatch) => {
     }
 };
 
+// Funciones simples que generan los mensajes necesarios de redux (para la actualizacion del estado)
 export const comentariosFailed = (errmess) => ({ type: ActionTypes.COMENTARIOS_FAILED, payload: errmess });
 export const addComentarios = (comentarios) => ({ type: ActionTypes.ADD_COMENTARIOS, payload: comentarios });
 
 
-// Convierte recursivamente Timestamp de Firestore (y otros valores no
-// serializables) en strings/numeros antes de meterlos en Redux.
+// serializarFirestore transforma datos complejos de Firebase, como fechas, en formatos simples 
+// y estandar para que puedan almacenarse en Redux sin causar errores de compatibilidad.
 const serializarFirestore = (valor) => {
     if (valor === null || valor === undefined) return valor;
     if (typeof valor !== 'object') return valor;
@@ -54,6 +57,8 @@ const serializarFirestore = (valor) => {
 };
 
 // --- CAMISETAS ---
+// fetchCamisetas descarga los productos desde Firebase y los guarda en Redux, marcando el inicio de 
+// la carga, limpiando los datos y gestionando posibles errores de conexion automaticamente.
 export const fetchCamisetas = () => async (dispatch) => {
     dispatch(camisetasLoading());
     try {
@@ -68,12 +73,16 @@ export const fetchCamisetas = () => async (dispatch) => {
     }
 };
 
+// Acciones de Redux necesarias para gestionar el estado de la carga: camisetasLoading indica que la descarga ha comenzado, 
+// addCamisetas almacena los productos obtenidos tras el exito y camisetasFailed guarda el mensaje de error si ocurre algun problema.
 export const camisetasLoading = () => ({ type: ActionTypes.CAMISETAS_LOADING });
 export const camisetasFailed = (errmess) => ({ type: ActionTypes.CAMISETAS_FAILED, payload: errmess });
 export const addCamisetas = (camisetas) => ({ type: ActionTypes.ADD_CAMISETAS, payload: camisetas });
 
 
 // --- CABECERAS ---
+// fetchCabeceras descarga los elementos de cabecera desde Firebase, gestionando el estado de carga, 
+// la limpieza de datos y posibles errores para mantener la interfaz actualizada en Redux.
 export const fetchCabeceras = () => async (dispatch) => {
     dispatch(cabecerasLoading());
     try {
@@ -88,12 +97,16 @@ export const fetchCabeceras = () => async (dispatch) => {
     }
 };
 
+// Para gestionar el estado de carga de las cabeceras: cabecerasLoading indica el inicio de la operacion, addCabeceras 
+// guarda los datos recibidos y cabecerasFailed captura cualquier error ocurrido durante el proceso.
 export const cabecerasLoading = () => ({ type: ActionTypes.CABECERAS_LOADING });
 export const cabecerasFailed = (errmess) => ({ type: ActionTypes.CABECERAS_FAILED, payload: errmess });
 export const addCabeceras = (cabeceras) => ({ type: ActionTypes.ADD_CABECERAS, payload: cabeceras });
 
 
 // --- NOVEDADES ---
+// fetchNovedades descarga la lista de novedades desde Firebase, gestionando el estado de carga, 
+// la limpieza de datos y la captura de errores para actualizar el estado global de Redux.
 export const fetchNovedades = () => async (dispatch) => {
     dispatch(novedadesLoading());
     try {
@@ -108,12 +121,16 @@ export const fetchNovedades = () => async (dispatch) => {
     }
 };
 
+// Acciones para gestionar la carga de las novedades: novedadesLoading señala el inicio del proceso, 
+// addNovedades almacena los datos obtenidos y novedadesFailed reporta cualquier error ocurrido.
 export const novedadesLoading = () => ({ type: ActionTypes.NOVEDADES_LOADING });
 export const novedadesFailed = (errmess) => ({ type: ActionTypes.NOVEDADES_FAILED, payload: errmess });
 export const addNovedades = (novedades) => ({ type: ActionTypes.ADD_NOVEDADES, payload: novedades });
 
 
 // --- FAVORITOS Y POSTS ---
+// postFavorito guarda un nuevo registro en la coleccion "favoritos" de Firebase vinculando un usuario y una 
+// camiseta con su fecha actual, y luego actualiza el estado de Redux para reflejar este cambio.
 export const postFavorito = (camisetaId, usuarioId) => async (dispatch) => {
     try {
         await addDoc(collection(db, "favoritos"), {
@@ -128,8 +145,11 @@ export const postFavorito = (camisetaId, usuarioId) => async (dispatch) => {
     }
 };
 
+// Esta crea la accion de Redux para añadir una camiseta especifica a la lista de favoritos en el estado global.
 export const addFavorito = (camisetaId) => ({ type: ActionTypes.ADD_FAVORITO, payload: camisetaId });
 
+// postComentario crea un nuevo objeto con los detalles de la valoracion, lo guarda en la coleccion "comentarios" de 
+// Firebase y actualiza instantaneamente el estado de Redux para incluir el nuevo comentario.
 export const postComentario = (camisetaId, valoracion, autor, comentario) => async (dispatch) => {
     const nuevoComentario = {
         camisetaId: camisetaId,
@@ -147,8 +167,12 @@ export const postComentario = (camisetaId, valoracion, autor, comentario) => asy
     }
 };
 
+// Crea la accion de Redux para añadir un nuevo comentario al estado global, permitiendo que la interfaz 
+// se actualice inmediatamente tras su publicacion.
 export const addComentario = (comentario) => ({ type: ActionTypes.ADD_COMENTARIO, payload: comentario });
 
+// extractUser limpia el objeto de usuario de Firebase, seleccionando solo los campos necesarios 
+// (uid, email, displayName, photoURL) y normalizando los valores ausentes a null.
 const extractUser = (firebaseUser) => ({
     uid: firebaseUser.uid,
     email: firebaseUser.email,
@@ -156,7 +180,9 @@ const extractUser = (firebaseUser) => ({
     photoURL: firebaseUser.photoURL ?? null,
 });
 
-// ACCIÓN PARA REGISTRO MANUAL
+// ACCION PARA REGISTRO MANUAL
+// signUp gestiona el registro de un nuevo usuario en Firebase, guarda su perfil en la base de datos, 
+// inicializa su estado de sesion en Redux y registra su token de seguridad.
 export const signUp = (email, password) => async (dispatch) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -170,14 +196,16 @@ export const signUp = (email, password) => async (dispatch) => {
         dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: userData });
         setDoc(doc(db, "usuarios", user.uid), userData)
             .then(() => console.log("Perfil creado en DB"))
-            .catch(e => console.log("Error en DB (pero el usuario ya entró):", e));
+            .catch(e => console.log("Error en DB (pero el usuario ya entro):", e));
         await registrarTokenSeguro(user.uid);
     } catch (error) {
         Alert.alert("Error en Registro", error.message);
     }
 };
 
-// ACCIÓN PARA LOGIN MANUAL
+// ACCION PARA LOGIN MANUAL
+// login autentica al usuario en Firebase, actualiza su sesion en Redux usando extractUser, registra su 
+// token de seguridad y carga automaticamente su carrito desde la base de datos.
 export const login = (email, password) => async (dispatch) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: extractUser(userCredential.user) });
@@ -185,7 +213,10 @@ export const login = (email, password) => async (dispatch) => {
     dispatch(cargarCarritoDesdeFirebase(userCredential.user.uid));
 };
 
-// ACCIÓN PARA LOGIN CON GOOGLE (nativo + Firebase)
+
+// ACCION PARA LOGIN CON GOOGLE (nativo + Firebase)
+// loginWithGoogle maneja la autenticacion mediante Google, crea un perfil en la base de datos si el usuario es nuevo, 
+// actualiza el estado de Redux y sincroniza tanto el carrito como el token de seguridad del usuario.
 export const loginWithGoogle = () => async (dispatch) => {
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     const response = await GoogleSignin.signIn();
@@ -216,7 +247,8 @@ export const loginWithGoogle = () => async (dispatch) => {
     await registrarTokenSeguro(user.uid);
 };
 
-// Rehidrata el estado de Redux si Firebase ya tiene una sesión persistida.
+// restoreSession recupera la sesion activa al iniciar la app: si existe un usuario, actualiza el estado de Redux 
+// y carga su carrito; de lo contrario, cierra la sesion.
 export const restoreSession = (firebaseUser) => (dispatch) => {
     if (firebaseUser) {
         dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: extractUser(firebaseUser) });
@@ -227,6 +259,8 @@ export const restoreSession = (firebaseUser) => (dispatch) => {
 };
 
 // --- LOGOUT ---
+// logout cierra la sesion del usuario tanto en Google como en Firebase, y actualiza el estado de Redux 
+// para limpiar los datos del usuario.
 export const logout = () => async (dispatch) => {
     try {
         try {
@@ -235,18 +269,21 @@ export const logout = () => async (dispatch) => {
                 await GoogleSignin.signOut();
             }
         } catch (gErr) {
-            // Si Google Sign-In no estaba inicializado o falla, seguimos con el logout de Firebase
-            console.warn("GoogleSignin.signOut falló (continúa):", gErr?.message);
+            console.warn("GoogleSignin.signOut fallo (continua):", gErr?.message);
         }
         await signOut(auth);
         dispatch({ type: ActionTypes.LOGOUT_SUCCESS });
     } catch (error) {
-        console.error("Error al cerrar sesión:", error.message);
+        console.error("Error al cerrar sesion:", error.message);
     }
 };
 
+// Exporta los codigos de error de Google Sign-in con un alias mas claro para usarlos en el manejo 
+// de excepciones de la autenticacion.
 export { statusCodes as googleStatusCodes };
 
+// Sincroniza el estado actual del carrito en Redux con la base de datos de Firebase, 
+// siempre que haya un usuario autenticado.
 const guardarEnFirebase = async (dispatch, getState) => {
     const { usuario, carrito } = getState();
     if (usuario?.user?.uid) {
@@ -258,24 +295,43 @@ const guardarEnFirebase = async (dispatch, getState) => {
     }
 };
 
+// anadirAlCarrito actualiza el estado de Redux con una nueva camiseta y su talla, y luego 
+// activa automaticamente la sincronizacion del carrito con Firebase.
 export const anadirAlCarrito = (camiseta, talla) => async (dispatch, getState) => {
     dispatch({ type: ActionTypes.ANADIR_CARRITO, payload: { camiseta, talla } });
     guardarEnFirebase(dispatch, getState);
 };
 
+// restarDelCarrito reduce la cantidad o elimina un item del carrito en Redux y sincroniza 
+// inmediatamente el cambio con la base de datos de Firebase.
 export const restarDelCarrito = (id, talla) => async (dispatch, getState) => {
     dispatch({ type: ActionTypes.RESTAR_CARRITO, payload: { id, talla } });
     guardarEnFirebase(dispatch, getState);
 };
 
+// eliminarDelCarrito borra un producto especifico (identificado por ID y talla) del estado de Redux 
+// y sincroniza ese cambio con la base de datos en Firebase.
 export const eliminarDelCarrito = (id, talla) => async (dispatch, getState) => {
     dispatch({ type: ActionTypes.ELIMINAR_CARRITO, payload: { id, talla } });
     guardarEnFirebase(dispatch, getState);
 };
 
-export const limpiarCarrito = () => ({ type: ActionTypes.LIMPIAR_CARRITO });
+// limpiarCarrito vacia el estado del carrito en Redux y, si el usuario esta autenticado, 
+// borra tambien sus articulos del carrito guardado en Firebase.
+export const limpiarCarrito = () => async (dispatch, getState) => {
+    dispatch({ type: ActionTypes.LIMPIAR_CARRITO });
+    
+    const { usuario } = getState();
+    if (usuario?.user?.uid) {
+        try {
+            await setDoc(doc(db, "carritos", usuario.user.uid), { items: [] });
+        } catch (e) {
+            console.error("Error al limpiar carrito en Firebase:", e);
+        }
+    }
+};
 
-// Función para cargar los datos desde Firebase
+// cargarCarritoDesdeFirebase obtiene los articulos guardados del usuario en Firebase y los carga en el estado de Redux.
 export const cargarCarritoDesdeFirebase = (uid) => async (dispatch) => {
     try {
         const docSnap = await getDoc(doc(db, "carritos", uid));

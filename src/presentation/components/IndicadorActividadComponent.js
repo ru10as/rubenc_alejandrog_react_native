@@ -1,10 +1,10 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next'; // 1. Importación necesaria
+import { useTranslation } from 'react-i18next';
 import { colorTiendaOscuro } from '../../comun/comun';
 
 export const IndicadorActividad = () => {
-    const { t } = useTranslation(); // Extraemos la función t del hook
+    const { t } = useTranslation();
 
     return (
         <View style={styles.indicadorView}>

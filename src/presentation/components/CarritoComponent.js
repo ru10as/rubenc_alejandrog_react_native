@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, FlatList, StyleSheet, Alert } from 'react-native';
 import { List, Text, Button, Avatar, IconButton, Surface } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { colorTiendaOscuro } from '../../comun/comun';
-import { anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito } from '../../redux/ActionCreators';
+import { anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase } from '../../redux/ActionCreators';
 
-// YA NO FILTRAMOS AQUÍ: Redux ya tiene los items del usuario gracias a cargarCarritoDesdeFirebase
+// mapStateToProps es el filtro que extrae solo los datos necesarios del estado 
+// global de Redux para entregárselos a tu componente como propiedades.
 const mapStateToProps = (state) => ({
     items: state.carrito.items || [],
     usuario: state.usuario?.user,
@@ -17,17 +18,21 @@ const mapDispatchToProps = (dispatch) => ({
     restarDelCarrito: (id, talla) => dispatch(restarDelCarrito(id, talla)),
     eliminarDelCarrito: (id, talla) => dispatch(eliminarDelCarrito(id, talla)),
     limpiarCarrito: () => dispatch(limpiarCarrito()),
+    cargarCarritoDesdeFirebase: (uid) => dispatch(cargarCarritoDesdeFirebase(uid))
 });
 
-const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito }) => {
+const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase }) => {
     const { t } = useTranslation();
 
+    useEffect(() => {
+        if (usuario?.uid) {cargarCarritoDesdeFirebase(usuario.uid);}
+    }, [usuario?.uid]);
+
+    // La suma del total de la compra
     const total = items.reduce((acc, item) => acc + (item.camiseta.precio * item.cantidad), 0);
 
     const confirmarVaciar = () => {
-        Alert.alert(
-            t('carritoComponent.carrito_vaciar_titulo'),
-            t('carritoComponent.carrito_vaciar_msg'),
+        Alert.alert(t('carritoComponent.carrito_vaciar_titulo'),t('carritoComponent.carrito_vaciar_msg'),
             [
                 { text: t('carritoComponent.cancelar'), style: 'cancel' },
                 { text: t('carritoComponent.vaciar'), onPress: () => limpiarCarrito(), style: 'destructive' }

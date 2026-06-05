@@ -4,7 +4,7 @@ import { Card, Text } from 'react-native-paper';
 import { baseUrl } from '../../comun/comun';
 import { connect } from 'react-redux';
 import { IndicadorActividad } from './IndicadorActividadComponent';
-import { useTranslation, withTranslation } from 'react-i18next'; // Importamos ambos
+import { useTranslation, withTranslation } from 'react-i18next';
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
@@ -43,8 +43,6 @@ function RenderItem({ item, isLoading, errMess, onPress }) {
 class Home extends Component {
     render() {
         const { navigation } = this.props;
-
-        // Buscamos los elementos destacados para la home
         const cabecera = this.props.cabeceras.cabeceras?.find(item => item.destacado);
         const camiseta = this.props.camisetas.camisetas?.find(item => item.destacado);
         const novedad = this.props.novedades.novedades?.find(item => item.destacado);
