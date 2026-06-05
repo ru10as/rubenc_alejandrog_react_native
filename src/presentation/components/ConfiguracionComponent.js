@@ -79,7 +79,7 @@ const SeccionConfiguracion = ({ usuario, navigation }) => {
                         right={p => i18n.language.startsWith('es') && <List.Icon {...p} icon="check" color="green" />} />
                     <List.Item title="English" onPress={() => cambiarIdioma('en')} 
                         right={p => i18n.language.startsWith('en') && <List.Icon {...p} icon="check" color="green" />} />
-                    <List.Item title="Euskara" onPress={() => cambiarIdioma('eu')} 
+                    <List.Item title="Euskera" onPress={() => cambiarIdioma('eu')} 
                         right={p => i18n.language.startsWith('eu') && <List.Icon {...p} icon="check" color="green" />} />
                 </List.Accordion>
             </List.Section>
