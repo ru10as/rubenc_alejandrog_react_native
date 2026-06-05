@@ -4,11 +4,11 @@ import { List, Text, Button, Avatar, IconButton, Surface } from 'react-native-pa
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { colorTiendaOscuro } from '../../comun/comun';
-// Importamos los ActionCreators para que la lógica esté centralizada
 import { anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito } from '../../redux/ActionCreators';
 
+// YA NO FILTRAMOS AQUÍ: Redux ya tiene los items del usuario gracias a cargarCarritoDesdeFirebase
 const mapStateToProps = (state) => ({
-    items: state.carrito.items,
+    items: state.carrito.items || [],
     usuario: state.usuario?.user,
 });
 
@@ -22,7 +22,6 @@ const mapDispatchToProps = (dispatch) => ({
 const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito }) => {
     const { t } = useTranslation();
 
-    // Cálculo del total
     const total = items.reduce((acc, item) => acc + (item.camiseta.precio * item.cantidad), 0);
 
     const confirmarVaciar = () => {
@@ -110,7 +109,8 @@ const styles = StyleSheet.create({
     precioTotal: { fontWeight: 'bold', color: colorTiendaOscuro },
     botonPago: { paddingVertical: 4 },
     vacioContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    vacioTexto: { color: '#555', marginBottom: 20 }
+    vacioTexto: { color: '#555', marginBottom: 20 },
+    botonVolver: { marginTop: 10 }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarritoComponent);

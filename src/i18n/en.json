@@ -61,7 +61,12 @@
     "modal_nombre": "Name",
     "modal_comentario": "Comment",
     "modal_publicar": "Publish",
-    "modal_cancelar": "Cancel"
+    "modal_cancelar": "Cancel",
+    "anadida_al_carrito": "T-shirt added to cart",
+    "login_requerido": "Restricted access",
+    "mensaje_login": "You must log in to perform this action.",
+    "ir_a_login": "Go to Login",
+    "cerrar": "Close"
   },
   "detalleCamisetaSMano": {
     "titulo": "Second-hand details",

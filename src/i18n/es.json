@@ -62,7 +62,11 @@
     "modal_comentario": "Comentario",
     "modal_publicar": "Publicar",
     "modal_cancelar": "Cancelar",
-    "anadida_al_carrito": "Camiseta añadida al carrito"
+    "anadida_al_carrito": "Camiseta añadida al carrito",
+    "login_requerido": "Acceso restringido",
+    "mensaje_login": "Debes iniciar sesión para realizar esta acción.",
+    "ir_a_login": "Ir a Login",
+    "cerrar": "Cerrar"
   },
   "detalleCamisetaSMano": {
     "titulo": "Detalle de segunda mano",
