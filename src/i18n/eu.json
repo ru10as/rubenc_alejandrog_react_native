@@ -14,6 +14,21 @@
     "carrito_vacio_msg": "Gehitu zure taldeko kamiseta bat!",
     "ir_a_tienda": "Dendara joan"
   },
+  "homeComponent": {
+    "saludo": "Kaixo, {{nombre}}",
+    "destacados": "Nabarmenduak",
+    "recien_publicadas": "Berriki argitaratuak",
+    "selecciones": "Selekzioak",
+    "coleccion_retro": "Retro Bilduma",
+    "ver_todo": "Ikusi dena",
+    "acceso_oficial": "Ofiziala",
+    "acceso_segunda": "Bigarren eskua",
+    "acceso_retro": "Retro",
+    "acceso_selecciones": "Selekzioak",
+    "vende_titulo": "Kamisetarik baduzu?",
+    "vende_subtitulo": "Argitaratu eta saldu segundotan",
+    "vende_boton": "Saldu orain"
+  },
   "catalogoComponent": {
     "tienda_oficial": "Denda Ofiziala",
     "segunda_mano": "Bigarren Eskua",
@@ -21,7 +36,12 @@
     "filtrar_titulo": "Iragazi kategorien arabera",
     "filtro_pais": "Herrialdea",
     "filtro_equipo": "Taldea",
-    "filtro_talla": "Neurria"
+    "filtro_talla": "Neurria",
+    "filtro_etiquetas": "Etiketak",
+    "filtro_retro": "Retro",
+    "filtro_seleccion": "Selekzioak",
+    "todas": "Denak",
+    "vendida": "Salduta"
   },
   "configuracionComponent": {
     "logout_titulo": "Saioa Itxi",
@@ -96,6 +116,17 @@
     "vacio": "Oraindik ez duzu elkarrizketarik.",
     "login": "Hasi saioa zure txatak ikusteko."
   },
+  "ventas": {
+    "vacio": "Oraindik ez duzu eskaintzarik jaso."
+  },
+  "ofertas": {
+    "vacio": "Oraindik ez duzu eskaintzarik bidali."
+  },
+  "estado": {
+    "pendiente": "Zain",
+    "aceptada": "Onartua",
+    "rechazada": "Ukatua"
+  },
   "IndicadorActividad":{
     "indicador_proceso":"Katalogoa kargatzen..."
   },
@@ -140,7 +171,8 @@
     "NuestrasCamisetas": "Gure Elastikoak",
     "DetalleSegundaMano": "Bigarren Eskuko Xehetasunak",
     "Registrarse": "Izena eman",
-    "Chat": "Txata"
+    "Chat": "Txata",
+    "Tagline": "Elastikoen merkatua"
   },
   "authScreen": {
     "registrar": "Izena eman",

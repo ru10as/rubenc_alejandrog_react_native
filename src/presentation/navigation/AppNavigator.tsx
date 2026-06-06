@@ -6,7 +6,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import { colorTiendaOscuro, colorTiendaClaro } from '../../comun/comun';
+import { colorTiendaOscuro, colorTiendaClaro, colorTiendaAcento } from '../../comun/comun';
 import { useTranslation } from 'react-i18next';
 import MisOfertasComponent from '../components/MisOfertasComponent';
 import ChatOfertaComponent from '../components/ChatOfertaComponent';
@@ -56,6 +56,7 @@ function CustomDrawerContent(props: any) {
                     </View>
                     <View style={styles.drawerHeaderTextContainer}>
                         <Text style={styles.drawerHeaderText}>The 12th Man</Text>
+                        <Text style={styles.drawerHeaderSubtitle}>{t('Navigation.Tagline')}</Text>
                     </View>
                 </View>
                 <DrawerItemList {...props} />
@@ -71,6 +72,7 @@ function HomeStack() {
         <Stack.Navigator id="HomeStack" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeComponent} options={({ navigation }) => headerOptions('The 12th Man', navigation)} />
             <Stack.Screen name="DetalleCamiseta" component={DetalleCamisetaComponent} options={{ title: t('Navigation.DetalleProducto') }} />
+            <Stack.Screen name="DetalleCamisetaSMano" component={DetalleCamisetaSMano} options={{ title: t('Navigation.DetalleSegundaMano') }} />
         </Stack.Navigator>
     );
 }
@@ -192,6 +194,11 @@ export default function AppNavigator() {
                         headerTintColor: '#fff',
                         headerTitleAlign: 'center',
                         drawerStyle: { backgroundColor: colorTiendaClaro },
+                        drawerActiveTintColor: colorTiendaAcento,
+                        drawerActiveBackgroundColor: 'rgba(251,133,0,0.12)',
+                        drawerInactiveTintColor: colorTiendaOscuro,
+                        drawerItemStyle: { borderRadius: 10, marginHorizontal: 8, marginVertical: 2 },
+                        drawerLabelStyle: { fontSize: 15, fontWeight: '600', marginLeft: -12 },
                         headerRight: () => (
                             estaLogueado ? (
                                 <TouchableOpacity onPress={() => navigation.navigate('Acceso usuario')}>
@@ -230,11 +237,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
+        borderBottomWidth: 3,
+        borderBottomColor: colorTiendaAcento,
     },
     drawerHeaderText: {
         color: 'white',
         fontSize: 24,
         fontWeight: 'bold',
+    },
+    drawerHeaderSubtitle: {
+        color: colorTiendaAcento,
+        fontSize: 12,
+        fontWeight: '600',
+        letterSpacing: 1.5,
+        textTransform: 'uppercase',
+        marginTop: 2,
     },
     drawerHeaderImageContainer: {
         flex: 1,
