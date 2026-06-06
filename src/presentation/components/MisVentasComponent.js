@@ -20,7 +20,6 @@ const MisVentasComponent = ({ navigation }) => {
     useEffect(() => {
         if (!usuario?.uid) return;
 
-        // Query: Trae todas las camisetas del vendedor
         const qCamisetas = query(
             collection(db, "camisetas"), 
             where("vendedorId", "==", usuario.uid)
@@ -44,13 +43,9 @@ const MisVentasComponent = ({ navigation }) => {
             const batch = writeBatch(db);
             
             if (nuevoEstado === 'aceptada') {
-                // 1. Aceptar la oferta específica
                 batch.update(doc(db, "ofertas", oferta.id), { estado: 'aceptada' });
-
-                // 2. Marcar la camiseta como vendida usando el nuevo campo estadoVenta
                 batch.update(doc(db, "camisetas", oferta.camisetaId), { estadoVenta: 'vendida' });
 
-                // 3. Rechazar el resto de ofertas para esta camiseta
                 const q = query(
                     collection(db, "ofertas"),
                     where("camisetaId", "==", oferta.camisetaId),
@@ -63,7 +58,6 @@ const MisVentasComponent = ({ navigation }) => {
                     }
                 });
             } else {
-                // Si es rechazada o cualquier otro estado, solo actualizamos la oferta
                 batch.update(doc(db, "ofertas", oferta.id), { estado: nuevoEstado });
             }
             
@@ -76,7 +70,6 @@ const MisVentasComponent = ({ navigation }) => {
     const renderCamiseta = ({ item }) => {
         const ofertasDeEsteProducto = ofertasRecibidas.filter(o => o.camisetaId === item.id);
         
-        // FILTRO: Ocultamos si ya está marcada como 'vendida' en estadoVenta
         if (item.estadoVenta === 'vendida') {
             return null;
         }

@@ -125,18 +125,21 @@
     "register_boton_empezar": "Hasi"
   },
   "Navigation": {
-    "DetalleProducto": "Produktuaren xehetasunak",
-    "NuestrasCamisetas": "Gure Elastikoak",
-    "DetalleSegundaMano": "Bigarren Eskuko Xehetasunak",
+    "NombreApp": "The 12th Man",
+    "Inicio": "Hasiera",
+    "Camisetas": "Elastikoak",
     "MiCarrito": "Nire Saskia",
     "MisChats": "Nire Txatak",
+    "MisVentas": "Nire Salmentak",
+    "MisOfertas": "Nire Eskaintzak",
     "QuienesSomos": "Nor Gara",
     "Contacto": "Kontaktua",
     "Configuracion": "Ezarpenak",
     "PublicarProducto": "Argitaratu Produktua",
+    "DetalleProducto": "Produktuaren xehetasunak",
+    "NuestrasCamisetas": "Gure Elastikoak",
+    "DetalleSegundaMano": "Bigarren Eskuko Xehetasunak",
     "Registrarse": "Izena eman",
-    "Inicio": "Hasiera",
-    "Camisetas": "Elastikoak",
     "Chat": "Txata"
   },
   "authScreen": {

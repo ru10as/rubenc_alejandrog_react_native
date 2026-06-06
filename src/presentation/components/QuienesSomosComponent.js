@@ -36,7 +36,6 @@ function QuienesSomos({ actividades }) {
                 </View>
             </ImageBackground>
 
-            {/* 2. NUESTRA FILOSOFÍA (QUÉ VENDEMOS) */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>{t('QuienesSomos.qs_que_vendemos_titulo')}</Text>
                 <View style={styles.featuresGrid}>
@@ -54,7 +53,6 @@ function QuienesSomos({ actividades }) {
                 </View>
             </View>
 
-            {/* 3. HISTORIA CON ESTILO */}
             <Surface style={styles.historySurface} elevation={1}>
                 <Text style={styles.historyText}>
                     {t('QuienesSomos.qs_historia_parrafo_1')}
@@ -66,7 +64,6 @@ function QuienesSomos({ actividades }) {
                 </View>
             </Surface>
 
-            {/* 4. DÓNDE ESTAMOS (TIENDAS) */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>{t('QuienesSomos.qs_tiendas_titulo')}</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tiendasScroll}>
@@ -80,7 +77,6 @@ function QuienesSomos({ actividades }) {
                 </ScrollView>
             </View>
 
-            {/* 5. EL EQUIPO (TU LISTA DE ACTIVIDADES/PERSONAS) */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>{t('QuienesSomos.qs_actividades_titulo')}</Text>
                 {actividades.actividades.map((item) => (

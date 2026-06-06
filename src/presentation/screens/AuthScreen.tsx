@@ -5,11 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { loginWithGoogle } from '../../redux/ActionCreators';
 import { useTranslation } from 'react-i18next';
-// Importamos tu función de notificaciones y la config
 import { registrarTokenPush } from '../../comun/notificaciones';
 import { auth } from '../../api/firebaseConfig'; 
-
-// IMPORTANTE: Cambiamos el import por tu nuevo componente unificado
 import LoginFormComponent from '../components/LoginFormComponent';
 import RegisterFormComponent from '../components/RegisterFormComponent';
 
@@ -42,7 +39,6 @@ const AuthScreen = ({ navigation }) => {
             navigation.navigate('Inicio');
         } catch (error) {
             if (error?.code === statusCodes.SIGN_IN_CANCELLED) {
-                // Usuario canceló
             } else {
                 Alert.alert(
                     t('authScreen.error_google'), 
@@ -75,7 +71,6 @@ const AuthScreen = ({ navigation }) => {
             </View>
 
             <View style={styles.formContainer}>
-                {/* Aquí es donde realizamos el cambio para usar tu componente unificado */}
                 {activeTab === 0 ? (
                     <RegisterFormComponent navigation={navigation} />
                 ) : (

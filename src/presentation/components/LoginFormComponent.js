@@ -11,14 +11,12 @@ const LoginFormComponent = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [errorMsg, setErrorMsg] = useState(null); // Nuevo estado para errores
-    
+    const [errorMsg, setErrorMsg] = useState(null);
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const colorTiendaOscuro = '#f44336';
 
     const handleLogin = async () => {
-        // Limpiar error previo
         setErrorMsg(null);
 
         if (!email || !password) {
@@ -58,7 +56,6 @@ const LoginFormComponent = ({ navigation }) => {
         <View style={styles.innerContainer}>
             <Text style={styles.label}>{t('LoginForm.login_identificate')}</Text>
             
-            {/* Mensaje de error visual en pantalla */}
             {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
             
             <TextInput 

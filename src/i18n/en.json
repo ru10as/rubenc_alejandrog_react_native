@@ -125,18 +125,21 @@
     "register_boton_empezar": "Get started"
   },
   "Navigation": {
-    "DetalleProducto": "Product Details",
-    "NuestrasCamisetas": "Our Jerseys",
-    "DetalleSegundaMano": "Second Hand Details",
+    "NombreApp": "The 12th Man",
+    "Inicio": "Home",
+    "Camisetas": "Jerseys",
     "MiCarrito": "My Cart",
     "MisChats": "My Chats",
+    "MisVentas": "My Sales",
+    "MisOfertas": "My Offers",
     "QuienesSomos": "About Us",
     "Contacto": "Contact",
     "Configuracion": "Settings",
     "PublicarProducto": "Post Product",
+    "DetalleProducto": "Product Details",
+    "NuestrasCamisetas": "Our Jerseys",
+    "DetalleSegundaMano": "Second Hand Details",
     "Registrarse": "Sign up",
-    "Inicio": "Home",
-    "Camisetas": "Jerseys",
     "Chat": "Chat"
   },
   "authScreen": {

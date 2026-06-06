@@ -3,8 +3,6 @@ import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert } from 'reac
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/ActionCreators';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-// IMPORTACIONES PARA TU LÓGICA DE NOTIFICACIONES
 import { registrarTokenPush } from '../../comun/notificaciones';
 import { auth } from '../../api/firebaseConfig';
 
@@ -20,21 +18,17 @@ const LoginScreen = ({ navigation }: Props) => {
     const handleLogin = async () => {
         if (email !== '' && password !== '') {
             try {
-                // 1. Ejecutamos el login original
                 await dispatch(login(email, password));
                 
-                // 2. INTEGRACIÓN: Registrar el token de notificaciones
                 if (auth.currentUser) {
                     try {
                         console.log('Login exitoso. Registrando token de notificaciones...');
                         await registrarTokenPush(auth.currentUser.uid);
                     } catch (notifError) {
-                        // No bloqueamos el acceso si falla el registro del token
                         console.error('Error al registrar notificaciones tras login:', notifError);
                     }
                 }
                 
-                // 3. Navegación directa tras login exitoso
                 navigation.navigate('Inicio');
 
             } catch (error: any) {

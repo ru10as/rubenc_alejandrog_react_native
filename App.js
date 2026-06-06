@@ -34,13 +34,11 @@ function AppContent() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // 1. Cargar datos iniciales
     dispatch(fetchCamisetas());
     dispatch(fetchComentarios());
     dispatch(fetchCabeceras());
     dispatch(fetchNovedades());
 
-    // 2. Gestión de Notificaciones
     const requestPermissions = async () => {
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== 'granted') console.log('Permisos de notificaciones denegados');
@@ -51,7 +49,6 @@ function AppContent() {
       console.log("Notificación recibida:", notification);
     });
 
-    // 3. Gestión de Autenticación (Firebase + Google)
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
       dispatch(restoreSession(firebaseUser));
     });

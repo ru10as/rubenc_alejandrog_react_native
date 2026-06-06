@@ -4,7 +4,7 @@ import { comentarios } from './comentarios';
 import { cabeceras } from './cabeceras';      
 import { novedades } from './novedades';      
 import { favoritos } from './favoritos';      
-import { usuario } from './usuario'; //
+import { usuario } from './usuario';
 import { carrito } from './carrito';
 
 export const ConfigureStore = () => {
