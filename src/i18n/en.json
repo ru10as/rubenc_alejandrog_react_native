@@ -14,6 +14,21 @@
     "carrito_vacio_msg": "Add a jersey from your team!",
     "ir_a_tienda": "Go to shop"
   },
+  "homeComponent": {
+    "saludo": "Hi, {{nombre}}",
+    "destacados": "Featured",
+    "recien_publicadas": "Recently posted",
+    "selecciones": "National teams",
+    "coleccion_retro": "Retro Collection",
+    "ver_todo": "See all",
+    "acceso_oficial": "Official",
+    "acceso_segunda": "Second hand",
+    "acceso_retro": "Retro",
+    "acceso_selecciones": "National teams",
+    "vende_titulo": "Got jerseys?",
+    "vende_subtitulo": "List and sell them in seconds",
+    "vende_boton": "Sell now"
+  },
   "catalogoComponent": {
     "tienda_oficial": "Official Store",
     "segunda_mano": "Second Hand",
@@ -21,7 +36,12 @@
     "filtrar_titulo": "Filter by categories",
     "filtro_pais": "Country",
     "filtro_equipo": "Team",
-    "filtro_talla": "Size"
+    "filtro_talla": "Size",
+    "filtro_etiquetas": "Tags",
+    "filtro_retro": "Retro",
+    "filtro_seleccion": "National teams",
+    "todas": "All",
+    "vendida": "Sold"
   },
   "configuracionComponent": {
     "logout_titulo": "Log Out",
@@ -96,6 +116,17 @@
     "vacio": "You don't have any conversations yet.",
     "login": "Sign in to see your chats."
   },
+  "ventas": {
+    "vacio": "You haven't received any offers yet."
+  },
+  "ofertas": {
+    "vacio": "You haven't sent any offers yet."
+  },
+  "estado": {
+    "pendiente": "Pending",
+    "aceptada": "Accepted",
+    "rechazada": "Rejected"
+  },
   "IndicadorActividad":{
     "indicador_proceso":"Loading catalog..."
   },
@@ -130,6 +161,8 @@
     "DetalleSegundaMano": "Second Hand Details",
     "MiCarrito": "My Cart",
     "MisChats": "My Chats",
+    "MisVentas": "My Sales",
+    "MisOfertas": "My Offers",
     "QuienesSomos": "About Us",
     "Contacto": "Contact",
     "Configuracion": "Settings",
@@ -137,7 +170,8 @@
     "Registrarse": "Sign up",
     "Inicio": "Home",
     "Camisetas": "Jerseys",
-    "Chat": "Chat"
+    "Chat": "Chat",
+    "Tagline": "Jersey marketplace"
   },
   "authScreen": {
     "registrar": "Sign up",

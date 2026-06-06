@@ -14,6 +14,21 @@
     "carrito_vacio_msg":"¡Añade alguna camiseta de tu equipo!",
     "ir_a_tienda":"Ir a la tienda"
   },
+  "homeComponent": {
+    "saludo": "Hola, {{nombre}}",
+    "destacados": "Destacados",
+    "recien_publicadas": "Recién publicadas",
+    "selecciones": "Selecciones",
+    "coleccion_retro": "Colección Retro",
+    "ver_todo": "Ver todo",
+    "acceso_oficial": "Oficial",
+    "acceso_segunda": "Segunda mano",
+    "acceso_retro": "Retro",
+    "acceso_selecciones": "Selecciones",
+    "vende_titulo": "¿Tienes camisetas?",
+    "vende_subtitulo": "Publícalas y véndelas en segundos",
+    "vende_boton": "Vender ahora"
+  },
   "catalogoComponent": {
     "tienda_oficial": "Tienda Oficial",
     "segunda_mano": "Segunda Mano",
@@ -21,7 +36,12 @@
     "filtrar_titulo": "Filtrar por categorías",
     "filtro_pais": "País",
     "filtro_equipo": "Equipo",
-    "filtro_talla": "Talla"
+    "filtro_talla": "Talla",
+    "filtro_etiquetas": "Etiquetas",
+    "filtro_retro": "Retro",
+    "filtro_seleccion": "Selecciones",
+    "todas": "Todas",
+    "vendida": "Vendida"
   },
   "configuracionComponent": {
     "logout_titulo": "Cerrar Sesión",
@@ -96,6 +116,17 @@
     "vacio": "Todavía no tienes conversaciones.",
     "login": "Inicia sesión para ver tus chats."
   },
+  "ventas": {
+    "vacio": "Aún no has recibido ninguna oferta."
+  },
+  "ofertas": {
+    "vacio": "Aún no has enviado ninguna oferta."
+  },
+  "estado": {
+    "pendiente": "Pendiente",
+    "aceptada": "Aceptada",
+    "rechazada": "Rechazada"
+  },
   "IndicadorActividad":{
     "indicador_proceso":"Cargando catálogo..."
   },
@@ -130,6 +161,8 @@
     "DetalleSegundaMano": "Detalle Segunda Mano",
     "MiCarrito": "Mi Carrito",
     "MisChats": "Mis Chats",
+    "MisVentas": "Mis Ventas",
+    "MisOfertas": "Mis Ofertas",
     "QuienesSomos": "Quiénes Somos",
     "Contacto": "Contacto",
     "Configuracion": "Configuración",
@@ -137,7 +170,8 @@
     "Registrarse": "Registrarse",
     "Inicio": "Inicio",
     "Camisetas": "Camisetas",
-    "Chat": "Chat"
+    "Chat": "Chat",
+    "Tagline": "Mercado de camisetas"
   },
   "authScreen": {
     "registrar": "Registrarse",
