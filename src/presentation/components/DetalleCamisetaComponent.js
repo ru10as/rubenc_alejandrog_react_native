@@ -1,38 +1,52 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Image, ScrollView, Modal, ImageBackground } from 'react-native';
-import { Text, Divider, IconButton, TextInput, Button, Surface } from 'react-native-paper';
-import QRCode from 'react-native-qrcode-svg';
+import { Text, Divider, IconButton, Button, Surface, Snackbar } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-
-import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
-import { postFavorito, postComentario } from '../../redux/ActionCreators';
+import { colorTiendaOscuro } from '../../comun/comun';
+import { postFavorito, postComentario, anadirAlCarrito } from '../../redux/ActionCreators';
 import { IndicadorActividad } from './IndicadorActividadComponent';
+import fondoMaracana from '../../../assets/images/logo.png';
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
     comentarios: state.comentarios,
     favoritos: state.favoritos,
+    usuario: state.usuario,
 });
 
 const mapDispatchToProps = dispatch => ({
     postFavorito: (camisetaId) => dispatch(postFavorito(camisetaId)),
     postComentario: (camisetaId, valoracion, autor, comentario) =>
         dispatch(postComentario(camisetaId, valoracion, autor, comentario)),
+    anadirAlCarrito: (camiseta, talla) => dispatch(anadirAlCarrito(camiseta, talla)),
 });
 
 class DetalleCamiseta extends Component {
     constructor(props) {
         super(props);
-        this.state = { valoracion: 5, autor: '', comentario: '', showModal: false };
+        this.state = { 
+            valoracion: 5, 
+            autor: '', 
+            comentario: '', 
+            showModal: false,
+            visibleSnack: false,
+            showLoginModal: false // Estado para el bloqueo de login
+        };
     }
 
     toggleModal = () => this.setState({ showModal: !this.state.showModal });
 
-    enviarComentario(camisetaId) {
-        this.props.postComentario(camisetaId, this.state.valoracion, this.state.autor, this.state.comentario);
-        this.setState({ valoracion: 5, autor: '', comentario: '', showModal: false });
-    }
+    handleAnadirAlCarrito = (camiseta) => { // Dependiendo de si este logueado o no, se podra añadir al carrito
+        const estaLogueado = this.props.usuario && this.props.usuario.user;
+
+        if (!estaLogueado) {
+            this.setState({ showLoginModal: true });
+        } else {
+            this.props.anadirAlCarrito(camiseta, 'M');
+            this.setState({ visibleSnack: true });
+        }
+    };
 
     render() {
         const { camisetaId } = this.props.route.params;
@@ -49,18 +63,10 @@ class DetalleCamiseta extends Component {
         if (!camiseta) return <View style={styles.error}><Text>{t('detalleCamisetaComponent.error')}</Text></View>;
 
         return (
-            <ImageBackground 
-                source={{ uri: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000' }} 
-                style={styles.background}
-                blurRadius={2}
-            >
+            <ImageBackground source={fondoMaracana} style={styles.background} blurRadius={2}>
                 <ScrollView style={styles.mainContainer}>
                     <Surface style={styles.contenedorImagen} elevation={1}>
-                        <Image
-                            source={{ uri: camiseta.imagen }}
-                            style={styles.imagenPrincipal}
-                            resizeMode="contain"
-                        />
+                        <Image source={{ uri: camiseta.imagen }} style={styles.imagenPrincipal} resizeMode="contain" />
                     </Surface>
 
                     <View style={styles.seccionContenido}>
@@ -69,85 +75,33 @@ class DetalleCamiseta extends Component {
                                 <Text style={styles.titulo}>{camiseta.nombre}</Text>
                                 {camiseta.destacado && <Text style={styles.badge}>{t('detalleCamisetaComponent.edicion_coleccionista')}</Text>}
                             </View>
-                            <IconButton
-                                icon={esFavorita ? 'heart' : 'heart-outline'}
-                                iconColor={esFavorita ? 'red' : '#000'}
-                                size={35}
-                                onPress={() => this.props.postFavorito(camisetaId)}
-                            />
                         </View>
                         <Text style={styles.descripcion}>{camiseta.descripciones?.[i18n.language] ?? camiseta.descripciones?.es ?? camiseta.descripcion}</Text>
-                        <Button
-                            mode="contained"
-                            onPress={() => console.log('Comprar')}
-                            style={styles.btnComprar}
-                        >
+                        <Button mode="contained" onPress={() => this.handleAnadirAlCarrito(camiseta)} style={styles.btnComprar}>
                             {t('detalleCamisetaComponent.comprar')}
                         </Button>
                     </View>
 
-                    <Divider style={styles.divisor} />
-
-                    <View style={styles.comentariosSeccion}>
-                        <View style={styles.rowTitulo}>
-                            <Text style={styles.seccionTitulo}>{t('detalleCamisetaComponent.voces_grada')}</Text>
-                            <IconButton icon="plus-circle" iconColor={colorTiendaOscuro} onPress={this.toggleModal} />
-                        </View>
-                        {comentarios.map((item, index) => (
-                            <Surface key={index} style={styles.comentarioItem} elevation={1}>
-                                <Text style={styles.comentarioAutor}>{item.autor} • {'⭐'.repeat(item.valoracion)}</Text>
-                                <Text style={styles.comentarioTexto}>{item.comentario}</Text>
+                    <Modal visible={this.state.showLoginModal} animationType="fade" transparent={true}>
+                        <View style={styles.modalBloqueo}>
+                            <Surface style={styles.contenedorBloqueo}>
+                                <Text style={styles.modalTitulo}>{t('detalleCamisetaComponent.login_requerido') || 'Acceso restringido'}</Text>
+                                <Text style={styles.modalTexto}>{t('detalleCamisetaComponent.mensaje_login') || 'Debes iniciar sesión para añadir productos al carrito.'}</Text>
+                                
+                                <Button 
+                                    mode="contained" 
+                                    style={[styles.btnModal, { backgroundColor: colorTiendaOscuro }]} 
+                                    onPress={() => this.setState({ showLoginModal: false })}
+                                >
+                                    {t('detalleCamisetaComponent.cerrar') || 'Cerrar'}
+                                </Button>
                             </Surface>
-                        ))}
-                    </View>
-
-                    <View style={styles.seccionCromo}>
-                        <Text style={styles.seccionTitulo}>{t('detalleCamisetaComponent.certificado_titulo')}</Text>
-                        <Surface style={styles.tarjetaCromo} elevation={4}>
-                            <View style={styles.cromoHeader}>
-                                <Text style={styles.cromoID}>{t('detalleCamisetaComponent.certificado_id')}: #TM-{camiseta.id}99</Text>
-                            </View>
-                            <View style={styles.qrWrapper}>
-                                <QRCode
-                                    value={`the12thman://cromo/${camiseta.id}`}
-                                    size={160}
-                                    color={colorTiendaOscuro}
-                                    backgroundColor="white"
-                                />
-                            </View>
-                            <Text style={styles.cromoFooter}>{t('detalleCamisetaComponent.certificado_footer')}</Text>
-                        </Surface>
-                    </View>
-
-                    <Modal visible={this.state.showModal} animationType="slide">
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTitulo}>{t('detalleCamisetaComponent.modal_titulo')}</Text>
-                            <TextInput
-                                label={t('detalleCamisetaComponent.modal_nombre')}
-                                mode="outlined"
-                                style={styles.input}
-                                value={this.state.autor}
-                                onChangeText={txt => this.setState({ autor: txt })}
-                            />
-                            <TextInput
-                                label={t('detalleCamisetaComponent.modal_comentario')}
-                                mode="outlined"
-                                multiline
-                                numberOfLines={4}
-                                style={styles.input}
-                                value={this.state.comentario}
-                                onChangeText={txt => this.setState({ comentario: txt })}
-                            />
-                            <Button
-                                mode="contained"
-                                onPress={() => this.enviarComentario(camisetaId)}
-                                style={styles.btnModal}
-                            >
-                                {t('detalleCamisetaComponent.modal_publicar')}
-                            </Button>
-                            <Button textColor="red" onPress={this.toggleModal}>{t('detalleCamisetaComponent.modal_cancelar')}</Button>
                         </View>
                     </Modal>
+
+                    <Snackbar visible={this.state.visibleSnack} onDismiss={() => this.setState({ visibleSnack: false })} duration={2000}>
+                        {t('detalleCamisetaComponent.anadida_al_carrito')}
+                    </Snackbar>
                 </ScrollView>
             </ImageBackground>
         );
@@ -183,6 +137,42 @@ const styles = StyleSheet.create({
     modalTitulo: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
     input: { marginBottom: 15 },
     btnModal: { backgroundColor: colorTiendaOscuro, padding: 5, marginBottom: 10 },
+    modalBloqueo: { 
+        flex: 1, 
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        elevation: 10,
+        zIndex: 1000
+    },
+    contenedorBloqueo: { 
+        padding: 25, 
+        borderRadius: 15, 
+        width: '80%', 
+        backgroundColor: 'white',
+        alignItems: 'center',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84
+    },
+    modalTitulo: { 
+        fontSize: 18, 
+        fontWeight: 'bold', 
+        marginBottom: 10,
+        color: '#333'
+    },
+    modalTexto: { 
+        marginBottom: 20, 
+        textAlign: 'center',
+        color: '#666'
+    }
 });
 
 export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(DetalleCamiseta));

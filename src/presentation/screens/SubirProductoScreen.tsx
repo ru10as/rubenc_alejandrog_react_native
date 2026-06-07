@@ -13,13 +13,14 @@ import { fetchCamisetas } from '../../redux/ActionCreators';
 import { db, storage, auth } from '../../api/firebaseConfig';
 import { colorTiendaOscuro } from '../../comun/comun';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { addCamisetaAlStore } from '../../redux/ActionCreators';
 
 const ANCHO_MAX_IMAGEN = 1024;
 const CALIDAD_JPEG = 0.7;
 
 export default function SubirProductoScreen({ navigation }: any) {
-    const dispatch = useDispatch();
-    const [imagen, setImagen] = useState<string | null>(null);
+    const dispatch = useDispatch(); // Para preparar la conexion con redux
+    const [imagen, setImagen] = useState<string | null>(null); // Para guardar la ubicacion local de la foto 
     const [nombreEs, setNombreEs] = useState('');
     const [nombreEn, setNombreEn] = useState('');
     const [nombreEu, setNombreEu] = useState('');
@@ -32,7 +33,7 @@ export default function SubirProductoScreen({ navigation }: any) {
 
     const abrirSelector = () => {
         Alert.alert('Añadir foto', '¿Desde dónde quieres subir la imagen?', [
-            { text: 'Cámara', onPress: () => abrirFuente('camara') },
+            { text: 'Camara', onPress: () => abrirFuente('camara') },
             { text: 'Galería', onPress: () => abrirFuente('galeria') },
             { text: 'Cancelar', style: 'cancel' },
         ]);
@@ -40,9 +41,9 @@ export default function SubirProductoScreen({ navigation }: any) {
 
     const abrirFuente = async (fuente: 'camara' | 'galeria') => {
         if (fuente === 'camara') {
-            const { granted } = await ImagePicker.requestCameraPermissionsAsync();
+            const { granted } = await ImagePicker.requestCameraPermissionsAsync(); 
             if (!granted) {
-                Alert.alert('Permiso denegado', 'Activa el acceso a la cámara en los ajustes.');
+                Alert.alert('Permiso denegado', 'Activa el acceso a la camara en los ajustes.');
                 return;
             }
             const resultado = await ImagePicker.launchCameraAsync({
@@ -74,11 +75,10 @@ export default function SubirProductoScreen({ navigation }: any) {
         if (!imagen) return Alert.alert('Falta la imagen', 'Selecciona una foto del producto.');
         if (!nombreEs.trim()) return Alert.alert('Nombre obligatorio', 'El nombre en español es obligatorio.');
         if (!descEs.trim()) return Alert.alert('Descripción obligatoria', 'La descripción en español es obligatoria.');
-        if (!precio.trim() || isNaN(Number(precio))) return Alert.alert('Precio inválido', 'Introduce un número válido.');
+        if (!precio.trim() || isNaN(Number(precio))) return Alert.alert('Precio invalido', 'Introduce un número valido.');
 
         setSubiendo(true);
         try {
-            // Redimensionar y comprimir antes de subir para no malgastar Storage
             const imagenOptimizada = await ImageManipulator.manipulateAsync(
                 imagen,
                 [{ resize: { width: ANCHO_MAX_IMAGEN } }],
@@ -102,7 +102,6 @@ export default function SubirProductoScreen({ navigation }: any) {
 
             const downloadURL = await getDownloadURL(storageRef);
 
-            // Guardar documento en Firestore
             await addDoc(collection(db, 'camisetas'), {
                 nombres: {
                     es: nombreEs.trim(),
@@ -116,8 +115,11 @@ export default function SubirProductoScreen({ navigation }: any) {
                 },
                 imagen: downloadURL,
                 precio: parseFloat(precio),
+                estado: 'usada',
+                estadoVenta: 'disponible',
                 destacado: false,
                 creadoPor: usuario.uid,
+                vendedorId: usuario.uid,
                 vendedorNombre: usuario.displayName ?? usuario.email ?? 'Usuario anónimo',
                 vendedorFoto: usuario.photoURL ?? null,
                 creadoEn: serverTimestamp(),
@@ -125,7 +127,7 @@ export default function SubirProductoScreen({ navigation }: any) {
 
             (dispatch as any)(fetchCamisetas());
 
-            Alert.alert('¡Publicado!', 'El producto se ha añadido al catálogo.', [
+            Alert.alert('¡Publicado!', 'El producto se ha añadido al catalogo.', [
                 { text: 'OK', onPress: () => navigation.goBack() },
             ]);
         } catch (error: any) {
@@ -143,7 +145,6 @@ export default function SubirProductoScreen({ navigation }: any) {
         >
             <ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
-                {/* Selector de imagen */}
                 <TouchableOpacity style={styles.imagenPicker} onPress={abrirSelector} activeOpacity={0.8}>
                     {imagen ? (
                         <Image source={{ uri: imagen }} style={styles.imagenPreview} resizeMode="cover" />
@@ -161,19 +162,16 @@ export default function SubirProductoScreen({ navigation }: any) {
                     )}
                 </TouchableOpacity>
 
-                {/* Nombre */}
                 <Text style={styles.seccion}>Nombre del producto</Text>
                 <TextInput label="Español *" mode="outlined" value={nombreEs} onChangeText={setNombreEs} style={styles.input} />
                 <TextInput label="English" mode="outlined" value={nombreEn} onChangeText={setNombreEn} style={styles.input} />
                 <TextInput label="Euskara" mode="outlined" value={nombreEu} onChangeText={setNombreEu} style={styles.input} />
 
-                {/* Descripción */}
                 <Text style={styles.seccion}>Descripción</Text>
                 <TextInput label="Español *" mode="outlined" multiline numberOfLines={3} value={descEs} onChangeText={setDescEs} style={styles.input} />
                 <TextInput label="English" mode="outlined" multiline numberOfLines={3} value={descEn} onChangeText={setDescEn} style={styles.input} />
                 <TextInput label="Euskara" mode="outlined" multiline numberOfLines={3} value={descEu} onChangeText={setDescEu} style={styles.input} />
 
-                {/* Precio */}
                 <Text style={styles.seccion}>Precio</Text>
                 <TextInput
                     label="Precio (€) *"
@@ -185,7 +183,6 @@ export default function SubirProductoScreen({ navigation }: any) {
                     left={<TextInput.Affix text="€" />}
                 />
 
-                {/* Progreso de subida */}
                 {subiendo && (
                     <View style={styles.progresoContainer}>
                         <ActivityIndicator animating color={colorTiendaOscuro} />

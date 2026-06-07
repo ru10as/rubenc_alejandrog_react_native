@@ -4,82 +4,79 @@ import { useDispatch } from 'react-redux';
 import { signUp } from '../../redux/ActionCreators';
 import { registrarTokenPush } from '../../comun/notificaciones';
 import { auth } from '../../api/firebaseConfig';
+import { useTranslation } from 'react-i18next';
 
 const RegisterFormComponent = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState(null); 
-    
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     
     const handleRegister = async () => {
         setErrorMsg(null); 
 
         if (!email || !password || !confirmPassword) {
-            setErrorMsg("Por favor, rellena todos los campos.");
+            setErrorMsg(t("RegisterForm.register_error_campos"));
             return;
         }
 
         if (password !== confirmPassword) {
-            setErrorMsg("Las contraseñas no coinciden.");
+            setErrorMsg(t("RegisterForm.register_error_no_coinciden"));
             return;
         }
 
         try {
-            console.log('Iniciando proceso de registro para:', email);
             await dispatch(signUp(email, password));
             
             if (auth.currentUser) {
-                console.log('Registro exitoso. UID:', auth.currentUser.uid);
-                
-                // PEQUEÑO RETRASO PARA ASEGURAR INICIALIZACIÓN NATIVA
-                console.log('Esperando inicialización nativa de Firebase...');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 
                 try {
-                    console.log('Intentando registrar token de notificaciones...');
                     await registrarTokenPush(auth.currentUser.uid);
-                    console.log('Notificaciones registradas correctamente en el registro.');
                 } catch (notifError) {
-                    console.error('Error al registrar notificaciones tras el registro:', notifError);
+                    console.error('Error al registrar notificaciones:', notifError);
                 }
             }
             
             navigation.navigate('Inicio');
         } catch (error) {
-            console.error('Error durante el registro:', error);
-            setErrorMsg("No se pudo crear la cuenta. Prueba con otro email.");
+            setErrorMsg(t("RegisterForm.register_error_registro"));
         }
     };
 
     return (
         <View style={styles.innerContainer}>
-            <Text style={styles.label}>Crea tu cuenta</Text>
+            <Text style={styles.label}>{t("RegisterForm.register_titulo")}</Text>
             
             {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
             
             <TextInput 
-                placeholder="Correo electrónico" 
+                placeholder={t("RegisterForm.register_email")}
                 onChangeText={(text) => { setEmail(text); setErrorMsg(null); }} 
                 style={styles.input} 
                 autoCapitalize="none"
                 keyboardType="email-address"
             />
             <TextInput 
-                placeholder="Contraseña" 
+                placeholder={t("RegisterForm.register_password")}
                 secureTextEntry 
                 onChangeText={(text) => { setPassword(text); setErrorMsg(null); }} 
                 style={styles.input} 
             />
             <TextInput 
-                placeholder="Repetir contraseña" 
+                placeholder={t("RegisterForm.register_repeat_password")}
                 secureTextEntry 
                 onChangeText={(text) => { setConfirmPassword(text); setErrorMsg(null); }} 
                 style={styles.input} 
             />
             <View style={{ marginTop: 10 }}>
-                <Button title="Empezar" onPress={handleRegister} color="#f44336" />
+                <Button 
+                    title={t("RegisterForm.register_boton_empezar")} 
+                    onPress={handleRegister} 
+                    color="#f44336" 
+                />
             </View>
         </View>
     );

@@ -2,34 +2,38 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View, Alert } from 'react-native';
 import { List, Divider, Switch, Avatar, Text, Surface, Button } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { colorTiendaOscuro } from '../../comun/comun';
-// Importamos la acción de logout
 import { logout } from '../../redux/ActionCreators';
 
 const mapStateToProps = (state) => ({
     usuario: state.usuario?.user || null,
 });
 
-// Añadimos 'logout' a las props recibidas
-const SeccionConfiguracion = ({ usuario, navigation, logout }) => {
+const SeccionConfiguracion = ({ usuario, navigation }) => {
     const { t, i18n } = useTranslation();
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [notifications, setNotifications] = useState(true);
-
+    const dispatch = useDispatch();
     const cambiarIdioma = (lang) => i18n.changeLanguage(lang);
 
+    const ejecutarLogout = async () => { // Proceso de salida de la aplicacion 
+        try {
+            await dispatch(logout());
+            navigation.navigate('Inicio');
+        } catch (err) {
+            Alert.alert('Error', err?.message ?? 'No se pudo cerrar sesión.');
+        }
+    };
+
+    // Este lo hacemos para evitar que el usuario cierre sesion por error
     const confirmarLogout = () => {
         Alert.alert(
             t('configuracionComponent.logout_titulo'),
             t('configuracionComponent.logout_msg'),
             [
                 { text: t('configuracionComponent.cancelar'), style: 'cancel' },
-                { 
-                    text: t('configuracionComponent.salir'), 
-                    onPress: () => logout(), // Llamamos a la acción de Redux
-                    style: 'destructive' 
-                }
+                { text: t('configuracionComponent.salir'), onPress: ejecutarLogout, style: 'destructive' }
             ]
         );
     };
@@ -37,7 +41,6 @@ const SeccionConfiguracion = ({ usuario, navigation, logout }) => {
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             
-            {/* 1. CABECERA */}
             <Surface style={styles.userCard} elevation={1}>
                 <Avatar.Icon 
                     size={70} 
@@ -64,7 +67,6 @@ const SeccionConfiguracion = ({ usuario, navigation, logout }) => {
                 </View>
             </Surface>
 
-            {/* 2. SECCIÓN DE IDIOMA */}
             <List.Section>
                 <List.Subheader style={styles.headerText}>{t('configuracionComponent.ajustes_generales')}</List.Subheader>
                 <List.Accordion
@@ -75,12 +77,11 @@ const SeccionConfiguracion = ({ usuario, navigation, logout }) => {
                         right={p => i18n.language.startsWith('es') && <List.Icon {...p} icon="check" color="green" />} />
                     <List.Item title="English" onPress={() => cambiarIdioma('en')} 
                         right={p => i18n.language.startsWith('en') && <List.Icon {...p} icon="check" color="green" />} />
-                    <List.Item title="Euskara" onPress={() => cambiarIdioma('eu')} 
+                    <List.Item title="Euskera" onPress={() => cambiarIdioma('eu')} 
                         right={p => i18n.language.startsWith('eu') && <List.Icon {...p} icon="check" color="green" />} />
                 </List.Accordion>
             </List.Section>
 
-            {/* 3. SECCIONES PRIVADAS*/}
             {usuario && (
                 <>
                     <Divider style={styles.divider} />
@@ -101,7 +102,6 @@ const SeccionConfiguracion = ({ usuario, navigation, logout }) => {
 
             <Divider style={styles.divider} />
 
-            {/* 4. SOPORTE */}
             <List.Section>
                 <List.Subheader style={styles.headerText}>{t('configuracionComponent.seccion_soporte')}</List.Subheader>
                 <List.Item
@@ -114,7 +114,6 @@ const SeccionConfiguracion = ({ usuario, navigation, logout }) => {
                 />
             </List.Section>
 
-            {/* 5. LOGOUT */}
             {usuario && (
                 <List.Item
                     title={t('configuracionComponent.logout', 'Cerrar Sesión')}
@@ -140,9 +139,4 @@ const styles = StyleSheet.create({
     versionText: { textAlign: 'center', color: '#bbb', fontSize: 10, marginVertical: 20 }
 });
 
-// Mapeamos la acción para que esté disponible como prop
-const mapDispatchToProps = (dispatch) => ({
-    logout: () => dispatch(logout()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SeccionConfiguracion);
+export default connect(mapStateToProps)(SeccionConfiguracion);

@@ -12,7 +12,24 @@
     "vaciar_carrito": "Saskia Hustu",
     "carrito_vacio_titulo": "Zure saskia hutsik dago",
     "carrito_vacio_msg": "Gehitu zure taldeko kamiseta bat!",
-    "ir_a_tienda": "Dendara joan"
+    "ir_a_tienda": "Dendara joan",
+    "subtotal_label": "Azpitotala",
+    "descuento_label": "Deskontua"
+  },
+  "homeComponent": {
+    "saludo": "Kaixo, {{nombre}}",
+    "destacados": "Nabarmenduak",
+    "recien_publicadas": "Berriki argitaratuak",
+    "selecciones": "Selekzioak",
+    "coleccion_retro": "Retro Bilduma",
+    "ver_todo": "Ikusi dena",
+    "acceso_oficial": "Ofiziala",
+    "acceso_segunda": "Bigarren eskua",
+    "acceso_retro": "Retro",
+    "acceso_selecciones": "Selekzioak",
+    "vende_titulo": "Kamisetarik baduzu?",
+    "vende_subtitulo": "Argitaratu eta saldu segundotan",
+    "vende_boton": "Saldu orain"
   },
   "catalogoComponent": {
     "tienda_oficial": "Denda Ofiziala",
@@ -21,7 +38,12 @@
     "filtrar_titulo": "Iragazi kategorien arabera",
     "filtro_pais": "Herrialdea",
     "filtro_equipo": "Taldea",
-    "filtro_talla": "Neurria"
+    "filtro_talla": "Neurria",
+    "filtro_etiquetas": "Etiketak",
+    "filtro_retro": "Retro",
+    "filtro_seleccion": "Selekzioak",
+    "todas": "Denak",
+    "vendida": "Salduta"
   },
   "configuracionComponent": {
     "logout_titulo": "Saioa Itxi",
@@ -52,7 +74,7 @@
   "detalleCamisetaComponent": {
     "error": "Kamiseta ez da aurkitu",
     "edicion_coleccionista": "Kolekzionisten Edizioa",
-    "comprar": "Erosi Orain",
+    "comprar": "Saskira gehitu",
     "voces_grada": "Gradako Ahotsak",
     "certificado_titulo": "QR Ziurtagiri Digitala",
     "certificado_id": "ZIURTATUTAKO PRODUKTUA",
@@ -61,7 +83,12 @@
     "modal_nombre": "Izena",
     "modal_comentario": "Iruzkina",
     "modal_publicar": "Argitaratu",
-    "modal_cancelar": "Utzi"
+    "modal_cancelar": "Utzi",
+    "anadida_al_carrito": "Kamiseta saskira gehitu da",
+    "login_requerido": "Sarbide mugatua",
+    "mensaje_login": "Ekintza hau egiteko saioa hasi behar duzu.",
+    "ir_a_login": "Hasi saioa",
+    "cerrar": "Itxi"
   },
   "detalleCamisetaSMano": {
     "titulo": "Bigarren eskuko xehetasunak",
@@ -78,5 +105,96 @@
     "exito_oferta_enviada": "Eskaintza saltzaileari bidali zaio.",
     "chat_label": "Saltzailearekin txata",
     "ventas_label": "salmentak"
+  },
+  "chat": {
+    "placeholder": "Idatzi mezu bat...",
+    "vacio": "Oraindik mezurik ez. Agurtu saltzailea!",
+    "login_titulo": "Hasi saioa",
+    "login_msg": "Kontu bat behar duzu saltzailearekin txateatzeko.",
+    "aviso_titulo": "Oharra",
+    "propio_articulo": "Artikulu hau zurea da, ezin duzu zeure buruarekin txateatu."
+  },
+  "chats": {
+    "vacio": "Oraindik ez duzu elkarrizketarik.",
+    "login": "Hasi saioa zure txatak ikusteko."
+  },
+  "ventas": {
+    "vacio": "Oraindik ez duzu eskaintzarik jaso."
+  },
+  "ofertas": {
+    "vacio": "Oraindik ez duzu eskaintzarik bidali."
+  },
+  "estado": {
+    "pendiente": "Zain",
+    "aceptada": "Onartua",
+    "rechazada": "Ukatua"
+  },
+  "IndicadorActividad":{
+    "indicador_proceso":"Katalogoa kargatzen..."
+  },
+  "LoginForm":{
+    "login_error_campos":"Mesedez, bete eremu guztiak.",
+    "login_error_credenciales":"Emaila edo pasahitza okerrak dira.",
+    "login_identificate":"Hasi saioa zure kontuan",
+    "login_email":"Posta elektronikoa",
+    "login_password":"Pasahitza",
+    "login_boton_entrar":"Sartu"
+  },
+  "QuienesSomos": {
+    "qs_historia_subtitulo": "Futbolaren kultura zure esku",
+    "qs_que_vendemos_titulo": "Zerk egiten gaitu bakar?",
+    "qs_historia_parrafo_1": "THE 12th MAN-en, futbolarekin zuk adinako pasioa dugu. Gure helburua pieza bakarrak eskaintzea da, xehetasun bakoitza zainduz, elastiko bakoitzak istorio mitiko bat konta dezan.",
+    "qs_tiendas_titulo": "Gure Egoitzak",
+    "qs_actividades_titulo": "Gure Taldea"
+  },
+  "RegisterForm": {
+    "register_titulo": "Sortu zure kontua",
+    "register_error_campos": "Mesedez, bete eremu guztiak.",
+    "register_error_no_coinciden": "Pasahitzak ez datoz bat.",
+    "register_error_registro": "Ezin izan da kontua sortu. Saiatu beste email batekin.",
+    "register_email": "Posta elektronikoa",
+    "register_password": "Pasahitza",
+    "register_repeat_password": "Errepikatu pasahitza",
+    "register_boton_empezar": "Hasi"
+  },
+  "MisDescuentos": {
+    "titulo": "Nire Deskontuak",
+    "error": "Errorea",
+    "codigo_no_reconocido": "Kodea ez da ezagutzen.",
+    "codigo_ya_escaneado": "QR kode hau dagoeneko eskaneatuta dago.",
+    "exito": "Arrakasta!",
+    "aplicado": "Kupoia aplikatuta. Balioa: {{valor}}€",
+    "permiso_camara": "Kamerarako sarbidea behar dugu",
+    "dar_permiso": "Baimena eman",
+    "estado_canjeado": "Erabilita",
+    "estado_disponible": "Eskuragarri"
+  },
+  "Navigation": {
+    "NombreApp": "The 12th Man",
+    "Inicio": "Hasiera",
+    "Camisetas": "Elastikoak",
+    "MiCarrito": "Nire Saskia",
+    "MisChats": "Nire Txatak",
+    "MisVentas": "Nire Salmentak",
+    "MisOfertas": "Nire Eskaintzak",
+    "QuienesSomos": "Nor Gara",
+    "Contacto": "Kontaktua",
+    "Configuracion": "Ezarpenak",
+    "PublicarProducto": "Argitaratu Produktua",
+    "DetalleProducto": "Produktuaren xehetasunak",
+    "NuestrasCamisetas": "Gure Elastikoak",
+    "DetalleSegundaMano": "Bigarren Eskuko Xehetasunak",
+    "Registrarse": "Izena eman",
+    "Chat": "Txata",
+    "Tagline": "Elastikoen merkatua",
+    "MisDescuentos":"Nire Deskontuak"
+  },
+  "authScreen": {
+    "registrar": "Izena eman",
+    "ya_tengo_cuenta": "Kontua badut",
+    "o_tambien": "EDO",
+    "continuar_google": "Google-ekin jarraitu",
+    "error_google": "Google-eko errorea",
+    "error_login_default": "Ezin izan da saioa hasi."
   }
 }

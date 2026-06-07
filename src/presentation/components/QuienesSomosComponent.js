@@ -32,13 +32,12 @@ function QuienesSomos({ actividades }) {
                 <View style={styles.overlay}>
                     <Text style={styles.heroTitle}>THE 12th MAN</Text>
                     <View style={styles.badgeUnderline} />
-                    <Text style={styles.heroSubtitle}>{t('qs_historia_subtitulo')}</Text>
+                    <Text style={styles.heroSubtitle}>{t('QuienesSomos.qs_historia_subtitulo')}</Text>
                 </View>
             </ImageBackground>
 
-            {/* 2. NUESTRA FILOSOFÍA (QUÉ VENDEMOS) */}
             <View style={styles.section}>
-                <Text style={styles.sectionTitle}>{t('qs_que_vendemos_titulo', '¿Qué nos hace únicos?')}</Text>
+                <Text style={styles.sectionTitle}>{t('QuienesSomos.qs_que_vendemos_titulo')}</Text>
                 <View style={styles.featuresGrid}>
                     <Surface style={styles.featureCard} elevation={2}>
                         <IconButton icon="shield-check" iconColor={colorTiendaOscuro} />
@@ -54,10 +53,9 @@ function QuienesSomos({ actividades }) {
                 </View>
             </View>
 
-            {/* 3. HISTORIA CON ESTILO */}
             <Surface style={styles.historySurface} elevation={1}>
                 <Text style={styles.historyText}>
-                    {t('qs_historia_parrafo_1')}
+                    {t('QuienesSomos.qs_historia_parrafo_1')}
                 </Text>
                 <View style={styles.statsRow}>
                     <StatItem icon="tshirt-crew" count="+500" label="Modelos" />
@@ -66,9 +64,8 @@ function QuienesSomos({ actividades }) {
                 </View>
             </Surface>
 
-            {/* 4. DÓNDE ESTAMOS (TIENDAS) */}
             <View style={styles.section}>
-                <Text style={styles.sectionTitle}>{t('qs_tiendas_titulo', 'Nuestras Sedes')}</Text>
+                <Text style={styles.sectionTitle}>{t('QuienesSomos.qs_tiendas_titulo')}</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tiendasScroll}>
                     {['Madrid - Bernabéu', 'Barcelona - Camp Nou', 'Bilbao - San Mamés'].map((tienda, i) => (
                         <Surface key={i} style={styles.tiendaCard} elevation={3}>
@@ -80,9 +77,8 @@ function QuienesSomos({ actividades }) {
                 </ScrollView>
             </View>
 
-            {/* 5. EL EQUIPO (TU LISTA DE ACTIVIDADES/PERSONAS) */}
             <View style={styles.section}>
-                <Text style={styles.sectionTitle}>{t('qs_actividades_titulo')}</Text>
+                <Text style={styles.sectionTitle}>{t('QuienesSomos.qs_actividades_titulo')}</Text>
                 {actividades.actividades.map((item) => (
                     <Surface key={item.id} style={styles.equipoItem} elevation={1}>
                         <Avatar.Image source={{ uri: baseUrl + item.imagen }} size={60} />

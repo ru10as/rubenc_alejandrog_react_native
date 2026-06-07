@@ -5,17 +5,36 @@ import { useSelector } from 'react-redux';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 
-const DetalleCamisetaSMano = ({ route }) => {
-    const { t } = useTranslation();
-    
+const DetalleCamisetaSMano = ({ route, navigation }) => {
+    const { t, i18n } = useTranslation();
     const { camiseta } = route.params;
-    
-    // Obtener datos del usuario desde Redux
+    const nombre = camiseta.nombres?.[i18n.language] || camiseta.nombres?.es || camiseta.nombre || '';
+    const descripcion = camiseta.descripciones?.[i18n.language] || camiseta.descripciones?.es || camiseta.descripcion || '';
+    const vendedorId = camiseta.creadoPor || camiseta.vendedorId;
     const usuario = useSelector((state) => state.usuario?.user);
-    
-    // Estados para el diálogo de oferta
     const [visible, setVisible] = useState(false);
     const [montoOferta, setMontoOferta] = useState('');
+
+    const abrirChat = () => {
+        if (!usuario?.uid) {
+            Alert.alert(t('chat.login_titulo'), t('chat.login_msg'));
+            return;
+        }
+        if (usuario.uid === vendedorId) {
+            Alert.alert(t('chat.aviso_titulo'), t('chat.propio_articulo'));
+            return;
+        }
+
+        const chatId = `${camiseta.id}_${usuario.uid}`;
+        navigation.navigate('Chat', {
+            chatId,
+            compradorId: usuario.uid,
+            compradorNombre: usuario.displayName || usuario.email || 'Usuario',
+            vendedorId,
+            vendedorNombre: camiseta.vendedorNombre,
+            camiseta: { id: camiseta.id, nombre, imagen: camiseta.imagen },
+        });
+    };
 
     const enviarOfertaAFirebase = async () => {
         if (!montoOferta || isNaN(montoOferta)) {
@@ -30,9 +49,9 @@ const DetalleCamisetaSMano = ({ route }) => {
         try {
             await addDoc(collection(db, "ofertas"), {
                 camisetaId: camiseta.id,
-                vendedorId: camiseta.vendedorId,
-                compradorId: usuario?.uid || 'anonimo', // Asegúrate de tener el UID
-                nombreComprador: usuario?.nombre || 'Usuario',
+                vendedorId: vendedorId,
+                compradorId: usuario?.uid || 'anonimo',
+                nombreComprador: usuario?.displayName || usuario?.email || 'Usuario',
                 monto: parseFloat(montoOferta),
                 estado: 'pendiente',
                 fecha: new Date().toISOString()
@@ -64,12 +83,12 @@ const DetalleCamisetaSMano = ({ route }) => {
                         <Text style={styles.nombreVendedor}>{camiseta.vendedorNombre}</Text>
                         <Text style={styles.valoracion}>⭐ 4.8 (12 {t('detalleCamisetaSMano.ventas_label')})</Text>
                     </View>
-                    <IconButton icon="message-text" onPress={() => console.log('Abrir Chat')} />
+                    <IconButton icon="message-text" onPress={abrirChat} />
                 </Surface>
 
-                <Text style={styles.titulo}>{camiseta.nombre}</Text>
+                <Text style={styles.titulo}>{nombre}</Text>
                 <Text style={styles.precio}>{camiseta.precio} €</Text>
-                <Text style={styles.descripcion}>{camiseta.descripcion}</Text>
+                <Text style={styles.descripcion}>{descripcion}</Text>
 
                 <Divider style={styles.divisor} />
 
@@ -77,13 +96,9 @@ const DetalleCamisetaSMano = ({ route }) => {
                     <Button mode="contained" style={styles.btnOferta} onPress={() => setVisible(true)}>
                         {t('detalleCamisetaSMano.oferta')}
                     </Button>
-                    <Button mode="outlined" style={styles.btnChat} onPress={() => console.log('Chat')}>
-                        {t('detalleCamisetaSMano.chat')}
-                    </Button>
                 </View>
             </View>
 
-            {/* Diálogo para capturar el precio */}
             <Portal>
                 <Dialog visible={visible} onDismiss={() => setVisible(false)}>
                     <Dialog.Title>{t('detalleCamisetaSMano.dialog_titulo')}</Dialog.Title>

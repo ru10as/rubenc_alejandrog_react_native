@@ -6,8 +6,6 @@ import { colorTiendaOscuro } from '../../comun/comun';
 
 function Contacto() {
     const { t } = useTranslation();
-
-    // Función para llamadas/emails reales
     const abrirEnlace = (url) => Linking.openURL(url);
 
     return (
@@ -18,7 +16,6 @@ function Contacto() {
         >
             <ScrollView contentContainerStyle={styles.container}>
                 
-                {/* Cabecera con Estilo */}
                 <View style={styles.header}>
                     <Avatar.Icon size={80} icon="soccer" backgroundColor={colorTiendaOscuro} />
                     <Text style={styles.tituloApp}>THE 12th MAN</Text>
@@ -32,7 +29,6 @@ function Contacto() {
                         
                         <Divider style={styles.linea} />
 
-                        {/* Sección de Contacto con Iconos */}
                         <List.Item
                             title={t('contactoComponent.tel')}
                             description="+34 600 123 456"

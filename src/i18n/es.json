@@ -12,7 +12,24 @@
     "vaciar_carrito":"Vaciar Carrito",
     "carrito_vacio_titulo":"Tu carrito está vacío",
     "carrito_vacio_msg":"¡Añade alguna camiseta de tu equipo!",
-    "ir_a_tienda":"Ir a la tienda"
+    "ir_a_tienda":"Ir a la tienda",
+    "subtotal_label": "Subtotal",
+    "descuento_label": "Descuento"
+  },
+  "homeComponent": {
+    "saludo": "Hola, {{nombre}}",
+    "destacados": "Destacados",
+    "recien_publicadas": "Recién publicadas",
+    "selecciones": "Selecciones",
+    "coleccion_retro": "Colección Retro",
+    "ver_todo": "Ver todo",
+    "acceso_oficial": "Oficial",
+    "acceso_segunda": "Segunda mano",
+    "acceso_retro": "Retro",
+    "acceso_selecciones": "Selecciones",
+    "vende_titulo": "¿Tienes camisetas?",
+    "vende_subtitulo": "Publícalas y véndelas en segundos",
+    "vende_boton": "Vender ahora"
   },
   "catalogoComponent": {
     "tienda_oficial": "Tienda Oficial",
@@ -21,7 +38,12 @@
     "filtrar_titulo": "Filtrar por categorías",
     "filtro_pais": "País",
     "filtro_equipo": "Equipo",
-    "filtro_talla": "Talla"
+    "filtro_talla": "Talla",
+    "filtro_etiquetas": "Etiquetas",
+    "filtro_retro": "Retro",
+    "filtro_seleccion": "Selecciones",
+    "todas": "Todas",
+    "vendida": "Vendida"
   },
   "configuracionComponent": {
     "logout_titulo": "Cerrar Sesión",
@@ -52,7 +74,7 @@
   "detalleCamisetaComponent": {
     "error": "Camiseta no encontrada",
     "edicion_coleccionista": "Edición de Coleccionista",
-    "comprar": "Comprar Ahora",
+    "comprar": "Añadir al carrito",
     "voces_grada": "Voces de la Grada",
     "certificado_titulo": "Certificado QR Digital",
     "certificado_id": "PRODUCTO CERTIFICADO",
@@ -61,7 +83,12 @@
     "modal_nombre": "Nombre",
     "modal_comentario": "Comentario",
     "modal_publicar": "Publicar",
-    "modal_cancelar": "Cancelar"
+    "modal_cancelar": "Cancelar",
+    "anadida_al_carrito": "Camiseta añadida al carrito",
+    "login_requerido": "Acceso restringido",
+    "mensaje_login": "Debes iniciar sesión para realizar esta acción.",
+    "ir_a_login": "Ir a Login",
+    "cerrar": "Cerrar"
   },
   "detalleCamisetaSMano": {
     "titulo": "Detalle de segunda mano",
@@ -78,5 +105,95 @@
     "exito_oferta_enviada": "Oferta enviada al vendedor.",
     "chat_label": "Chat con vendedor",
     "ventas_label": "ventas"
+  },
+  "chat": {
+    "placeholder": "Escribe un mensaje...",
+    "vacio": "Aún no hay mensajes. ¡Saluda al vendedor!",
+    "login_titulo": "Inicia sesión",
+    "login_msg": "Necesitas una cuenta para chatear con el vendedor.",
+    "aviso_titulo": "Aviso",
+    "propio_articulo": "Este artículo es tuyo, no puedes chatear contigo mismo."
+  },
+  "chats": {
+    "vacio": "Todavía no tienes conversaciones.",
+    "login": "Inicia sesión para ver tus chats."
+  },
+  "ventas": {
+    "vacio": "Aún no has recibido ninguna oferta."
+  },
+  "ofertas": {
+    "vacio": "Aún no has enviado ninguna oferta."
+  },
+  "estado": {
+    "pendiente": "Pendiente",
+    "aceptada": "Aceptada",
+    "rechazada": "Rechazada"
+  },
+  "IndicadorActividad":{
+    "indicador_proceso":"Cargando catálogo..."
+  },
+  "LoginForm":{
+    "login_error_campos":"Por favor, rellena todos los campos.",
+    "login_error_credenciales":"Email o contraseña incorrectos.",
+    "login_identificate":"Inicia sesión en tu cuenta",
+    "login_email":"Correo electrónico",
+    "login_password":"Contraseña",
+    "login_boton_entrar":"Entrar"
+  },
+  "QuienesSomos":{
+    "qs_historia_subtitulo":"La cultura del fútbol en tus manos",
+    "qs_que_vendemos_titulo":"¿Qué nos hace únicos?",
+    "qs_historia_parrafo_1":"En THE 12th MAN, vivimos el fútbol con la misma pasión que tú. Nuestro objetivo es ofrecerte piezas únicas, cuidando cada detalle para que cada camiseta cuente una historia legendaria.",
+    "qs_tiendas_titulo":"Nuestras Sedes",
+    "qs_actividades_titulo":"Nuestro Equipo"
+  },
+  "RegisterForm": {
+    "register_titulo": "Crea tu cuenta",
+    "register_error_campos": "Por favor, rellena todos los campos.",
+    "register_error_no_coinciden": "Las contraseñas no coinciden.",
+    "register_error_registro": "No se pudo crear la cuenta. Prueba con otro email.",
+    "register_email": "Correo electrónico",
+    "register_password": "Contraseña",
+    "register_repeat_password": "Repetir contraseña",
+    "register_boton_empezar": "Empezar"
+  },
+  "MisDescuentos": {
+    "titulo": "Mis Descuentos",
+    "error": "Error",
+    "codigo_no_reconocido": "Código no reconocido.",
+    "codigo_ya_escaneado": "Este código QR ya ha sido escaneado.",
+    "exito": "¡Éxito!",
+    "aplicado": "Cupón aplicado. Valor: {{valor}}€",
+    "permiso_camara": "Necesitamos acceso a la cámara",
+    "dar_permiso": "Dar permiso",
+    "estado_canjeado": "Canjeado",
+    "estado_disponible": "Disponible"
+  },
+  "Navigation": {
+    "NombreApp": "The 12th Man",
+    "Inicio": "Inicio",
+    "Camisetas": "Camisetas",
+    "MiCarrito": "Mi Carrito",
+    "MisChats": "Mis Chats",
+    "MisVentas": "Mis Ventas",
+    "MisOfertas": "Mis Ofertas",
+    "QuienesSomos": "Quiénes Somos",
+    "Contacto": "Contacto",
+    "PublicarProducto": "Publicar Producto",
+    "Configuracion": "Configuración",
+    "DetalleProducto": "Detalle de Producto",
+    "DetalleSegundaMano": "Detalle Segunda Mano",
+    "Registrarse": "Registrarse",
+    "Chat": "Chat",
+    "Tagline": "Mercado de camisetas"
+  },
+  "authScreen": {
+    "registrar": "Registrarse",
+    "ya_tengo_cuenta": "Ya tengo cuenta",
+    "o_tambien": "O TAMBIÉN",
+    "continuar_google": "Continuar con Google",
+    "error_google": "Error con Google",
+    "error_login_default": "No se pudo iniciar sesión."
   }
+
 }

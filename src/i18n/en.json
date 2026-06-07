@@ -12,7 +12,24 @@
     "vaciar_carrito": "Clear Cart",
     "carrito_vacio_titulo": "Your cart is empty",
     "carrito_vacio_msg": "Add a jersey from your team!",
-    "ir_a_tienda": "Go to shop"
+    "ir_a_tienda": "Go to shop",
+    "subtotal_label": "Subtotal",
+    "descuento_label": "Discount"
+  },
+  "homeComponent": {
+    "saludo": "Hi, {{nombre}}",
+    "destacados": "Featured",
+    "recien_publicadas": "Recently posted",
+    "selecciones": "National teams",
+    "coleccion_retro": "Retro Collection",
+    "ver_todo": "See all",
+    "acceso_oficial": "Official",
+    "acceso_segunda": "Second hand",
+    "acceso_retro": "Retro",
+    "acceso_selecciones": "National teams",
+    "vende_titulo": "Got jerseys?",
+    "vende_subtitulo": "List and sell them in seconds",
+    "vende_boton": "Sell now"
   },
   "catalogoComponent": {
     "tienda_oficial": "Official Store",
@@ -21,7 +38,12 @@
     "filtrar_titulo": "Filter by categories",
     "filtro_pais": "Country",
     "filtro_equipo": "Team",
-    "filtro_talla": "Size"
+    "filtro_talla": "Size",
+    "filtro_etiquetas": "Tags",
+    "filtro_retro": "Retro",
+    "filtro_seleccion": "National teams",
+    "todas": "All",
+    "vendida": "Sold"
   },
   "configuracionComponent": {
     "logout_titulo": "Log Out",
@@ -52,7 +74,7 @@
   "detalleCamisetaComponent": {
     "error": "Jersey not found",
     "edicion_coleccionista": "Collector's Edition",
-    "comprar": "Buy Now",
+    "comprar": "Add to cart",
     "voces_grada": "Fans' Voices",
     "certificado_titulo": "Digital QR Certificate",
     "certificado_id": "CERTIFIED PRODUCT",
@@ -61,7 +83,12 @@
     "modal_nombre": "Name",
     "modal_comentario": "Comment",
     "modal_publicar": "Publish",
-    "modal_cancelar": "Cancel"
+    "modal_cancelar": "Cancel",
+    "anadida_al_carrito": "T-shirt added to cart",
+    "login_requerido": "Restricted access",
+    "mensaje_login": "You must log in to perform this action.",
+    "ir_a_login": "Go to Login",
+    "cerrar": "Close"
   },
   "detalleCamisetaSMano": {
     "titulo": "Second-hand details",
@@ -78,5 +105,96 @@
     "exito_oferta_enviada": "Offer sent to seller.",
     "chat_label": "Chat with seller",
     "ventas_label": "sales"
+  },
+  "chat": {
+    "placeholder": "Type a message...",
+    "vacio": "No messages yet. Say hi to the seller!",
+    "login_titulo": "Sign in",
+    "login_msg": "You need an account to chat with the seller.",
+    "aviso_titulo": "Notice",
+    "propio_articulo": "This item is yours, you can't chat with yourself."
+  },
+  "chats": {
+    "vacio": "You don't have any conversations yet.",
+    "login": "Sign in to see your chats."
+  },
+  "ventas": {
+    "vacio": "You haven't received any offers yet."
+  },
+  "ofertas": {
+    "vacio": "You haven't sent any offers yet."
+  },
+  "estado": {
+    "pendiente": "Pending",
+    "aceptada": "Accepted",
+    "rechazada": "Rejected"
+  },
+  "IndicadorActividad":{
+    "indicador_proceso":"Loading catalog..."
+  },
+  "LoginForm":{
+    "login_error_campos":"Please fill in all fields.",
+    "login_error_credenciales":"Incorrect email or password.",
+    "login_identificate":"Log in to your account",
+    "login_email":"Email",
+    "login_password":"Password",
+    "login_boton_entrar":"Sign in"
+  },
+  "QuienesSomos": {
+    "qs_historia_subtitulo": "Football culture in your hands",
+    "qs_que_vendemos_titulo": "What makes us unique?",
+    "qs_historia_parrafo_1": "At THE 12th MAN, we live football with the same passion you do. Our goal is to offer you unique pieces, caring for every detail so that every jersey tells a legendary story.",
+    "qs_tiendas_titulo": "Our Locations",
+    "qs_actividades_titulo": "Our Team"
+  },
+  "RegisterForm": {
+    "register_titulo": "Create your account",
+    "register_error_campos": "Please fill in all fields.",
+    "register_error_no_coinciden": "Passwords do not match.",
+    "register_error_registro": "Could not create account. Try a different email.",
+    "register_email": "Email",
+    "register_password": "Password",
+    "register_repeat_password": "Repeat password",
+    "register_boton_empezar": "Get started"
+  },
+  "MisDescuentos": {
+    "titulo": "My Discounts",
+    "error": "Error",
+    "codigo_no_reconocido": "Code not recognized.",
+    "codigo_ya_escaneado": "This QR code has already been scanned.",
+    "exito": "Success!",
+    "aplicado": "Coupon applied. Value: {{valor}}€",
+    "permiso_camara": "We need camera access",
+    "dar_permiso": "Grant permission",
+    "estado_canjeado": "Redeemed",
+    "estado_disponible": "Available"
+  },
+  "Navigation": {
+    "NombreApp": "The 12th Man",
+    "Inicio": "Home",
+    "Camisetas": "Jerseys",
+    "MiCarrito": "My Cart",
+    "MisChats": "My Chats",
+    "MisVentas": "My Sales",
+    "MisOfertas": "My Offers",
+    "QuienesSomos": "About Us",
+    "Contacto": "Contact",
+    "Configuracion": "Settings",
+    "PublicarProducto": "Post Product",
+    "DetalleProducto": "Product Details",
+    "NuestrasCamisetas": "Our Jerseys",
+    "DetalleSegundaMano": "Second Hand Details",
+    "Registrarse": "Sign up",
+    "Chat": "Chat",
+    "Tagline": "Jersey marketplace",
+    "MisDescuentos":"My Discounts"
+  },
+  "authScreen": {
+    "registrar": "Sign up",
+    "ya_tengo_cuenta": "Already have an account",
+    "o_tambien": "OR",
+    "continuar_google": "Continue with Google",
+    "error_google": "Google Sign-In Error",
+    "error_login_default": "Could not sign in."
   }
 }
