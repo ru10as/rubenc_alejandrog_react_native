@@ -288,7 +288,11 @@ const guardarEnFirebase = async (dispatch, getState) => {
     const { usuario, carrito } = getState();
     if (usuario?.user?.uid) {
         try {
-            await setDoc(doc(db, "carritos", usuario.user.uid), { items: carrito.items });
+            // Guardamos solo los items, manteniendo intactos los otros campos del documento 
+            // como descuentosAplicados y totalDescuento.
+            await setDoc(doc(db, "carritos", usuario.user.uid), { 
+                items: carrito.items 
+            }, { merge: true });
         } catch (e) { 
             console.error("Error sincronizando carrito:", e); 
         }
@@ -319,12 +323,19 @@ export const eliminarDelCarrito = (id, talla) => async (dispatch, getState) => {
 // limpiarCarrito vacia el estado del carrito en Redux y, si el usuario esta autenticado, 
 // borra tambien sus articulos del carrito guardado en Firebase.
 export const limpiarCarrito = () => async (dispatch, getState) => {
+    // 1. Primero limpiamos Redux para una respuesta visual inmediata
     dispatch({ type: ActionTypes.LIMPIAR_CARRITO });
     
     const { usuario } = getState();
     if (usuario?.user?.uid) {
         try {
-            await setDoc(doc(db, "carritos", usuario.user.uid), { items: [] });
+            // 2. Reseteamos el documento de Firestore
+            // Usamos un objeto completo para asegurar que no queden valores antiguos
+            await setDoc(doc(db, "carritos", usuario.user.uid), { 
+                items: [],
+                descuentosAplicados: {},
+                totalDescuento: 0
+            }, { merge: true }); // Merge asegura que si hay otros campos, no se borren
         } catch (e) {
             console.error("Error al limpiar carrito en Firebase:", e);
         }

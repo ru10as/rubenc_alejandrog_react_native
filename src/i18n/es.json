@@ -12,7 +12,9 @@
     "vaciar_carrito":"Vaciar Carrito",
     "carrito_vacio_titulo":"Tu carrito está vacío",
     "carrito_vacio_msg":"¡Añade alguna camiseta de tu equipo!",
-    "ir_a_tienda":"Ir a la tienda"
+    "ir_a_tienda":"Ir a la tienda",
+    "subtotal_label": "Subtotal",
+    "descuento_label": "Descuento"
   },
   "homeComponent": {
     "saludo": "Hola, {{nombre}}",
@@ -154,6 +156,18 @@
     "register_password": "Contraseña",
     "register_repeat_password": "Repetir contraseña",
     "register_boton_empezar": "Empezar"
+  },
+  "MisDescuentos": {
+    "titulo": "Mis Descuentos",
+    "error": "Error",
+    "codigo_no_reconocido": "Código no reconocido.",
+    "codigo_ya_escaneado": "Este código QR ya ha sido escaneado.",
+    "exito": "¡Éxito!",
+    "aplicado": "Cupón aplicado. Valor: {{valor}}€",
+    "permiso_camara": "Necesitamos acceso a la cámara",
+    "dar_permiso": "Dar permiso",
+    "estado_canjeado": "Canjeado",
+    "estado_disponible": "Disponible"
   },
   "Navigation": {
     "NombreApp": "The 12th Man",

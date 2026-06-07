@@ -11,6 +11,10 @@ const mapStateToProps = state => ({
     camisetas: state.camisetas,
 });
 
+const mapDispatchToProps = dispatch => ({
+    fetchCamisetas: () => dispatch(fetchCamisetas())
+});
+
 class Catalogo extends Component {
     constructor(props) {
         super(props);
@@ -122,7 +126,6 @@ class Catalogo extends Component {
             const nombre = camiseta.nombres?.[i18n.language] || camiseta.nombres?.['es'] || camiseta.nombre || '';
             const esSegunda = esProductoSegundaMano(camiseta); // oficial vs segunda según creadoPor
 
-            // La "mano" se decide por quién publicó; los tags y categorías son independientes
             const coincideMano =
                 filtros.modo === 'todas' ? true :
                 filtros.modo === 'segunda_mano' ? esSegunda :
@@ -209,4 +212,4 @@ const styles = StyleSheet.create({
     filtroChip: { marginRight: 6, marginBottom: 6 },
 });
 
-export default withTranslation()(connect(mapStateToProps)(Catalogo));
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(Catalogo));

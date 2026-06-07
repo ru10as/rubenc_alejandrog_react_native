@@ -12,7 +12,9 @@
     "vaciar_carrito": "Saskia Hustu",
     "carrito_vacio_titulo": "Zure saskia hutsik dago",
     "carrito_vacio_msg": "Gehitu zure taldeko kamiseta bat!",
-    "ir_a_tienda": "Dendara joan"
+    "ir_a_tienda": "Dendara joan",
+    "subtotal_label": "Azpitotala",
+    "descuento_label": "Deskontua"
   },
   "homeComponent": {
     "saludo": "Kaixo, {{nombre}}",
@@ -154,6 +156,18 @@
     "register_password": "Pasahitza",
     "register_repeat_password": "Errepikatu pasahitza",
     "register_boton_empezar": "Hasi"
+  },
+  "MisDescuentos": {
+    "titulo": "Nire Deskontuak",
+    "error": "Errorea",
+    "codigo_no_reconocido": "Kodea ez da ezagutzen.",
+    "codigo_ya_escaneado": "QR kode hau dagoeneko eskaneatuta dago.",
+    "exito": "Arrakasta!",
+    "aplicado": "Kupoia aplikatuta. Balioa: {{valor}}€",
+    "permiso_camara": "Kamerarako sarbidea behar dugu",
+    "dar_permiso": "Baimena eman",
+    "estado_canjeado": "Erabilita",
+    "estado_disponible": "Eskuragarri"
   },
   "Navigation": {
     "NombreApp": "The 12th Man",

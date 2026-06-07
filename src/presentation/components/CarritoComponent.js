@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Alert } from 'react-native';
 import { List, Text, Button, Avatar, IconButton, Surface } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../api/firebaseConfig';
 import { colorTiendaOscuro } from '../../comun/comun';
 import { anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase } from '../../redux/ActionCreators';
 
-// mapStateToProps es el filtro que extrae solo los datos necesarios del estado 
-// global de Redux para entregárselos a tu componente como propiedades.
 const mapStateToProps = (state) => ({
     items: state.carrito.items || [],
     usuario: state.usuario?.user,
@@ -23,21 +23,39 @@ const mapDispatchToProps = (dispatch) => ({
 
 const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase }) => {
     const { t } = useTranslation();
+    const [totalDescuento, setTotalDescuento] = useState(0);
+    const [cuponesAplicados, setCuponesAplicados] = useState([]);
 
     useEffect(() => {
-        if (usuario?.uid) {cargarCarritoDesdeFirebase(usuario.uid);}
+        if (!usuario?.uid) return;
+
+        // Cargamos el carrito inicial
+        cargarCarritoDesdeFirebase(usuario.uid);
+
+        // Escucha en tiempo real todo el documento del carrito para mantener sincronizados el descuento y los cupones
+        const unsubscribe = onSnapshot(doc(db, "carritos", usuario.uid), (doc) => {
+            if (doc.exists()) {
+                const data = doc.data();
+                setTotalDescuento(data.totalDescuento || 0);
+                // Extraemos las claves de los cupones aplicados para mostrarlos si quieres
+                setCuponesAplicados(Object.keys(data.descuentosAplicados || {}));
+            } else {
+                setTotalDescuento(0);
+                setCuponesAplicados([]);
+            }
+        });
+
+        return () => unsubscribe();
     }, [usuario?.uid]);
 
-    // La suma del total de la compra
-    const total = items.reduce((acc, item) => acc + (item.camiseta.precio * item.cantidad), 0);
+    const subtotal = items.reduce((acc, item) => acc + (item.camiseta.precio * item.cantidad), 0);
+    const totalFinal = Math.max(0, subtotal - totalDescuento);
 
     const confirmarVaciar = () => {
-        Alert.alert(t('carritoComponent.carrito_vaciar_titulo'),t('carritoComponent.carrito_vaciar_msg'),
-            [
-                { text: t('carritoComponent.cancelar'), style: 'cancel' },
-                { text: t('carritoComponent.vaciar'), onPress: () => limpiarCarrito(), style: 'destructive' }
-            ]
-        );
+        Alert.alert(t('carritoComponent.carrito_vaciar_titulo'), t('carritoComponent.carrito_vaciar_msg'), [
+            { text: t('carritoComponent.cancelar'), style: 'cancel' },
+            { text: t('carritoComponent.vaciar'), onPress: () => limpiarCarrito(), style: 'destructive' }
+        ]);
     };
 
     const renderItem = ({ item }) => (
@@ -46,9 +64,7 @@ const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarD
                 title={item.camiseta.nombre}
                 titleStyle={styles.productoTitulo}
                 description={`${t('carritoComponent.talla')}: ${item.talla} | ${item.camiseta.precio}€`}
-                left={() => (
-                    <Avatar.Image size={60} source={{ uri: item.camiseta.imagen }} style={styles.avatar} />
-                )}
+                left={() => <Avatar.Image size={60} source={{ uri: item.camiseta.imagen }} style={styles.avatar} />}
                 right={() => (
                     <View style={styles.controles}>
                         <IconButton icon="minus" size={20} onPress={() => restarDelCarrito(item.camiseta.id, item.talla)} />
@@ -73,9 +89,20 @@ const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarD
                     />
                     <Surface style={styles.footer} elevation={4}>
                         <View style={styles.totalRow}>
-                            <Text variant="titleMedium">{t('carritoComponent.total')}:</Text>
-                            <Text variant="headlineSmall" style={styles.precioTotal}>{total.toFixed(2)}€</Text>
+                            <Text>{t('carritoComponent.subtotal_label')}:</Text>
+                            <Text>{subtotal.toFixed(2)}€</Text>
                         </View>
+                        {totalDescuento > 0 && (
+                            <View style={styles.totalRow}>
+                                <Text style={{ color: 'green' }}>{t('carritoComponent.descuento_label')}:</Text>
+                                <Text style={{ color: 'green' }}>-{totalDescuento.toFixed(2)}€</Text>
+                            </View>
+                        )}
+                        <View style={styles.totalRow}>
+                            <Text variant="titleMedium">{t('carritoComponent.total')}:</Text>
+                            <Text variant="headlineSmall" style={styles.precioTotal}>{totalFinal.toFixed(2)}€</Text>
+                        </View>
+                        
                         <Button 
                             mode="contained" 
                             buttonColor={colorTiendaOscuro}
@@ -110,7 +137,7 @@ const styles = StyleSheet.create({
     controles: { flexDirection: 'row', alignItems: 'center' },
     cantidad: { fontWeight: 'bold', width: 25, textAlign: 'center' },
     footer: { padding: 20, borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: '#fff' },
-    totalRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
+    totalRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 },
     precioTotal: { fontWeight: 'bold', color: colorTiendaOscuro },
     botonPago: { paddingVertical: 4 },
     vacioContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },

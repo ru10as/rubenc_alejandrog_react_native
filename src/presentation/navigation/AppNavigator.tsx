@@ -26,6 +26,7 @@ import AuthScreen from '../screens/AuthScreen';
 import SubirProductoScreen from '../screens/SubirProductoScreen';
 import { useSelector } from 'react-redux';
 import MisVentasComponent from '../components/MisVentasComponent';
+import MisDescuentos from '../components/MisDescuentos';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -175,6 +176,20 @@ function SubirProductoStack() {
     );
 }
 
+function MisDescuentosStack() {
+    const { t } = useTranslation();
+    return (
+        <Stack.Navigator id="MisDescuentosStack" screenOptions={{ headerShown: false }}>
+            <Stack.Screen 
+                name="MisDescuentos" 
+                component={MisDescuentos} 
+                options={({ navigation }) => headerOptions(t('Navigation.MisDescuentos'), navigation)} 
+            />
+        </Stack.Navigator>
+    );
+}
+
+
 export default function AppNavigator() {
     const { t } = useTranslation();
     const datosUsuario = useSelector((state: any) => state.usuario);
@@ -223,6 +238,7 @@ export default function AppNavigator() {
                     <Drawer.Screen name="Acceso usuario" component={AuthStack} options={{ drawerItemStyle: { display: 'none' }, drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />) }} />
                     <Drawer.Screen name="Publicar Producto" component={SubirProductoStack} options={{ title: t('Navigation.PublicarProducto'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="upload" color={color} size={size} />) }} />
                     <Drawer.Screen name="Configuracion" component={ConfiguracionStack} options={{ title: t('Navigation.Configuracion'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="cog" color={color} size={size} />) }} />
+                    <Drawer.Screen name="Mis Descuentos" component={MisDescuentosStack} options={{ title: 'Mis Descuentos', drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="qrcode-scan" color={color} size={size} />) }} />
                 </Drawer.Navigator>
             </View>
         </NavigationContainer>

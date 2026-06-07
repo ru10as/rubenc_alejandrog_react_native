@@ -6,6 +6,7 @@ import { withTranslation } from 'react-i18next';
 import { colorTiendaOscuro } from '../../comun/comun';
 import { postFavorito, postComentario, anadirAlCarrito } from '../../redux/ActionCreators';
 import { IndicadorActividad } from './IndicadorActividadComponent';
+import fondoMaracana from '../../../assets/images/logo.png';
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
@@ -62,7 +63,7 @@ class DetalleCamiseta extends Component {
         if (!camiseta) return <View style={styles.error}><Text>{t('detalleCamisetaComponent.error')}</Text></View>;
 
         return (
-            <ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000' }} style={styles.background} blurRadius={2}>
+            <ImageBackground source={fondoMaracana} style={styles.background} blurRadius={2}>
                 <ScrollView style={styles.mainContainer}>
                     <Surface style={styles.contenedorImagen} elevation={1}>
                         <Image source={{ uri: camiseta.imagen }} style={styles.imagenPrincipal} resizeMode="contain" />
