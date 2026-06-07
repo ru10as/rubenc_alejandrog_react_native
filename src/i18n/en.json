@@ -186,7 +186,8 @@
     "DetalleSegundaMano": "Second Hand Details",
     "Registrarse": "Sign up",
     "Chat": "Chat",
-    "Tagline": "Jersey marketplace"
+    "Tagline": "Jersey marketplace",
+    "MisDescuentos":"My Discounts"
   },
   "authScreen": {
     "registrar": "Sign up",

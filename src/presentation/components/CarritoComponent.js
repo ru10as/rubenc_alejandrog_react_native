@@ -8,6 +8,7 @@ import { db } from '../../api/firebaseConfig';
 import { colorTiendaOscuro } from '../../comun/comun';
 import { anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase } from '../../redux/ActionCreators';
 
+// Tomamos los datos que queremos del store
 const mapStateToProps = (state) => ({
     items: state.carrito.items || [],
     usuario: state.usuario?.user,
@@ -22,7 +23,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(); // Para la traduccion
     const [totalDescuento, setTotalDescuento] = useState(0);
     const [cuponesAplicados, setCuponesAplicados] = useState([]);
 
@@ -33,7 +34,7 @@ const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarD
         cargarCarritoDesdeFirebase(usuario.uid);
 
         // Escucha en tiempo real todo el documento del carrito para mantener sincronizados el descuento y los cupones
-        const unsubscribe = onSnapshot(doc(db, "carritos", usuario.uid), (doc) => {
+        const unsubscribe = onSnapshot(doc(db, "carritos", usuario.uid), (doc) => { // Ejecucion instantanea cuando hay cambio en carritos
             if (doc.exists()) {
                 const data = doc.data();
                 setTotalDescuento(data.totalDescuento || 0);

@@ -9,8 +9,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { db } from '../../api/firebaseConfig';
 import { colorTiendaOscuro } from '../../comun/comun';
+import { useDispatch } from 'react-redux';
+import { actualizarCamisetaEnStore } from '../../redux/ActionCreators';
 
 const MisVentasComponent = ({ navigation }) => {
+    const dispatch = useDispatch();
     const { t } = useTranslation();
     const usuario = useSelector((state) => state.usuario?.user);
     const [misCamisetas, setMisCamisetas] = useState([]);
@@ -62,6 +65,10 @@ const MisVentasComponent = ({ navigation }) => {
             }
             
             await batch.commit();
+
+            if (nuevoEstado === 'aceptada') {
+                dispatch(actualizarCamisetaEnStore(oferta.camisetaId, { estadoVenta: 'vendida' }));
+            }
         } catch (e) {
             console.error("Error al gestionar la oferta:", e);
         }

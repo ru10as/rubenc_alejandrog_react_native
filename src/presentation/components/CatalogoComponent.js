@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { FlatList, View, Image, StyleSheet, ScrollView } from 'react-native';
+import { FlatList, View, Image, StyleSheet, ScrollView,RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { List, Divider, Text, Searchbar, Chip } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { IndicadorActividad } from './IndicadorActividadComponent';
 import { esProductoSegundaMano } from '../../comun/comun';
+import { suscribirseACamisetas } from '../../redux/ActionCreators';
 
 const mapStateToProps = state => ({
     camisetas: state.camisetas,
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetchCamisetas: () => dispatch(fetchCamisetas())
+    suscribirseACamisetas: () => dispatch(suscribirseACamisetas())
 });
 
 class Catalogo extends Component {
@@ -29,9 +30,28 @@ class Catalogo extends Component {
                 talla: '',
                 soloRetro: !!params.soloRetro,       // Acceso rápido "Retro" desde el Inicio
                 soloSeleccion: !!params.soloSeleccion, // Acceso rápido "Selecciones" desde el Inicio
+                refreshing: false,
             }
         };
     }
+
+    componentDidMount() { // Es como si abriesemos un canal permanente (solo ocurre una vez)
+        // Al entrar, nos suscribimos a los cambios en tiempo real
+        this.unsubscribe = this.props.suscribirseACamisetas();
+    }
+
+    componentWillUnmount() {
+        if (this.unsubscribe) {
+            this.unsubscribe();
+        }
+    }
+
+    // Esto no lo voy a usar al final 
+    onRefresh = async () => {
+        this.setState({ refreshing: true });
+        await this.props.fetchCamisetas(); // Vuelve a llamar a la API
+        this.setState({ refreshing: false });
+    };
 
     // Si se vuelve a entrar al Catálogo con otros parámetros (otro acceso rápido), resincronizamos
     componentDidUpdate(prevProps) {

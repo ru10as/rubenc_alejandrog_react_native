@@ -3,12 +3,13 @@ import { View, StyleSheet, FlatList, KeyboardAvoidingView, Platform } from 'reac
 import { Text, TextInput, IconButton } from 'react-native-paper';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {
     collection, doc, setDoc, addDoc, query, orderBy, onSnapshot, serverTimestamp
 } from 'firebase/firestore';
 import { db } from '../../api/firebaseConfig';
+import { enviarMensaje } from '../../redux/ActionCreators';
 
 const ChatOfertaComponent = ({ route, navigation }) => { // Cuando se toca una oferta
     const { t } = useTranslation();
@@ -19,9 +20,10 @@ const ChatOfertaComponent = ({ route, navigation }) => { // Cuando se toca una o
     const [mensajes, setMensajes] = useState([]);
     const [texto, setTexto] = useState('');
     const listaRef = useRef(null);
+    const dispatch = useDispatch();
 
     // Para poner el nombre del comprador
-    useEffect(() => {
+    useEffect(() => { // Vigilamos el cambio del nombre del comprador
         if (oferta.nombreComprador) navigation.setOptions({ title: oferta.nombreComprador });
     }, [navigation, oferta.nombreComprador]);
 
@@ -37,28 +39,11 @@ const ChatOfertaComponent = ({ route, navigation }) => { // Cuando se toca una o
         return unsubscribe;
     }, [oferta.id]);
 
-    const enviarMensaje = async () => {
+    const handleEnviarMensaje = async () => { // Ejecutaremos este cuando se le envia el mensaje
         const contenido = texto.trim();
         if (!contenido || !usuario?.uid) return; // Por ejemplo, si el mensaje esta vacio
         setTexto(''); // Llevamos a cabo la limpieza de la barra de escritura inmediatamente
-        try {
-            await setDoc(doc(db, 'chats', oferta.id), { // Para escribir o actualizar en la coleccion de chats
-                participantes: [oferta.compradorId, oferta.vendedorId],
-                compradorId: oferta.compradorId,
-                compradorNombre: oferta.nombreComprador,
-                vendedorId: oferta.vendedorId,
-                camisetaId: oferta.camisetaId,
-                ultimoMensaje: contenido,
-                ultimoAutorId: usuario.uid,
-                ultimaFecha: serverTimestamp(),
-            }, { merge: true });
-
-            await addDoc(collection(db, 'chats', oferta.id, 'mensajes'), { // Para llevar a cabo el registro
-                texto: contenido,
-                autorId: usuario.uid,
-                fecha: serverTimestamp(),
-            });
-        } catch (error) { console.error('Error al enviar:', error); }
+        dispatch(enviarMensaje(oferta, contenido, usuario.uid));
     };
 
     const renderMensaje = ({ item }) => { // Para indicar como se dibuja cada mensaje en pantalla
@@ -99,7 +84,7 @@ const ChatOfertaComponent = ({ route, navigation }) => { // Cuando se toca una o
                 <IconButton
                     icon="send"
                     mode="contained"
-                    onPress={enviarMensaje}
+                    onPress={handleEnviarMensaje}
                     disabled={!texto.trim()}
                 />
             </View>

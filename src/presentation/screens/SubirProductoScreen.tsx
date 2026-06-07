@@ -13,6 +13,7 @@ import { fetchCamisetas } from '../../redux/ActionCreators';
 import { db, storage, auth } from '../../api/firebaseConfig';
 import { colorTiendaOscuro } from '../../comun/comun';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { addCamisetaAlStore } from '../../redux/ActionCreators';
 
 const ANCHO_MAX_IMAGEN = 1024;
 const CALIDAD_JPEG = 0.7;

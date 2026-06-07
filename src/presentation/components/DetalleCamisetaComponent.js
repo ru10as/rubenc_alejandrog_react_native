@@ -75,12 +75,6 @@ class DetalleCamiseta extends Component {
                                 <Text style={styles.titulo}>{camiseta.nombre}</Text>
                                 {camiseta.destacado && <Text style={styles.badge}>{t('detalleCamisetaComponent.edicion_coleccionista')}</Text>}
                             </View>
-                            <IconButton
-                                icon={esFavorita ? 'heart' : 'heart-outline'}
-                                iconColor={esFavorita ? 'red' : '#000'}
-                                size={35}
-                                onPress={() => this.props.postFavorito(camisetaId)}
-                            />
                         </View>
                         <Text style={styles.descripcion}>{camiseta.descripciones?.[i18n.language] ?? camiseta.descripciones?.es ?? camiseta.descripcion}</Text>
                         <Button mode="contained" onPress={() => this.handleAnadirAlCarrito(camiseta)} style={styles.btnComprar}>

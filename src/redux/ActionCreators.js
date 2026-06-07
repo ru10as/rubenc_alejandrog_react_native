@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { db, auth } from '../api/firebaseConfig';
-import { collection, getDocs, addDoc, doc, setDoc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, setDoc, getDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -351,5 +351,61 @@ export const cargarCarritoDesdeFirebase = (uid) => async (dispatch) => {
         }
     } catch (e) { 
         console.error("Error cargando carrito:", e); 
+    }
+};
+
+//
+export const actualizarCamisetaEnStore = (camisetaId, datosActualizados) => ({
+    type: 'UPDATE_CAMISETA', // O el nombre que tenga tu acción en el reducer
+    payload: {
+        id: camisetaId,
+        ...datosActualizados
+    }
+});
+
+export const addCamisetaAlStore = (camiseta) => ({
+    type: 'ADD_CAMISETA',
+    payload: camiseta
+});
+
+export const suscribirseACamisetas = () => (dispatch) => {
+    const unsubscribe = onSnapshot(collection(db, "camisetas"), (snapshot) => {
+        const camisetas = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...serializarFirestore(doc.data()),
+        }));
+        dispatch(addCamisetas(camisetas));
+    }, (error) => {
+        dispatch(camisetasFailed(error.message));
+    });
+
+    return unsubscribe;
+};
+
+///
+export const enviarMensaje = (oferta, contenido, usuarioId) => async (dispatch) => {
+    try {
+        // 1. Actualizamos el "sobre" (la metadata del chat)
+        await setDoc(doc(db, 'chats', oferta.id), {
+            participantes: [oferta.compradorId, oferta.vendedorId],
+            compradorId: oferta.compradorId,
+            compradorNombre: oferta.nombreComprador,
+            vendedorId: oferta.vendedorId,
+            camisetaId: oferta.camisetaId,
+            ultimoMensaje: contenido,
+            ultimoAutorId: usuarioId,
+            ultimaFecha: serverTimestamp(),
+        }, { merge: true });
+
+        // 2. Registramos el mensaje dentro de la subcolección
+        await addDoc(collection(db, 'chats', oferta.id, 'mensajes'), {
+            texto: contenido,
+            autorId: usuarioId,
+            fecha: serverTimestamp(),
+        });
+
+    } catch (error) {
+        console.error('Error al enviar el mensaje:', error);
+        // Si tienes algún tipo de notificación de error en Redux, podrías dispararlo aquí
     }
 };
