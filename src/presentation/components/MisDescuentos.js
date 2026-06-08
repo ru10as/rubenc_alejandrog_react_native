@@ -2,47 +2,60 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Alert, Button } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useTranslation } from 'react-i18next';
-import { canjearCupon,suscribirseACupones } from '../../redux/ActionCreators';
+import { canjearCupon, suscribirseACupones } from '../../redux/ActionCreators';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => ({
-  userId: state.usuario?.user?.uid
+  userId: state.usuario?.user?.uid,
+  cupones: state.cupones?.items || []
 });
 
 const mapDispatchToProps = dispatch => ({
-  canjearCupon: (uid, data) => dispatch(canjearCupon(uid, data))
+  canjearCupon: (uid, data) => dispatch(canjearCupon(uid, data)),
+  suscribirseACupones: (uid) => dispatch(suscribirseACupones(uid)),
 });
 
-function MisDescuentos({userId, canjearCupon, navigation}) {
-  const [cupones, setCupones] = useState([]); // es donde vamos a guardar la lista de cupones
-  const [scanned, setScanned] = useState(false); // Cuando el usuario escanea el qr, cambia de false a true
-  const [permission, requestPermission] = useCameraPermissions(); // Para controlar los permisos de la camara
+function MisDescuentos({ userId, cupones, canjearCupon, suscribirseACupones }) {
+
+  const [scanned, setScanned] = useState(false);
+  const [permission, requestPermission] = useCameraPermissions();
   const { t } = useTranslation();
 
   useEffect(() => {
     if (!userId) return;
-    const unsubscribe = suscribirseACupones(userId, (data) => {
-      setCupones(data);
-    });
-    return () => unsubscribe();
+
+    const unsubscribe = suscribirseACupones(userId);
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [userId]);
 
   const handleBarcodeScanned = async ({ data }) => {
     if (scanned || !userId) return;
+
     setScanned(true);
 
     try {
       const resultado = await canjearCupon(userId, data);
-      Alert.alert(t('MisDescuentos.exito'), t('MisDescuentos.aplicado', { valor: resultado.valor }));
-    } 
-    catch (e) {
-      Alert.alert(t('MisDescuentos.error'), e.message);
+
+      Alert.alert(
+        t('MisDescuentos.exito'),
+        t('MisDescuentos.aplicado', { valor: resultado.valor })
+      );
+
+    } catch (e) {
+      Alert.alert(
+        t('MisDescuentos.error'),
+        e.message
+      );
+
     } finally {
       setTimeout(() => setScanned(false), 2000);
     }
   };
 
-  if (!permission?.granted) { // Esto es basicamente para el caso en el cual no se han dado permisos a la camara
+  if (!permission?.granted) {
     return (
       <View style={styles.container}>
         <Text style={styles.message}>{t('MisDescuentos.permiso_camara')}</Text>
@@ -54,14 +67,15 @@ function MisDescuentos({userId, canjearCupon, navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.scannerContainer}>
-        <CameraView 
-          style={StyleSheet.absoluteFillObject} 
-          onBarcodeScanned={scanned ? undefined : handleBarcodeScanned} 
+        <CameraView
+          style={StyleSheet.absoluteFillObject}
+          onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
         />
       </View>
 
       <View style={styles.listContainer}>
         <Text style={styles.title}>{t('MisDescuentos.titulo')}</Text>
+
         <FlatList
           data={cupones}
           keyExtractor={item => item.id}
@@ -69,7 +83,11 @@ function MisDescuentos({userId, canjearCupon, navigation}) {
             <View style={[styles.card, item.canjeado && styles.cardUsed]}>
               <Text style={styles.codeText}>{item.id}</Text>
               <Text style={styles.valueText}>{item.valor}€</Text>
-              <Text>{item.canjeado ? t('MisDescuentos.estado_canjeado') : t('MisDescuentos.estado_disponible')}</Text>
+              <Text>
+                {item.canjeado
+                  ? t('MisDescuentos.estado_canjeado')
+                  : t('MisDescuentos.estado_disponible')}
+              </Text>
             </View>
           )}
         />
@@ -77,7 +95,6 @@ function MisDescuentos({userId, canjearCupon, navigation}) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scannerContainer: { height: 300 },

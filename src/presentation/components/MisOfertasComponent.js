@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { List, Divider, Text, Avatar, IconButton } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import { suscribirseAOfertas } from '../../redux/ActionCreators'; 
+import { suscribirseAMisCompras } from '../../redux/ActionCreators';
 
+// Ahora apuntamos a la rama consolidada ventasYOfertas y a la propiedad 'enviadas'
 const mapStateToProps = state => ({
     usuario: state.usuario?.user,
-    misOfertas: state.ofertas.items || []
+    misOfertas: state.ventasYOfertas?.enviadas || [] 
 });
 
 const mapDispatchToProps = dispatch => ({
-    suscribirse: (uid) => suscribirseAOfertas(uid, dispatch)
+    suscribirse: (uid) => dispatch(suscribirseAMisCompras(uid))
 });
 
 const MisOfertasComponent = ({ navigation, usuario, misOfertas, suscribirse }) => {
@@ -51,6 +52,7 @@ const MisOfertasComponent = ({ navigation, usuario, misOfertas, suscribirse }) =
                                 <List.Icon {...props} icon={iconoEstado} color={colorEstado} />
                             </View>
 
+                            {/* El chat sigue funcionando igual al navegar con el objeto item completo */}
                             <IconButton 
                                 icon="chat" 
                                 iconColor="#2196F3" 

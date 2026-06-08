@@ -22,14 +22,15 @@ const mapDispatchToProps = (dispatch) => ({
     suscribirseACarrito: (uid) => dispatch(suscribirseACarrito(uid))
 });
 
-const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase,suscribirseACarrito }) => {
+const CarritoComponent = ({ items, usuario,totalDescuento, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase,suscribirseACarrito }) => {
     const { t } = useTranslation(); // Para la traduccion
 
     useEffect(() => {
         if (!usuario?.uid) return;
-        cargarCarritoDesdeFirebase(usuario.uid);
+
         const unsubscribe = suscribirseACarrito(usuario.uid);
-        return () => unsubscribe();
+
+        return unsubscribe;
     }, [usuario?.uid]);
 
     const subtotal = items.reduce((acc, item) => acc + (item.camiseta.precio * item.cantidad), 0);

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, StyleSheet, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, TextInput, IconButton } from 'react-native-paper';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { enviarMensaje,suscribirseAMensajes } from '../../redux/ActionCreators';
+import { enviarMensaje, suscribirseAMensajes } from '../../redux/ActionCreators';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
@@ -13,9 +13,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     enviarMensaje: (oferta, contenido, uid) => dispatch(enviarMensaje(oferta, contenido, uid)),
+    // Usamos useCallback indirectamente mediante dispatch para estabilidad
+    suscribirse: (ofertaId, callback) => dispatch(suscribirseAMensajes(ofertaId, callback))
 });
 
-const ChatOfertaComponent = ({ route, navigation, usuario, enviarMensaje }) => { 
+const ChatOfertaComponent = ({ route, navigation, usuario, enviarMensaje, suscribirse }) => { 
     const { t } = useTranslation();
     const { oferta } = route.params; 
     const headerHeight = useHeaderHeight();
@@ -25,24 +27,33 @@ const ChatOfertaComponent = ({ route, navigation, usuario, enviarMensaje }) => {
     const listaRef = useRef(null);
 
     useEffect(() => {
-        if (oferta.nombreComprador) navigation.setOptions({ title: oferta.nombreComprador });
-    }, [navigation, oferta.nombreComprador]);
+        if (oferta?.nombreComprador) navigation.setOptions({ title: oferta.nombreComprador });
+    }, [navigation, oferta]);
 
     useEffect(() => {
-        const unsubscribe = suscribirseAMensajes(oferta.id, (mensajesActualizados) => {
+        // Suscripción segura
+        const unsubscribe = suscribirse(oferta.id, (mensajesActualizados) => {
             setMensajes(mensajesActualizados);
         });
-        return unsubscribe;
-    }, [oferta.id]);
+        
+        return () => {
+            if (typeof unsubscribe === 'function') unsubscribe();
+        };
+    }, [oferta.id, suscribirse]);
 
     const handleEnviarMensaje = async () => {
         const contenido = texto.trim();
         if (!contenido || !usuario?.uid) return;
+        
         setTexto('');
-        enviarMensaje(oferta, contenido, usuario.uid);
+        try {
+            await enviarMensaje(oferta, contenido, usuario.uid);
+        } catch (error) {
+            console.error("Error al enviar mensaje:", error);
+        }
     };
 
-    const renderMensaje = ({ item }) => { // Para indicar como se dibuja cada mensaje en pantalla
+    const renderMensaje = ({ item }) => {
         const esMio = item.autorId === usuario?.uid;
         return (
             <View style={[styles.burbuja, esMio ? styles.burbujaMia : styles.burbujaSuya]}>

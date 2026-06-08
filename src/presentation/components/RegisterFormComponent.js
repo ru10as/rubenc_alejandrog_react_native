@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Button, Text, HelperText } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { registrarUsuarioYNotificaciones } from '../../redux/ActionCreators';
 import { connect } from 'react-redux';
@@ -12,12 +13,15 @@ const RegisterFormComponent = ({ navigation, registrar }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [errorMsg, setErrorMsg] = useState(null); 
+    const [errorMsg, setErrorMsg] = useState(null);
+    const [loading, setLoading] = useState(false);
+    
     const { t } = useTranslation();
     
     const handleRegister = async () => {
         setErrorMsg(null); 
 
+        // Validaciones básicas
         if (!email || !password || !confirmPassword) {
             setErrorMsg(t("RegisterForm.register_error_campos"));
             return;
@@ -28,46 +32,66 @@ const RegisterFormComponent = ({ navigation, registrar }) => {
             return;
         }
 
+        setLoading(true); // Bloqueamos el botón y mostramos spinner
         try {
             await registrar(email, password);
             navigation.navigate('Inicio');
         } catch (error) {
+            console.error("Error detallado de Firebase:", error);
             setErrorMsg(t("RegisterForm.register_error_registro"));
+        } finally {
+            setLoading(false); // Liberamos el botón
         }
     };
 
     return (
         <View style={styles.innerContainer}>
-            <Text style={styles.label}>{t("RegisterForm.register_titulo")}</Text>
-            
-            {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
+            <Text variant="titleLarge" style={styles.label}>{t("RegisterForm.register_titulo")}</Text>
             
             <TextInput 
-                placeholder={t("RegisterForm.register_email")}
-                onChangeText={(text) => { setEmail(text); setErrorMsg(null); }} 
-                style={styles.input} 
+                label={t("RegisterForm.register_email")}
+                value={email}
+                onChangeText={(text) => { setEmail(text); setErrorMsg(null); }}
+                style={styles.input}
+                mode="outlined"
                 autoCapitalize="none"
                 keyboardType="email-address"
             />
+
             <TextInput 
-                placeholder={t("RegisterForm.register_password")}
-                secureTextEntry 
-                onChangeText={(text) => { setPassword(text); setErrorMsg(null); }} 
-                style={styles.input} 
+                label={t("RegisterForm.register_password")}
+                value={password}
+                onChangeText={(text) => { setPassword(text); setErrorMsg(null); }}
+                style={styles.input}
+                mode="outlined"
+                secureTextEntry
             />
+
             <TextInput 
-                placeholder={t("RegisterForm.register_repeat_password")}
-                secureTextEntry 
-                onChangeText={(text) => { setConfirmPassword(text); setErrorMsg(null); }} 
-                style={styles.input} 
+                label={t("RegisterForm.register_repeat_password")}
+                value={confirmPassword}
+                onChangeText={(text) => { setConfirmPassword(text); setErrorMsg(null); }}
+                style={styles.input}
+                mode="outlined"
+                secureTextEntry
             />
-            <View style={{ marginTop: 10 }}>
-                <Button 
-                    title={t("RegisterForm.register_boton_empezar")} 
-                    onPress={handleRegister} 
-                    color="#f44336" 
-                />
-            </View>
+
+            {errorMsg && (
+                <HelperText type="error" visible={true} style={{ textAlign: 'center' }}>
+                    {errorMsg}
+                </HelperText>
+            )}
+            
+            <Button 
+                mode="contained" 
+                onPress={handleRegister} 
+                loading={loading} 
+                disabled={loading}
+                style={styles.boton}
+                buttonColor="#f44336"
+            >
+                {t("RegisterForm.register_boton_empezar")}
+            </Button>
         </View>
     );
 };
@@ -77,27 +101,18 @@ const styles = StyleSheet.create({
         padding: 20 
     },
     label: { 
-        fontSize: 18, 
         fontWeight: 'bold', 
-        marginBottom: 15, 
+        marginBottom: 20, 
         textAlign: 'center' 
     },
-    errorText: {
-        color: 'red',
-        textAlign: 'center',
-        marginBottom: 10,
-        fontWeight: 'bold'
-    },
     input: {
-        height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        marginBottom: 15,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-        backgroundColor: '#f9f9f9',
-        color: '#000',
+        marginBottom: 10,
+        backgroundColor: '#fff'
     },
+    boton: {
+        marginTop: 10,
+        paddingVertical: 5
+    }
 });
 
 export default connect(null, mapDispatchToProps)(RegisterFormComponent);

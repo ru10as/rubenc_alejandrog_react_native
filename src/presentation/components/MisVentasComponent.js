@@ -1,30 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { List, Avatar, Text, Surface, IconButton, ActivityIndicator } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import { connect, useDispatch } from 'react-redux';
 import { colorTiendaOscuro } from '../../comun/comun';
-import { suscribirseAVentas,gestionarOferta } from '../../redux/ActionCreators';
-import { connect } from 'react-redux';
+import { suscribirseAVentas, suscribirseAOfertasRecibidas, gestionarOferta } from '../../redux/ActionCreators';
 
 const mapStateToProps = state => ({
     usuario: state.usuario?.user,
-    misCamisetas: state.ventas.camisetas || [],
-    ofertasRecibidas: state.ventas.ofertas || []
+    // Apuntamos a la nueva estructura consolidada
+    misCamisetas: state.ventasYOfertas?.ventas || [],
+    ofertasRecibidas: state.ventasYOfertas?.recibidas || [], 
+    cargando: state.ventasYOfertas?.isLoading
 });
 
 const mapDispatchToProps = dispatch => ({
-    suscribirse: (uid) => suscribirseAVentas(uid, dispatch),
     gestionar: (oferta, estado) => dispatch(gestionarOferta(oferta, estado))
 });
 
-const MisVentasComponent = ({ navigation, usuario, misCamisetas, ofertasRecibidas, suscribirse, gestionar }) => {
+const MisVentasComponent = ({ navigation, usuario, misCamisetas, cargando, ofertasRecibidas, gestionar }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (!usuario?.uid) return;
-        const unsubscribe = suscribirse(usuario.uid);
-        return () => unsubscribe(); 
-    }, [usuario?.uid, suscribirse]);
+        
+        // Lanzamos las suscripciones de forma independiente
+        const unsubVentas = dispatch(suscribirseAVentas(usuario.uid));
+        const unsubOfertas = dispatch(suscribirseAOfertasRecibidas(usuario.uid));
+        
+        return () => {
+            if (unsubVentas) unsubVentas();
+            if (unsubOfertas) unsubOfertas();
+        };
+    }, [usuario?.uid, dispatch]);
 
     const actualizarEstado = async (oferta, nuevoEstado) => {
         try {
@@ -35,11 +44,10 @@ const MisVentasComponent = ({ navigation, usuario, misCamisetas, ofertasRecibida
     };
 
     const renderCamiseta = ({ item }) => {
+        // Filtramos las ofertas que corresponden a esta camiseta específica
         const ofertasDeEsteProducto = ofertasRecibidas.filter(o => o.camisetaId === item.id);
         
-        if (item.estadoVenta === 'vendida') {
-            return null;
-        }
+        if (item.estadoVenta === 'vendida') return null;
 
         return (
             <Surface style={styles.itemCard} elevation={1}>

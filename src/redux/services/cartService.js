@@ -23,16 +23,12 @@ export const suscribirseACarritoService = (uid, callback) => {
  * Obtención única del carrito (sin suscripción).
  */
 export const cargarCarritoDesdeFirebaseService = async (uid) => {
-    try {
-        const docSnap = await getDoc(doc(db, "carritos", uid));
-        if (docSnap.exists()) {
-            return docSnap.data().items || [];
-        }
-        return null;
-    } catch (e) {
-        console.error("Error cargando carrito desde Firebase:", e);
-        throw e;
+    const docRef = doc(db, "carritos", uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        return docSnap.data(); // Esto devuelve { items: [...], totalDescuento: ... }
     }
+    return { items: [], totalDescuento: 0, cuponesAplicados: [] };
 };
 
 /**
@@ -54,10 +50,26 @@ export const limpiarCarritoEnFirebaseService = async (uid) => {
 /**
  * Suscripción al historial de cupones de un usuario específico.
  */
+const serializarFirestore = (valor) => {
+    if (valor === null || valor === undefined) return valor;
+    if (typeof valor !== 'object') return valor;
+    if (typeof valor.toDate === 'function') return valor.toDate().toISOString();
+    if (Array.isArray(valor)) return valor.map(serializarFirestore);
+    const salida = {};
+    for (const clave of Object.keys(valor)) {
+        salida[clave] = serializarFirestore(valor[clave]);
+    }
+    return salida;
+};
+
 export const suscribirseACuponesService = (userId, callback) => {
     const colRef = collection(db, 'carritos', userId, 'historial_cupones');
     return onSnapshot(colRef, (snapshot) => {
-        const cupones = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        const cupones = snapshot.docs.map(d => ({ 
+            id: d.id, 
+            ...serializarFirestore(d.data()) // <--- AQUÍ ESTÁ LA CORRECCIÓN
+        }));
+        console.log("LOG 1: Datos obtenidos en el servicio:", cupones);
         callback(cupones);
     });
 };

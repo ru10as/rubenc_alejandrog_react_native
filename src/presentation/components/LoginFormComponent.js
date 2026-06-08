@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { login } from '../../redux/ActionCreators';
-import { registrarTokenPush } from '../../comun/notificaciones';
-import { auth } from '../../api/firebaseConfig';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Button, Text, HelperText } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-native-paper';
-import { loginYRegistrarNotificaciones } from '../../redux/ActionCreators';
 import { connect } from 'react-redux';
+import { loginYRegistrarNotificaciones } from '../../redux/ActionCreators';
 
 const mapDispatchToProps = dispatch => ({
     login: (email, password) => dispatch(loginYRegistrarNotificaciones(email, password))
 });
 
-const LoginFormComponent = ({ navigation,login }) => {
+const LoginFormComponent = ({ navigation, login }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
     const { t } = useTranslation();
+    
     const colorTiendaOscuro = '#f44336';
 
     const handleLogin = async () => {
@@ -33,6 +30,7 @@ const LoginFormComponent = ({ navigation,login }) => {
             await login(email, password);
             navigation.navigate('Inicio');
         } catch (error) {
+            console.error("Error detallado de Firebase:", error);
             setErrorMsg(t('LoginForm.login_error_credenciales'));
         } finally {
             setLoading(false);
@@ -41,75 +39,57 @@ const LoginFormComponent = ({ navigation,login }) => {
 
     return (
         <View style={styles.innerContainer}>
-            <Text style={styles.label}>{t('LoginForm.login_identificate')}</Text>
-            
-            {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
+            <Text variant="titleMedium" style={styles.label}>
+                {t('LoginForm.login_identificate')}
+            </Text>
             
             <TextInput 
-                placeholder={t('LoginForm.login_email')} 
+                label={t('LoginForm.login_email')} 
+                value={email}
                 onChangeText={(text) => { setEmail(text); setErrorMsg(null); }} 
-                style={styles.input} 
+                style={styles.input}
+                mode="outlined"
                 autoCapitalize="none"
                 keyboardType="email-address"
-                editable={!loading}
+                disabled={loading}
             />
             
             <TextInput 
-                placeholder={t('LoginForm.login_password')} 
+                label={t('LoginForm.login_password')} 
+                value={password}
                 secureTextEntry 
                 onChangeText={(text) => { setPassword(text); setErrorMsg(null); }} 
-                style={styles.input} 
+                style={styles.input}
+                mode="outlined"
                 autoCapitalize="none"
-                editable={!loading}
+                disabled={loading}
             />
+            
+            {errorMsg && (
+                <HelperText type="error" visible={true} style={{ textAlign: 'center' }}>
+                    {errorMsg}
+                </HelperText>
+            )}
             
             <Button 
                 mode="contained" 
                 onPress={handleLogin} 
                 style={styles.button}
                 buttonColor={colorTiendaOscuro}
+                loading={loading}
                 disabled={loading}
             >
-                {loading ? <ActivityIndicator color="white" /> : t('LoginForm.login_boton_entrar')}
+                {t('LoginForm.login_boton_entrar')}
             </Button>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    innerContainer: { 
-        width: '100%',
-        padding: 20 
-    },
-    label: { 
-        fontSize: 16, 
-        fontWeight: 'bold', 
-        color: '#333', 
-        marginBottom: 15, 
-        textAlign: 'center' 
-    },
-    errorText: {
-        color: 'red',
-        textAlign: 'center',
-        marginBottom: 10,
-        fontWeight: '600'
-    },
-    input: {
-        height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        marginBottom: 15,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-        backgroundColor: '#f9f9f9',
-        color: '#000'
-    },
-    button: { 
-        marginTop: 10, 
-        borderRadius: 5, 
-        height: 50, 
-        justifyContent: 'center' 
-    },
+    innerContainer: { width: '100%', padding: 20 },
+    label: { fontWeight: 'bold', color: '#333', marginBottom: 15, textAlign: 'center' },
+    input: { marginBottom: 10, backgroundColor: '#fff' },
+    button: { marginTop: 10, borderRadius: 5 }
 });
 
 export default connect(null, mapDispatchToProps)(LoginFormComponent);

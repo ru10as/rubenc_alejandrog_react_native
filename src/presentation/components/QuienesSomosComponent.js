@@ -8,11 +8,10 @@ import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
 const { width } = Dimensions.get('window');
 
 const mapStateToProps = (state) => ({
-    actividades: state.actividades || { actividades: [] },
+    actividades: state.actividades?.actividades || [],
 });
 
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = dispatch => ({});
 
 const StatItem = ({ icon, count, label }) => (
     <View style={styles.statBox}>
@@ -80,17 +79,22 @@ function QuienesSomos({ actividades }) {
                 </ScrollView>
             </View>
 
+            {/* Sección de actividades corregida */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>{t('QuienesSomos.qs_actividades_titulo')}</Text>
-                {actividades.actividades.map((item) => (
-                    <Surface key={item.id} style={styles.equipoItem} elevation={1}>
-                        <Avatar.Image source={{ uri: baseUrl + item.imagen }} size={60} />
-                        <View style={styles.equipoInfo}>
-                            <Text style={styles.equipoNombre}>{item.nombre}</Text>
-                            <Text style={styles.equipoPuesto}>{item.descripcion}</Text>
-                        </View>
-                    </Surface>
-                ))}
+                {actividades && actividades.length > 0 ? (
+                    actividades.map((item) => (
+                        <Surface key={item.id} style={styles.equipoItem} elevation={1}>
+                            <Avatar.Image source={{ uri: baseUrl + item.imagen }} size={60} />
+                            <View style={styles.equipoInfo}>
+                                <Text style={styles.equipoNombre}>{item.nombre}</Text>
+                                <Text style={styles.equipoPuesto}>{item.descripcion}</Text>
+                            </View>
+                        </Surface>
+                    ))
+                ) : (
+                    <Text style={{ textAlign: 'center', color: '#888' }}>{t('QuienesSomos.no_actividades')}</Text>
+                )}
             </View>
 
             <View style={styles.footer}>

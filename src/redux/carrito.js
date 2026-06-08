@@ -9,7 +9,7 @@ const initialState = {
 export const carrito = (state = initialState, action) => {
     switch (action.type) {
         
-        case ActionTypes.LOGOUT_SUCCESS:
+        case ActionTypes.AUTH_LOGOUT:
         case ActionTypes.LIMPIAR_CARRITO:
             return initialState;
 
@@ -57,6 +57,15 @@ export const carrito = (state = initialState, action) => {
             };
         }
 
+        // Este es el que gestiona la sincronización en tiempo real (Firebase -> Redux)
+        case ActionTypes.CARRITO_ACTUALIZAR:
+            return {
+                ...state,
+                items: action.payload.items || state.items,
+                totalDescuento: action.payload.totalDescuento || 0,
+                cuponesAplicados: action.payload.cuponesAplicados || []
+            };
+
         case ActionTypes.ACTUALIZAR_DATOS_CARRITO:
             return {
                 ...state,
@@ -64,10 +73,12 @@ export const carrito = (state = initialState, action) => {
                 cuponesAplicados: action.payload.cuponesAplicados
             };
 
-        case ActionTypes.CARGAR_CARRITO:
+        case ActionTypes.CARRITO_CARGAR:
             return {
                 ...state,
-                items: Array.isArray(action.payload) ? action.payload : []
+                items: Array.isArray(action.payload.items) ? action.payload.items : (Array.isArray(action.payload) ? action.payload : []),
+                totalDescuento: action.payload.totalDescuento || 0,
+                cuponesAplicados: action.payload.cuponesAplicados || []
             };
 
         default:
