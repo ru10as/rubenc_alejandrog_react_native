@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Image, ScrollView, Modal, ImageBackground } from 'react-native';
-import { Text, Divider, IconButton, Button, Surface, Snackbar } from 'react-native-paper';
+import { Text, Divider, Button, Surface, Snackbar } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { colorTiendaOscuro } from '../../comun/comun';
@@ -17,8 +17,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     postFavorito: (camisetaId) => dispatch(postFavorito(camisetaId)),
-    postComentario: (camisetaId, valoracion, autor, comentario) =>
-        dispatch(postComentario(camisetaId, valoracion, autor, comentario)),
+    postComentario: (camisetaId, valoracion, autor, comentario) =>dispatch(postComentario(camisetaId, valoracion, autor, comentario)),
     anadirAlCarrito: (camiseta, talla) => dispatch(anadirAlCarrito(camiseta, talla)),
 });
 
@@ -102,6 +101,16 @@ class DetalleCamiseta extends Component {
                     <Snackbar visible={this.state.visibleSnack} onDismiss={() => this.setState({ visibleSnack: false })} duration={2000}>
                         {t('detalleCamisetaComponent.anadida_al_carrito')}
                     </Snackbar>
+                    <Divider style={styles.divisor} />
+                    <View style={styles.comentariosSeccion}>
+                        <Text style={styles.seccionTitulo}>{t('detalleCamisetaComponent.comentarios')}</Text>
+                        {comentarios.map((item, index) => (
+                            <View key={index} style={styles.comentarioItem}>
+                                <Text style={styles.comentarioAutor}>{item.autor}</Text>
+                                <Text style={styles.comentarioTexto}>{item.comentario}</Text>
+                            </View>
+                        ))}
+                    </View>
                 </ScrollView>
             </ImageBackground>
         );
@@ -123,7 +132,7 @@ const styles = StyleSheet.create({
     divisor: { marginHorizontal: 30, height: 1, backgroundColor: '#eee' },
     comentariosSeccion: { padding: 25 },
     rowTitulo: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-    seccionTitulo: { fontSize: 18, fontWeight: 'bold', color: '#222' },
+    seccionTitulo: { fontSize: 18, fontWeight: 'bold', color: '#8b7a7aff', marginBottom:20 },
     comentarioItem: { padding: 15, marginBottom: 10, borderRadius: 12, backgroundColor: '#f9f9f9' },
     comentarioAutor: { fontWeight: 'bold', fontSize: 13 },
     comentarioTexto: { fontStyle: 'italic', marginTop: 4, color: '#555' },
@@ -162,17 +171,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84
     },
-    modalTitulo: { 
-        fontSize: 18, 
-        fontWeight: 'bold', 
-        marginBottom: 10,
-        color: '#333'
-    },
-    modalTexto: { 
-        marginBottom: 20, 
-        textAlign: 'center',
-        color: '#666'
-    }
+    modalTitulo: { fontSize: 18,fontWeight: 'bold', marginBottom: 10,color: '#333'},
+    modalTexto: { marginBottom: 20, textAlign: 'center',color: '#666'}
 });
 
 export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(DetalleCamiseta));

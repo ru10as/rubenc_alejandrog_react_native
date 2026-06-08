@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View, Alert } from 'react-native';
 import { List, Divider, Switch, Avatar, Text, Surface, Button } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { colorTiendaOscuro } from '../../comun/comun';
 import { logout } from '../../redux/ActionCreators';
 
@@ -10,16 +10,19 @@ const mapStateToProps = (state) => ({
     usuario: state.usuario?.user || null,
 });
 
-const SeccionConfiguracion = ({ usuario, navigation }) => {
+const mapDispatchToProps = (dispatch) => ({
+    logout: () => dispatch(logout()),
+});
+
+const SeccionConfiguracion = ({ usuario, navigation, logout }) => {
     const { t, i18n } = useTranslation();
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [notifications, setNotifications] = useState(true);
-    const dispatch = useDispatch();
     const cambiarIdioma = (lang) => i18n.changeLanguage(lang);
 
-    const ejecutarLogout = async () => { // Proceso de salida de la aplicacion 
+    const ejecutarLogout = async () => {
         try {
-            await dispatch(logout());
+            logout();
             navigation.navigate('Inicio');
         } catch (err) {
             Alert.alert('Error', err?.message ?? 'No se pudo cerrar sesión.');
@@ -139,4 +142,4 @@ const styles = StyleSheet.create({
     versionText: { textAlign: 'center', color: '#bbb', fontSize: 10, marginVertical: 20 }
 });
 
-export default connect(mapStateToProps)(SeccionConfiguracion);
+export default connect(mapStateToProps,mapDispatchToProps)(SeccionConfiguracion);

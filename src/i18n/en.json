@@ -88,7 +88,8 @@
     "login_requerido": "Restricted access",
     "mensaje_login": "You must log in to perform this action.",
     "ir_a_login": "Go to Login",
-    "cerrar": "Close"
+    "cerrar": "Close",
+    "comentarios":"Comments"
   },
   "detalleCamisetaSMano": {
     "titulo": "Second-hand details",
@@ -145,7 +146,9 @@
     "qs_que_vendemos_titulo": "What makes us unique?",
     "qs_historia_parrafo_1": "At THE 12th MAN, we live football with the same passion you do. Our goal is to offer you unique pieces, caring for every detail so that every jersey tells a legendary story.",
     "qs_tiendas_titulo": "Our Locations",
-    "qs_actividades_titulo": "Our Team"
+    "qs_actividades_titulo": "Our Team",
+    "Envio_Express":"Express Shipping",
+    "Calidad_elite":"Elite Quality"
   },
   "RegisterForm": {
     "register_titulo": "Create your account",

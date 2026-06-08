@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { signUp } from '../../redux/ActionCreators';
-import { registrarTokenPush } from '../../comun/notificaciones';
-import { auth } from '../../api/firebaseConfig';
 import { useTranslation } from 'react-i18next';
+import { registrarUsuarioYNotificaciones } from '../../redux/ActionCreators';
+import { connect } from 'react-redux';
 
-const RegisterFormComponent = ({ navigation }) => {
+const mapDispatchToProps = dispatch => ({
+    registrar: (email, password) => dispatch(registrarUsuarioYNotificaciones(email, password))
+});
+
+const RegisterFormComponent = ({ navigation, registrar }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState(null); 
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     
     const handleRegister = async () => {
         setErrorMsg(null); 
@@ -28,18 +29,7 @@ const RegisterFormComponent = ({ navigation }) => {
         }
 
         try {
-            await dispatch(signUp(email, password));
-            
-            if (auth.currentUser) {
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                try {
-                    await registrarTokenPush(auth.currentUser.uid);
-                } catch (notifError) {
-                    console.error('Error al registrar notificaciones:', notifError);
-                }
-            }
-            
+            await registrar(email, password);
             navigation.navigate('Inicio');
         } catch (error) {
             setErrorMsg(t("RegisterForm.register_error_registro"));
@@ -110,4 +100,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RegisterFormComponent;
+export default connect(null, mapDispatchToProps)(RegisterFormComponent);

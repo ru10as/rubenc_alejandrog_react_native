@@ -88,7 +88,8 @@
     "login_requerido": "Acceso restringido",
     "mensaje_login": "Debes iniciar sesión para realizar esta acción.",
     "ir_a_login": "Ir a Login",
-    "cerrar": "Cerrar"
+    "cerrar": "Cerrar",
+    "comentarios":"Comentarios"
   },
   "detalleCamisetaSMano": {
     "titulo": "Detalle de segunda mano",
@@ -145,7 +146,9 @@
     "qs_que_vendemos_titulo":"¿Qué nos hace únicos?",
     "qs_historia_parrafo_1":"En THE 12th MAN, vivimos el fútbol con la misma pasión que tú. Nuestro objetivo es ofrecerte piezas únicas, cuidando cada detalle para que cada camiseta cuente una historia legendaria.",
     "qs_tiendas_titulo":"Nuestras Sedes",
-    "qs_actividades_titulo":"Nuestro Equipo"
+    "qs_actividades_titulo":"Nuestro Equipo",
+    "Envio_Express":"Envio Express",
+    "Calidad_elite":"Calidad Elite"
   },
   "RegisterForm": {
     "register_titulo": "Crea tu cuenta",
@@ -185,7 +188,8 @@
     "DetalleSegundaMano": "Detalle Segunda Mano",
     "Registrarse": "Registrarse",
     "Chat": "Chat",
-    "Tagline": "Mercado de camisetas"
+    "Tagline": "Mercado de camisetas",
+    "MisDescuentos":"Mis descuentos"
   },
   "authScreen": {
     "registrar": "Registrarse",

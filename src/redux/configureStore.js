@@ -6,6 +6,8 @@ import { novedades } from './novedades';
 import { favoritos } from './favoritos';      
 import { usuario } from './usuario';
 import { carrito } from './carrito';
+import { ventas } from './ventas';
+import { chat } from './chat';
 
 export const ConfigureStore = () => {
     const store = configureStore({
@@ -17,6 +19,8 @@ export const ConfigureStore = () => {
             favoritos: favoritos,
             usuario: usuario,
             carrito:carrito,
+            ventas:ventas,
+            chat:chat
         },
     });
 

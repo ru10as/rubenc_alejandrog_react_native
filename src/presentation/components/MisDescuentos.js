@@ -1,86 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Alert, Button } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useSelector } from 'react-redux';
-import { doc, collection, onSnapshot, serverTimestamp, runTransaction } from 'firebase/firestore';
-import { db } from '../../api/firebaseConfig';
 import { useTranslation } from 'react-i18next';
+import { canjearCupon,suscribirseACupones } from '../../redux/ActionCreators';
+import { connect } from 'react-redux';
 
-export default function MisDescuentos() {
+const mapStateToProps = state => ({
+  userId: state.usuario?.user?.uid
+});
+
+const mapDispatchToProps = dispatch => ({
+  canjearCupon: (uid, data) => dispatch(canjearCupon(uid, data))
+});
+
+function MisDescuentos({userId, canjearCupon, navigation}) {
   const [cupones, setCupones] = useState([]); // es donde vamos a guardar la lista de cupones
   const [scanned, setScanned] = useState(false); // Cuando el usuario escanea el qr, cambia de false a true
   const [permission, requestPermission] = useCameraPermissions(); // Para controlar los permisos de la camara
-  const userId = useSelector((state) => state.usuario?.user?.uid); // Extraemos el uid del usuario que esta ahora log
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!userId) return; // Primero verificamos si ese user con ese userid existe
-    const colRef = collection(db, 'carritos', userId, 'historial_cupones');
-    const unsubscribe = onSnapshot(colRef, (snapshot) => {
-      const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })); // Despues de esta linea tendremos algo como: { id: "FUTBOL10", valor: 10, escaneado: true, canjeado: false }
-      setCupones(data); // Actualizamos el estado
+    if (!userId) return;
+    const unsubscribe = suscribirseACupones(userId, (data) => {
+      setCupones(data);
     });
-    return () => unsubscribe(); // Para apagar la conexion con firebase
+    return () => unsubscribe();
   }, [userId]);
 
   const handleBarcodeScanned = async ({ data }) => {
     if (scanned || !userId) return;
-    setScanned(true); // Aqui desactivamos la camara
-
-    let valorDescuento = 0;
-    if (data.includes('FUTBOL10')) valorDescuento = 10; // A partir de aqui vamos a transformar a un valor numerico
-    else if (data.includes('FUTBOL20')) valorDescuento = 20;
-    else if (data.includes('FUTBOL40')) valorDescuento = 40;
-
-    // Caso de codigo no reconocido
-    if (valorDescuento === 0) {
-      Alert.alert(t('MisDescuentos.error'), t('MisDescuentos.codigo_no_reconocido'));
-      setScanned(false);
-      return;
-    }
-
-    const cuponRef = doc(db, 'carritos', userId, 'historial_cupones', data); // Este es el puntero para el cupon que se acaba de escanear
-    const carritoRef = doc(db, 'carritos', userId); // Este para saber cuantos descuentos tiene almacenado
+    setScanned(true);
 
     try {
-      await runTransaction(db, async (transaction) => {
-        const cuponDoc = await transaction.get(cuponRef); // Para ver si existe o no el cupon (dentro de historial_cupones)
-        
-        if (cuponDoc.exists()) {
-          throw new Error(t('MisDescuentos.codigo_ya_escaneado'));
-        }
-
-        const carritoSnap = await transaction.get(carritoRef); // Vamos a buscar en carritos
-        const dataActual = carritoSnap.exists() ? carritoSnap.data() : { descuentosAplicados: {} };
-
-        // Calculamos los nuevos descuentos
-        const nuevosDescuentos = { 
-          ...(dataActual.descuentosAplicados || {}), 
-          [data]: valorDescuento 
-        };
-
-        // Calculamos el nuevo descuento completo 
-        const nuevoTotalDescuento = Object.values(nuevosDescuentos).reduce((a, b) => a + b, 0);
-
-        transaction.set(cuponRef, {
-          valor: valorDescuento,
-          escaneado: true,
-          canjeado: false,
-          fecha: serverTimestamp()
-        });
-
-        transaction.set(carritoRef, {
-          descuentosAplicados: nuevosDescuentos,
-          totalDescuento: nuevoTotalDescuento
-        }, { merge: true });
-      });
-
-      Alert.alert(t('MisDescuentos.exito'), t('MisDescuentos.aplicado', { valor: valorDescuento }));
-    } catch (e) {
+      const resultado = await canjearCupon(userId, data);
+      Alert.alert(t('MisDescuentos.exito'), t('MisDescuentos.aplicado', { valor: resultado.valor }));
+    } 
+    catch (e) {
       Alert.alert(t('MisDescuentos.error'), e.message);
+    } finally {
+      setTimeout(() => setScanned(false), 2000);
     }
-    
-    setTimeout(() => setScanned(false), 2000);
   };
 
   if (!permission?.granted) { // Esto es basicamente para el caso en el cual no se han dado permisos a la camara
@@ -129,3 +88,5 @@ const styles = StyleSheet.create({
   codeText: { fontWeight: 'bold', fontSize: 16 },
   valueText: { color: 'green', fontWeight: 'bold', fontSize: 16 }
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(MisDescuentos);

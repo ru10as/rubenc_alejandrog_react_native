@@ -3,47 +3,43 @@ import { View, StyleSheet, FlatList, KeyboardAvoidingView, Platform } from 'reac
 import { Text, TextInput, IconButton } from 'react-native-paper';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSelector,useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import {
-    collection, doc, setDoc, addDoc, query, orderBy, onSnapshot, serverTimestamp
-} from 'firebase/firestore';
-import { db } from '../../api/firebaseConfig';
-import { enviarMensaje } from '../../redux/ActionCreators';
+import { enviarMensaje,suscribirseAMensajes } from '../../redux/ActionCreators';
+import { connect } from 'react-redux';
 
-const ChatOfertaComponent = ({ route, navigation }) => { // Cuando se toca una oferta
+const mapStateToProps = (state) => ({
+    usuario: state.usuario?.user,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    enviarMensaje: (oferta, contenido, uid) => dispatch(enviarMensaje(oferta, contenido, uid)),
+});
+
+const ChatOfertaComponent = ({ route, navigation, usuario, enviarMensaje }) => { 
     const { t } = useTranslation();
     const { oferta } = route.params; 
-    const usuario = useSelector((state) => state.usuario?.user);
     const headerHeight = useHeaderHeight();
     const insets = useSafeAreaInsets();
     const [mensajes, setMensajes] = useState([]);
     const [texto, setTexto] = useState('');
     const listaRef = useRef(null);
-    const dispatch = useDispatch();
 
-    // Para poner el nombre del comprador
-    useEffect(() => { // Vigilamos el cambio del nombre del comprador
+    useEffect(() => {
         if (oferta.nombreComprador) navigation.setOptions({ title: oferta.nombreComprador });
     }, [navigation, oferta.nombreComprador]);
 
-    // Motor de escucha en tiempo real // Mensajes de la pantalla siempre sincronizada
     useEffect(() => {
-        const q = query(
-            collection(db, 'chats', oferta.id, 'mensajes'),
-            orderBy('fecha', 'asc')
-        );
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            setMensajes(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+        const unsubscribe = suscribirseAMensajes(oferta.id, (mensajesActualizados) => {
+            setMensajes(mensajesActualizados);
         });
         return unsubscribe;
     }, [oferta.id]);
 
-    const handleEnviarMensaje = async () => { // Ejecutaremos este cuando se le envia el mensaje
+    const handleEnviarMensaje = async () => {
         const contenido = texto.trim();
-        if (!contenido || !usuario?.uid) return; // Por ejemplo, si el mensaje esta vacio
-        setTexto(''); // Llevamos a cabo la limpieza de la barra de escritura inmediatamente
-        dispatch(enviarMensaje(oferta, contenido, usuario.uid));
+        if (!contenido || !usuario?.uid) return;
+        setTexto('');
+        enviarMensaje(oferta, contenido, usuario.uid);
     };
 
     const renderMensaje = ({ item }) => { // Para indicar como se dibuja cada mensaje en pantalla
@@ -121,4 +117,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ChatOfertaComponent;
+export default connect(mapStateToProps, mapDispatchToProps)(ChatOfertaComponent);

@@ -46,13 +46,6 @@ class Catalogo extends Component {
         }
     }
 
-    // Esto no lo voy a usar al final 
-    onRefresh = async () => {
-        this.setState({ refreshing: true });
-        await this.props.fetchCamisetas(); // Vuelve a llamar a la API
-        this.setState({ refreshing: false });
-    };
-
     // Si se vuelve a entrar al Catálogo con otros parámetros (otro acceso rápido), resincronizamos
     componentDidUpdate(prevProps) {
         const prev = prevProps.route?.params || {};
@@ -149,7 +142,7 @@ class Catalogo extends Component {
             const coincideMano =
                 filtros.modo === 'todas' ? true :
                 filtros.modo === 'segunda_mano' ? esSegunda :
-                !esSegunda; // 'tienda' (oficial)
+                !esSegunda;
 
             const coincideRetro = !filtros.soloRetro || camiseta.esRetro;
             const coincideSeleccion = !filtros.soloSeleccion || camiseta.esSeleccion;
@@ -168,14 +161,10 @@ class Catalogo extends Component {
                     <Text style={styles.filtroLabel}>{label}</Text>
                     <View style={styles.chipsWrap}>
                         {valores.map(v => (
-                            <Chip
-                                key={v}
-                                compact
-                                selected={filtros[categoria] === v}
+                            <Chip key={v}
+                                compact selected={filtros[categoria] === v}
                                 onPress={() => this.gestionarFiltro(categoria, v)}
-                                style={styles.filtroChip}
-                            >
-                                {v}
+                                style={styles.filtroChip}>{v}
                             </Chip>
                         ))}
                     </View>
@@ -226,7 +215,7 @@ const styles = StyleSheet.create({
     searchbar: { marginHorizontal: 10, marginTop: 10, backgroundColor: '#f0f0f0' },
     acordeon: { backgroundColor: '#f8f8f8' },
     contenedorFiltros: { paddingHorizontal: 14, paddingBottom: 12, backgroundColor: '#f8f8f8' },
-    grupoFiltro: { marginTop: 10 },
+    grupoFiltro: { marginTop: 1 },
     filtroLabel: { fontSize: 13, fontWeight: 'bold', color: '#555', marginBottom: 6 },
     chipsWrap: { flexDirection: 'row', flexWrap: 'wrap' },
     filtroChip: { marginRight: 6, marginBottom: 6 },

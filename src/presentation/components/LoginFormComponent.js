@@ -6,47 +6,34 @@ import { registrarTokenPush } from '../../comun/notificaciones';
 import { auth } from '../../api/firebaseConfig';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-native-paper';
+import { loginYRegistrarNotificaciones } from '../../redux/ActionCreators';
+import { connect } from 'react-redux';
 
-const LoginFormComponent = ({ navigation }) => {
+const mapDispatchToProps = dispatch => ({
+    login: (email, password) => dispatch(loginYRegistrarNotificaciones(email, password))
+});
+
+const LoginFormComponent = ({ navigation,login }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
-    const dispatch = useDispatch();
     const { t } = useTranslation();
     const colorTiendaOscuro = '#f44336';
 
     const handleLogin = async () => {
         setErrorMsg(null);
-
         if (!email || !password) {
             setErrorMsg(t('LoginForm.login_error_campos'));
             return;
         }
 
         setLoading(true);
-
         try {
-            await dispatch(login(email, password));
-            
-            if (auth.currentUser) {
-                console.log('UID del usuario:', auth.currentUser.uid);
-                
-                try {
-                    await registrarTokenPush(auth.currentUser.uid);
-                    console.log('Notificaciones registradas correctamente');
-                } catch (notifError) {
-                    console.error('Error al registrar notificaciones:', notifError);
-                }
-            }
-
+            await login(email, password);
             navigation.navigate('Inicio');
         } catch (error) {
-            if (auth.currentUser) {
-                navigation.navigate('Inicio');
-            } else {
-                setErrorMsg(t('LoginForm.login_error_credenciales'));
-            }
+            setErrorMsg(t('LoginForm.login_error_credenciales'));
         } finally {
             setLoading(false);
         }
@@ -125,4 +112,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginFormComponent;
+export default connect(null, mapDispatchToProps)(LoginFormComponent);

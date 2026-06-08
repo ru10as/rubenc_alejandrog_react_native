@@ -27,10 +27,7 @@ const ChatComponent = ({ route, navigation }) => {
     }, [navigation, nombreOtro]);
 
     useEffect(() => {
-        const q = query(
-            collection(db, 'chats', chatId, 'mensajes'),
-            orderBy('fecha', 'asc')
-        );
+        const q = query(collection(db, 'chats', chatId, 'mensajes'),orderBy('fecha', 'asc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setMensajes(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
         });

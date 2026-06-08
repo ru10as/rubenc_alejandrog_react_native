@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { Avatar, Card, Text, Divider, Surface, IconButton } from 'react-native-paper';
+import { Avatar, Text, Surface, IconButton } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { baseUrl, colorTiendaOscuro } from '../../comun/comun';
 
@@ -9,6 +9,9 @@ const { width } = Dimensions.get('window');
 
 const mapStateToProps = (state) => ({
     actividades: state.actividades || { actividades: [] },
+});
+
+const mapDispatchToProps = dispatch => ({
 });
 
 const StatItem = ({ icon, count, label }) => (
@@ -41,14 +44,14 @@ function QuienesSomos({ actividades }) {
                 <View style={styles.featuresGrid}>
                     <Surface style={styles.featureCard} elevation={2}>
                         <IconButton icon="shield-check" iconColor={colorTiendaOscuro} />
-                        <Text style={styles.featureText}>Calidad Élite</Text>
+                        <Text style={styles.featureText}>{t('QuienesSomos.Calidad_elite')}</Text>
                     </Surface>
                     <Surface style={styles.featureCard} elevation={2}>
                         <IconButton icon="history" iconColor={colorTiendaOscuro} />
                     </Surface>
                     <Surface style={styles.featureCard} elevation={2}>
                         <IconButton icon="truck-fast" iconColor={colorTiendaOscuro} />
-                        <Text style={styles.featureText}>Envío Express</Text>
+                        <Text style={styles.featureText}>{t('QuienesSomos.Envio_Express')}</Text>
                     </Surface>
                 </View>
             </View>
@@ -160,4 +163,4 @@ const styles = StyleSheet.create({
     footerText: { color: '#bbb', fontSize: 10, letterSpacing: 1 }
 });
 
-export default connect(mapStateToProps)(QuienesSomos);
+export default connect(mapStateToProps, mapDispatchToProps)(QuienesSomos);

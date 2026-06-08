@@ -88,7 +88,8 @@
     "login_requerido": "Sarbide mugatua",
     "mensaje_login": "Ekintza hau egiteko saioa hasi behar duzu.",
     "ir_a_login": "Hasi saioa",
-    "cerrar": "Itxi"
+    "cerrar": "Itxi",
+    "comentarios":"Commentaires"
   },
   "detalleCamisetaSMano": {
     "titulo": "Bigarren eskuko xehetasunak",
@@ -145,7 +146,9 @@
     "qs_que_vendemos_titulo": "Zerk egiten gaitu bakar?",
     "qs_historia_parrafo_1": "THE 12th MAN-en, futbolarekin zuk adinako pasioa dugu. Gure helburua pieza bakarrak eskaintzea da, xehetasun bakoitza zainduz, elastiko bakoitzak istorio mitiko bat konta dezan.",
     "qs_tiendas_titulo": "Gure Egoitzak",
-    "qs_actividades_titulo": "Gure Taldea"
+    "qs_actividades_titulo": "Gure Taldea",
+    "Envio_Express":"Bidalketa Express",
+    "Calidad_elite":"Elite Kalitatea"
   },
   "RegisterForm": {
     "register_titulo": "Sortu zure kontua",

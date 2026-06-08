@@ -1,74 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { List, Avatar, Text, Surface, IconButton, ActivityIndicator } from 'react-native-paper';
-import { useSelector } from 'react-redux';
-import { 
-    collection, query, where, onSnapshot, doc, updateDoc, 
-    writeBatch, getDocs 
-} from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
-import { db } from '../../api/firebaseConfig';
 import { colorTiendaOscuro } from '../../comun/comun';
-import { useDispatch } from 'react-redux';
-import { actualizarCamisetaEnStore } from '../../redux/ActionCreators';
+import { suscribirseAVentas,gestionarOferta } from '../../redux/ActionCreators';
+import { connect } from 'react-redux';
 
-const MisVentasComponent = ({ navigation }) => {
-    const dispatch = useDispatch();
+const mapStateToProps = state => ({
+    usuario: state.usuario?.user,
+    misCamisetas: state.ventas.camisetas || [],
+    ofertasRecibidas: state.ventas.ofertas || []
+});
+
+const mapDispatchToProps = dispatch => ({
+    suscribirse: (uid) => suscribirseAVentas(uid, dispatch),
+    gestionar: (oferta, estado) => dispatch(gestionarOferta(oferta, estado))
+});
+
+const MisVentasComponent = ({ navigation, usuario, misCamisetas, ofertasRecibidas, suscribirse, gestionar }) => {
     const { t } = useTranslation();
-    const usuario = useSelector((state) => state.usuario?.user);
-    const [misCamisetas, setMisCamisetas] = useState([]);
-    const [ofertasRecibidas, setOfertasRecibidas] = useState([]);
-    const [cargando, setCargando] = useState(true);
 
     useEffect(() => {
         if (!usuario?.uid) return;
-
-        const qCamisetas = query(
-            collection(db, "camisetas"), 
-            where("vendedorId", "==", usuario.uid)
-        );
-        
-        const unsubCamisetas = onSnapshot(qCamisetas, (snap) => {
-            setMisCamisetas(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-            setCargando(false);
-        });
-
-        const qOfertas = query(collection(db, "ofertas"), where("vendedorId", "==", usuario.uid));
-        const unsubOfertas = onSnapshot(qOfertas, (snap) => {
-            setOfertasRecibidas(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-        });
-
-        return () => { unsubCamisetas(); unsubOfertas(); };
-    }, [usuario]);
+        const unsubscribe = suscribirse(usuario.uid);
+        return () => unsubscribe(); 
+    }, [usuario?.uid, suscribirse]);
 
     const actualizarEstado = async (oferta, nuevoEstado) => {
         try {
-            const batch = writeBatch(db);
-            
-            if (nuevoEstado === 'aceptada') {
-                batch.update(doc(db, "ofertas", oferta.id), { estado: 'aceptada' });
-                batch.update(doc(db, "camisetas", oferta.camisetaId), { estadoVenta: 'vendida' });
-
-                const q = query(
-                    collection(db, "ofertas"),
-                    where("camisetaId", "==", oferta.camisetaId),
-                    where("estado", "==", "pendiente")
-                );
-                const snapshot = await getDocs(q);
-                snapshot.docs.forEach((d) => {
-                    if (d.id !== oferta.id) {
-                        batch.update(d.ref, { estado: 'rechazada' });
-                    }
-                });
-            } else {
-                batch.update(doc(db, "ofertas", oferta.id), { estado: nuevoEstado });
-            }
-            
-            await batch.commit();
-
-            if (nuevoEstado === 'aceptada') {
-                dispatch(actualizarCamisetaEnStore(oferta.camisetaId, { estadoVenta: 'vendida' }));
-            }
+            await gestionar(oferta, nuevoEstado);
         } catch (e) {
             console.error("Error al gestionar la oferta:", e);
         }
@@ -155,4 +115,4 @@ const styles = StyleSheet.create({
     centered: { flex: 1, justifyContent: 'center', alignItems: 'center' }
 });
 
-export default MisVentasComponent;
+export default connect(mapStateToProps, mapDispatchToProps)(MisVentasComponent);

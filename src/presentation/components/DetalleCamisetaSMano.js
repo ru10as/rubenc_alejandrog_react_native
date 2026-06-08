@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Image, Alert } from 'react-native';
 import { Text, Button, Avatar, Surface, Divider, IconButton, Portal, Dialog, TextInput } from 'react-native-paper';
-import { useSelector } from 'react-redux';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { enviarOferta } from '../../redux/ActionCreators';
 
-const DetalleCamisetaSMano = ({ route, navigation }) => {
+const mapStateToProps = state => ({
+    usuario: state.usuario?.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+    enviarOferta: (datos) => dispatch(enviarOferta(datos))
+});
+
+const DetalleCamisetaSMano = ({ route, navigation,usuario,enviarOferta}) => {
     const { t, i18n } = useTranslation();
     const { camiseta } = route.params;
     const nombre = camiseta.nombres?.[i18n.language] || camiseta.nombres?.es || camiseta.nombre || '';
     const descripcion = camiseta.descripciones?.[i18n.language] || camiseta.descripciones?.es || camiseta.descripcion || '';
     const vendedorId = camiseta.creadoPor || camiseta.vendedorId;
-    const usuario = useSelector((state) => state.usuario?.user);
     const [visible, setVisible] = useState(false);
     const [montoOferta, setMontoOferta] = useState('');
 
@@ -38,37 +45,21 @@ const DetalleCamisetaSMano = ({ route, navigation }) => {
 
     const enviarOfertaAFirebase = async () => {
         if (!montoOferta || isNaN(montoOferta)) {
-            Alert.alert(
-                t('detalleCamisetaSMano.error_titulo'),
-                t('detalleCamisetaSMano.error_precio_invalido')
-            );
+            Alert.alert(t('error'), t('precio_invalido'));
             return;
         }
 
-        const db = getFirestore();
         try {
-            await addDoc(collection(db, "ofertas"), {
-                camisetaId: camiseta.id,
-                vendedorId: vendedorId,
+            await enviarOferta({camisetaId: camiseta.id,vendedorId: vendedorId,
                 compradorId: usuario?.uid || 'anonimo',
-                nombreComprador: usuario?.displayName || usuario?.email || 'Usuario',
-                monto: parseFloat(montoOferta),
-                estado: 'pendiente',
-                fecha: new Date().toISOString()
+                nombreComprador: usuario?.displayName || usuario?.email || 'Usuario',monto: parseFloat(montoOferta)
             });
             
             setVisible(false);
             setMontoOferta('');
-            Alert.alert(
-                t('detalleCamisetaSMano.exito_titulo'),
-                t('detalleCamisetaSMano.exito_oferta_enviada')
-            );
+            Alert.alert(t('exito'), t('oferta_enviada'));
         } catch (error) {
-            console.error("Error al enviar oferta: ", error);
-            Alert.alert(
-                t('detalleCamisetaSMano.error_titulo'),
-                t('detalleCamisetaSMano.error_envio')
-            );
+            Alert.alert(t('error'), t('error_envio'));
         }
     };
 
@@ -138,4 +129,4 @@ const styles = StyleSheet.create({
     btnChat: { paddingVertical: 5 }
 });
 
-export default DetalleCamisetaSMano;
+export default connect(mapStateToProps, mapDispatchToProps)(DetalleCamisetaSMano);

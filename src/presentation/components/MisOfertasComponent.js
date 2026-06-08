@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { List, Divider, Text, Avatar, IconButton } from 'react-native-paper';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from '../../api/firebaseConfig';
+import { connect } from 'react-redux';
+import { suscribirseAOfertas } from '../../redux/ActionCreators'; 
 
-const MisOfertasComponent = ({ navigation }) => {
+const mapStateToProps = state => ({
+    usuario: state.usuario?.user,
+    misOfertas: state.ofertas.items || []
+});
+
+const mapDispatchToProps = dispatch => ({
+    suscribirse: (uid) => suscribirseAOfertas(uid, dispatch)
+});
+
+const MisOfertasComponent = ({ navigation, usuario, misOfertas, suscribirse }) => {
     const { t } = useTranslation();
-    const usuario = useSelector((state) => state.usuario?.user);
-    const [misOfertas, setMisOfertas] = useState([]);
 
     useEffect(() => {
         if (!usuario?.uid) return;
-
-        const q = query(
-            collection(db, 'ofertas'),
-            where('compradorId', '==', usuario.uid),
-            orderBy('fecha', 'desc')
-        );
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            setMisOfertas(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
-        });
-        return unsubscribe;
-    }, [usuario?.uid]);
+        
+        const unsubscribe = suscribirse(usuario.uid); 
+        return () => unsubscribe();
+    }, [usuario?.uid, suscribirse]);
 
     const renderItem = ({ item }) => {
         let iconoEstado = 'clock-outline';
@@ -91,4 +89,4 @@ const styles = StyleSheet.create({
     estadoTexto: { marginRight: 5, fontSize: 12, fontWeight: 'bold' }
 });
 
-export default MisOfertasComponent;
+export default connect(mapStateToProps, mapDispatchToProps)(MisOfertasComponent);

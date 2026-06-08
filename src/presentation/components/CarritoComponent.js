@@ -3,15 +3,14 @@ import { View, FlatList, StyleSheet, Alert } from 'react-native';
 import { List, Text, Button, Avatar, IconButton, Surface } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../api/firebaseConfig';
 import { colorTiendaOscuro } from '../../comun/comun';
-import { anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase } from '../../redux/ActionCreators';
+import { anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase,suscribirseACarrito } from '../../redux/ActionCreators';
 
 // Tomamos los datos que queremos del store
 const mapStateToProps = (state) => ({
-    items: state.carrito.items || [],
-    usuario: state.usuario?.user,
+    items: state.carrito.items || [], // Lista de productos dentro del estado del carrito
+    usuario: state.usuario?.user, // Informacion del usuario logueado
+    totalDescuento: state.carrito.totalDescuento || 0, // Extraemos el valor numerico del descuento
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -19,33 +18,17 @@ const mapDispatchToProps = (dispatch) => ({
     restarDelCarrito: (id, talla) => dispatch(restarDelCarrito(id, talla)),
     eliminarDelCarrito: (id, talla) => dispatch(eliminarDelCarrito(id, talla)),
     limpiarCarrito: () => dispatch(limpiarCarrito()),
-    cargarCarritoDesdeFirebase: (uid) => dispatch(cargarCarritoDesdeFirebase(uid))
+    cargarCarritoDesdeFirebase: (uid) => dispatch(cargarCarritoDesdeFirebase(uid)),
+    suscribirseACarrito: (uid) => dispatch(suscribirseACarrito(uid))
 });
 
-const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase }) => {
+const CarritoComponent = ({ items, usuario, navigation, anadirAlCarrito, restarDelCarrito, eliminarDelCarrito, limpiarCarrito, cargarCarritoDesdeFirebase,suscribirseACarrito }) => {
     const { t } = useTranslation(); // Para la traduccion
-    const [totalDescuento, setTotalDescuento] = useState(0);
-    const [cuponesAplicados, setCuponesAplicados] = useState([]);
 
     useEffect(() => {
         if (!usuario?.uid) return;
-
-        // Cargamos el carrito inicial
         cargarCarritoDesdeFirebase(usuario.uid);
-
-        // Escucha en tiempo real todo el documento del carrito para mantener sincronizados el descuento y los cupones
-        const unsubscribe = onSnapshot(doc(db, "carritos", usuario.uid), (doc) => { // Ejecucion instantanea cuando hay cambio en carritos
-            if (doc.exists()) {
-                const data = doc.data();
-                setTotalDescuento(data.totalDescuento || 0);
-                // Extraemos las claves de los cupones aplicados para mostrarlos si quieres
-                setCuponesAplicados(Object.keys(data.descuentosAplicados || {}));
-            } else {
-                setTotalDescuento(0);
-                setCuponesAplicados([]);
-            }
-        });
-
+        const unsubscribe = suscribirseACarrito(usuario.uid);
         return () => unsubscribe();
     }, [usuario?.uid]);
 

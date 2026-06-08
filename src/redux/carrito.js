@@ -2,6 +2,8 @@ import * as ActionTypes from './ActionTypes';
 
 const initialState = {
     items: [],
+    totalDescuento: 0,
+    cuponesAplicados: []
 };
 
 export const carrito = (state = initialState, action) => {
@@ -55,8 +57,14 @@ export const carrito = (state = initialState, action) => {
             };
         }
 
+        case ActionTypes.ACTUALIZAR_DATOS_CARRITO:
+            return {
+                ...state,
+                totalDescuento: action.payload.totalDescuento,
+                cuponesAplicados: action.payload.cuponesAplicados
+            };
+
         case ActionTypes.CARGAR_CARRITO:
-            // Validación para asegurar que siempre sea un array
             return {
                 ...state,
                 items: Array.isArray(action.payload) ? action.payload : []

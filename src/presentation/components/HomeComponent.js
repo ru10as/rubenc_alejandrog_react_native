@@ -2,15 +2,19 @@ import React from 'react';
 import { ScrollView, View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { Text } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { baseUrl, colorTiendaOscuro, colorTiendaAcento, esProductoSegundaMano } from '../../comun/comun';
 import { IndicadorActividad } from './IndicadorActividadComponent';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => ({
+    camisetasState: state.camisetas,
+    usuario: state.usuario?.user,
+});
 
 // Resuelve la imagen tanto si viene como URL absoluta (Firebase) como relativa (json-server)
 const uriDe = (img) => (img?.startsWith('http') ? img : baseUrl + img);
 
-// Navega al detalle correcto: oficial -> comprar, de usuario -> chat/oferta (según creadoPor)
 const irADetalle = (navigation, item) => {
     if (esProductoSegundaMano(item)) {
         navigation.navigate('DetalleCamisetaSMano', { camiseta: item });
@@ -63,12 +67,9 @@ function Seccion({ titulo, icono, data, lang, navigation, verTodoLabel, onVerTod
     );
 }
 
-export default function Home({ navigation }) {
+function Home({ navigation,camisetasState, usuario }) {
     const { t, i18n } = useTranslation();
     const lang = i18n.language;
-
-    const camisetasState = useSelector((state) => state.camisetas);
-    const usuario = useSelector((state) => state.usuario?.user);
 
     if (camisetasState?.isLoading) return <IndicadorActividad />;
     if (camisetasState?.errMess) {
@@ -76,7 +77,6 @@ export default function Home({ navigation }) {
     }
 
     const camisetas = camisetasState?.camisetas || [];
-
     const destacadas = camisetas.filter((c) => c.destacado);
     const selecciones = camisetas.filter((c) => c.esSeleccion);
     const retro = camisetas.filter((c) => c.esRetro);
@@ -193,3 +193,5 @@ const styles = StyleSheet.create({
     vendeBoton: { flexDirection: 'row', alignItems: 'center', backgroundColor: colorTiendaAcento, paddingVertical: 8, paddingHorizontal: 12, borderRadius: 20 },
     vendeBotonTexto: { color: '#fff', fontWeight: 'bold', fontSize: 13, marginLeft: 4 },
 });
+
+export default connect(mapStateToProps, null)(Home);
