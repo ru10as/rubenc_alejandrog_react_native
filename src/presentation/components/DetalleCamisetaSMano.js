@@ -37,6 +37,12 @@ const DetalleCamisetaSMano = ({ route, navigation }) => {
     };
 
     const enviarOfertaAFirebase = async () => {
+        if (usuario?.uid === vendedorId) {
+            Alert.alert(t('chat.aviso_titulo'), t('chat.propio_articulo'));
+            setVisible(false);
+            return;
+        }
+
         if (!montoOferta || isNaN(montoOferta)) {
             Alert.alert(
                 t('detalleCamisetaSMano.error_titulo'),
@@ -83,7 +89,6 @@ const DetalleCamisetaSMano = ({ route, navigation }) => {
                         <Text style={styles.nombreVendedor}>{camiseta.vendedorNombre}</Text>
                         <Text style={styles.valoracion}>⭐ 4.8 (12 {t('detalleCamisetaSMano.ventas_label')})</Text>
                     </View>
-                    <IconButton icon="message-text" onPress={abrirChat} />
                 </Surface>
 
                 <Text style={styles.titulo}>{nombre}</Text>

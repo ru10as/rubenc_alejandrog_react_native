@@ -229,15 +229,63 @@ export default function AppNavigator() {
                 >
                     <Drawer.Screen name="Inicio" component={HomeStack} options={{ title: t('Navigation.Inicio'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />) }} />
                     <Drawer.Screen name="Camisetas" component={CatalogoStack} options={{ title: t('Navigation.Camisetas'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="tshirt-crew" color={color} size={size} />) }} />
-                    <Drawer.Screen name="Mi Carrito" component={CarritoStack} options={{ title: t('Navigation.MiCarrito'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="cart" color={color} size={size} />) }} />
-                    <Drawer.Screen name="Mis Ventas" component={MisVentasStack} options={{ title: t('Navigation.MisVentas'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="tag-outline" color={color} size={size} />) }} />
-                    <Drawer.Screen name="Mis Ofertas" component={MisOfertasStack} options={{ title: t('Navigation.MisOfertas'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="tag-heart-outline" color={color} size={size} />) }} />
+                    
+                    <Drawer.Screen 
+                        name="Mi Carrito" 
+                        component={CarritoStack} 
+                        options={{ 
+                            title: t('Navigation.MiCarrito'), 
+                            drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="cart" color={color} size={size} />),
+                            drawerItemStyle: { display: estaLogueado ? 'flex' : 'none' }
+                        }} 
+                    />
+                    
+                    <Drawer.Screen 
+                        name="Mis Ventas" 
+                        component={MisVentasStack} 
+                        options={{ 
+                            title: t('Navigation.MisVentas'), 
+                            drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="tag-outline" color={color} size={size} />),
+                            drawerItemStyle: { display: estaLogueado ? 'flex' : 'none' }
+                        }} 
+                    />
+                    
+                    <Drawer.Screen 
+                        name="Mis Ofertas" 
+                        component={MisOfertasStack} 
+                        options={{ 
+                            title: t('Navigation.MisOfertas'), 
+                            drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="tag-heart-outline" color={color} size={size} />),
+                            drawerItemStyle: { display: estaLogueado ? 'flex' : 'none' }
+                        }} 
+                    />
+                    
                     <Drawer.Screen name="Quienes Somos" component={QuienesSomosStack} options={{ title: t('Navigation.QuienesSomos'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="information" color={color} size={size} />) }} />
                     <Drawer.Screen name="Contacto" component={ContactoStack} options={{ title: t('Navigation.Contacto'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="phone" color={color} size={size} />) }} />
                     <Drawer.Screen name="Acceso usuario" component={AuthStack} options={{ drawerItemStyle: { display: 'none' }, drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />) }} />
-                    <Drawer.Screen name="Publicar Producto" component={SubirProductoStack} options={{ title: t('Navigation.PublicarProducto'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="upload" color={color} size={size} />) }} />
+                    
+                    <Drawer.Screen 
+                        name="Publicar Producto" 
+                        component={SubirProductoStack} 
+                        options={{ 
+                            title: t('Navigation.PublicarProducto'), 
+                            drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="upload" color={color} size={size} />),
+                            drawerItemStyle: { display: estaLogueado ? 'flex' : 'none' }
+                        }} 
+                    />
+                    
                     <Drawer.Screen name="Configuracion" component={ConfiguracionStack} options={{ title: t('Navigation.Configuracion'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="cog" color={color} size={size} />) }} />
-                    <Drawer.Screen name="Mis Descuentos" component={MisDescuentosStack} options={{ title: t('Navigation.MisDescuentos'), drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="qrcode-scan" color={color} size={size} />) }} />
+                    
+                    <Drawer.Screen 
+                        name="Mis Descuentos" 
+                        component={MisDescuentosStack} 
+                        options={{ 
+                            title: t('Navigation.MisDescuentos'), 
+                            drawerIcon: ({ color, size }) => (<MaterialCommunityIcons name="qrcode-scan" color={color} size={size} />),
+                            drawerItemStyle: { display: estaLogueado ? 'flex' : 'none' }
+                        }} 
+                    />
+                
                 </Drawer.Navigator>
             </View>
         </NavigationContainer>

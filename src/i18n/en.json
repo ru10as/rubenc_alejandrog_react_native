@@ -104,7 +104,9 @@
     "exito_titulo": "Success",
     "exito_oferta_enviada": "Offer sent to seller.",
     "chat_label": "Chat with seller",
-    "ventas_label": "sales"
+    "ventas_label": "sales",
+    "aviso_titulo":"Action not allowed",
+    "propio_articulo_oferta":"You cannot make an offer on your own item."
   },
   "chat": {
     "placeholder": "Type a message...",

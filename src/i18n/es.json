@@ -185,7 +185,8 @@
     "DetalleSegundaMano": "Detalle Segunda Mano",
     "Registrarse": "Registrarse",
     "Chat": "Chat",
-    "Tagline": "Mercado de camisetas"
+    "Tagline": "Mercado de camisetas",
+    "MisDescuentos":"Mis Descuentos"
   },
   "authScreen": {
     "registrar": "Registrarse",

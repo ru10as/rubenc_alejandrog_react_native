@@ -104,7 +104,9 @@
     "exito_titulo": "Arrakasta!",
     "exito_oferta_enviada": "Eskaintza saltzaileari bidali zaio.",
     "chat_label": "Saltzailearekin txata",
-    "ventas_label": "salmentak"
+    "ventas_label": "salmentak",
+    "aviso_titulo":"Ekintza ez dago baimenduta",
+    "propio_articulo_oferta":"Ezin diozu zeure artikuluari eskaintzarik egin."
   },
   "chat": {
     "placeholder": "Idatzi mezu bat...",
