@@ -37,13 +37,19 @@ export const suscribirseAOfertasService = (usuarioId, callback) => {
 export const suscribirseAMisComprasService = (usuarioId, callback) => {
     const q = query(
         collection(db, 'ofertas'), 
-        where('compradorId', '==', usuarioId), // Aquí está el cambio clave
+        where('compradorId', '==', usuarioId), 
         orderBy('fecha', 'desc')
     );
 
     return onSnapshot(q, (snapshot) => {
-        const ofertas = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        const ofertas = snapshot.docs.map((d) => ({ 
+            id: d.id, 
+            ...serializarFirestore(d.data()) 
+        }));
+        
         callback(ofertas);
+    }, (error) => {
+        console.error("Error en suscripción de 'Mis Compras':", error);
     });
 };
 

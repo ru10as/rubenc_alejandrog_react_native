@@ -27,7 +27,7 @@ const CarritoComponent = ({ items, usuario,totalDescuento, navigation, anadirAlC
 
     useEffect(() => {
         if (!usuario?.uid) return;
-
+        cargarCarritoDesdeFirebase(usuario.uid);
         const unsubscribe = suscribirseACarrito(usuario.uid);
 
         return unsubscribe;

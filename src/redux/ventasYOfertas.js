@@ -15,7 +15,6 @@ export const ventasYOfertas = (state = initialState, action) => {
         case ActionTypes.VENTAS_LOADING:
             return { ...state, isLoading: true, errMess: null };
 
-        // --- ADDERS (Carga de datos) ---
         case ActionTypes.ADD_OFERTAS_RECIBIDAS:
             return { ...state, isLoading: false, recibidas: action.payload };
 
@@ -25,7 +24,6 @@ export const ventasYOfertas = (state = initialState, action) => {
         case ActionTypes.ADD_VENTAS:
             return { ...state, isLoading: false, ventas: action.payload };
 
-        // --- ACTUALIZACIONES (Vital para el cambio de estado) ---
         case ActionTypes.ACTUALIZAR_OFERTA:
             return {
                 ...state,
@@ -42,12 +40,10 @@ export const ventasYOfertas = (state = initialState, action) => {
                 )
             };
 
-        // --- ERRORES ---
         case ActionTypes.OFERTAS_FAILED:
         case ActionTypes.VENTAS_FAILED:
             return { ...state, isLoading: false, errMess: action.payload };
 
-        // --- RESET ---
         case ActionTypes.AUTH_LOGOUT:
             return initialState;
 

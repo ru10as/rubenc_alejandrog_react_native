@@ -6,9 +6,9 @@ import { novedades } from './novedades';
 import { favoritos } from './favoritos';      
 import { usuario } from './usuario';
 import { carrito } from './carrito';
-import { ventasYOfertas } from './ventasYofertas';
 import { chat } from './chat';
 import { cupones } from './cupones';
+import { ventasYOfertas } from './ventasYOfertas';
 
 export const ConfigureStore = () => {
     const store = configureStore({

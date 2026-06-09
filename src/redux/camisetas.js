@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 
-export const camisetas = (state = { isLoading: false, camisetas: [], errMess: null }, action) => {
+export const camisetas = (state = { isLoading: true, errMess: null, camisetas: [] }, action) => {
     switch (action.type) {
         case ActionTypes.CAMISETAS_LOADING:
             return { ...state, isLoading: true };

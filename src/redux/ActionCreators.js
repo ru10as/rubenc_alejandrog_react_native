@@ -107,9 +107,18 @@ const registrarTokenSeguro = async (uid) => {
 // ----- CARRITO ------------------------------------------------------------------------------------------
 export const suscribirseACarrito = (uid) => (dispatch) => {
     return suscribirseACarritoService(uid, (data) => {
+        
+        const items = data.items || [];
+        const totalDesc = data.totalDescuento || 0;
+
+        console.log("Enviando al reducer:", { items, totalDesc });
+
         dispatch({
             type: ActionTypes.CARRITO_ACTUALIZAR,
-            payload: data
+            payload: {
+                items: items,
+                totalDescuento: totalDesc
+            }
         });
     });
 };
@@ -137,15 +146,17 @@ export const cargarCarritoDesdeFirebase = (uid) => async (dispatch) => {
         
         console.log("Datos recibidos del servicio:", data);
 
-        // Verificamos si data es el array directamente o un objeto que contiene el array
-        // Si tu servicio devuelve { items: [...] }, entonces debes usar data.items
-        let itemsAEnviar = Array.isArray(data) ? data : (data?.items || []);
+        const itemsAEnviar = Array.isArray(data) ? data : (data?.items || []);
+        const descuentoAEnviar = data?.totalDescuento || 0; // <--- AQUÍ CAPTURAS EL DESCUENTO
         
-        console.log("Items finales a enviar al reducer:", itemsAEnviar);
+        console.log("Datos finales a enviar al reducer:", { items: itemsAEnviar, totalDescuento: descuentoAEnviar });
 
         dispatch({ 
-            type: ActionTypes.CARRITO_CARGAR, 
-            payload: itemsAEnviar 
+            type: ActionTypes.CARRITO_CARGAR, // O el tipo que use tu reducer para cargar
+            payload: { 
+                items: itemsAEnviar, 
+                totalDescuento: descuentoAEnviar 
+            }
         });
         
     } catch (e) { 
